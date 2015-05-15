@@ -1,0 +1,1 @@
+mklink /D .\assets ..\taskurotta\dropwizard\src\main\resources\assets

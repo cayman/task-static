@@ -1,0 +1,62 @@
+[
+  {
+    "dataType": "java.lang.String",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": "49-9474"
+  },
+  {
+    "dataType": "java.lang.String",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": "application/zip; servicecode=0; service=smev; serviceorgcode=KURS02111"
+  },
+  {
+    "dataType": "java.lang.String",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": ""
+  },
+  {
+    "dataType": "java.lang.String",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": "558102100000"
+  },
+  {
+    "dataType": "java.lang.String",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": "9a7/9a72f8a1-f18f-4f4a-b363-658beb81f38e/9a72f8a1-f18f-4f4a-b363-658beb81f38e.zip"
+  },
+  {
+    "dataType": "java.lang.String",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": "esb-egrp"
+  }
+]

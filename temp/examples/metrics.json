@@ -1,0 +1,726 @@
+{
+  "Member [test-srv2-cnt.egron.net]:7777 this": [
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    }
+  ],
+  "Member [test-srv1-cnt.egron.net]:7777": [
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "startProcess",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "release",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "errorDecision",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    },
+    {
+      "metricName": "successfulPoll",
+      "datasetName": null,
+      "totalCountsHour": 0,
+      "totalCountsDay": 0,
+      "meanTimeHour": 0.0,
+      "meanTimeDay": 0.0,
+      "lastActivity": null
+    }
+  ]
+}

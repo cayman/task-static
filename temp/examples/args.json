@@ -1,0 +1,103 @@
+[
+  {
+    "dataType": "ru.rr.flk.model.RequestMetaData",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": {
+      "storageName": "esb-egrp",
+      "number": "49-9476",
+      "contentType": "application/zip; servicecode=0; service=smev; serviceorgcode=KURS02111",
+      "okato": "",
+      "requestCode": "558102100000",
+      "packageFileName": "70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip",
+      "packageLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip",
+      "decodedPackageLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip.decoded",
+      "packageDirectoryLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056",
+      "requestXmlLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/req_4672ff80-d60f-0132-f4b3-00155dfc3723.xml",
+      "requestXmlFileName": "req_4672ff80-d60f-0132-f4b3-00155dfc3723.xml",
+      "requestSignatureLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/req_4672ff80-d60f-0132-f4b3-00155dfc3723.xml.sig",
+      "attachmentsFileNames": [
+        "Руководство пользователя ЕСИА.doc",
+        "70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip.decoded",
+        "70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip"
+      ],
+      "certificateBase64": null,
+      "requestType": null,
+      "snils": null,
+      "ogrn": null,
+      "oids": null,
+      "requestData": null,
+      "stepRegistrar": {
+        "steps": [
+          {
+            "id": "start",
+            "result": true,
+            "input": {
+              "requestCode": "558102100000",
+              "packageLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip",
+              "okato": "",
+              "contentType": "application/zip; servicecode=0; service=smev; serviceorgcode=KURS02111",
+              "requestNumber": "49-9476",
+              "buildVersion": "2.0-SNAPSHOT#5fd87f77 from 20150505-1800"
+            }
+          },
+          {
+            "id": "packageDecoding",
+            "input": {
+              "fileLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip",
+              "storageName": "esb-egrp",
+              "decodedFileLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip.decoded"
+            },
+            "output": {"decodedPackageLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip.decoded"},
+            "result": true
+          },
+          {
+            "id": "packageExtracting",
+            "input": {
+              "storageName": "esb-egrp",
+              "destinationLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056",
+              "zipLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056.zip.decoded"
+            },
+            "output": {"packageDirectoryLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056"},
+            "result": true
+          },
+          {
+            "id": "packageChecking",
+            "input": {
+              "storageName": "esb-egrp",
+              "packageDirectoryLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056"
+            },
+            "output": {
+              "requestXmlLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/req_4672ff80-d60f-0132-f4b3-00155dfc3723.xml",
+              "requestSignatureLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/req_4672ff80-d60f-0132-f4b3-00155dfc3723.xml.sig"
+            },
+            "result": true
+          },
+          {
+            "id": "requestTypeDetecting",
+            "input": {
+              "requestCode": "558102100000",
+              "storageName": "esb-egrp",
+              "requestXmlLocation": "70c/70cd90f2-1ef9-40d2-bbf4-8f51bbe77056/req_4672ff80-d60f-0132-f4b3-00155dfc3723.xml"
+            }
+          }
+        ]
+      },
+      "taxFree": false
+    }
+  },
+  {
+    "dataType": null,
+    "taskId": "2ea5b8b5-a018-49ff-b675-8cb29b048bdd",
+    "valueType": null,
+    "compositeValue": null,
+    "promise": true,
+    "errorContainer": null,
+    "ready": false,
+    "jsonvalue": null
+  }
+]

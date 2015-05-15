@@ -1,0 +1,18 @@
+watch: app.arm
+build: ./assets
+hostname: '*'
+port: 9090
+proxies:
+# test rest server awp.egron.net (login/password = guest/querty)
+    - context: /rest
+      host: test-srv-cnt.egron.net
+      port: 80
+      https: false
+      changeOrigin: true
+# local rest server
+#    - context: /rest
+#      host: localhost
+#      port: 8811
+#      https: false
+#      changeOrigin: false
+
