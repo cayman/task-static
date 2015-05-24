@@ -1,0 +1,32 @@
+<p ng-hide="treeProperties.length">
+    {{ properties | json }}
+</p>
+<table ng-if="treeProperties.length" class="table table-bordered table-condensed">
+    <tbody>
+    <tr ng-repeat="node in treeProperties" ng-show="node.$visible()">
+        <td style="min-width: 40%" nowrap>
+            <span ng-style="node.$padding(20)">
+                <a ng-if="node.$children" ng-click="node.$toggle()">
+                    <i class="icon-chevron-{{ node.$expanded ? 'down' : 'up' }}" popover-trigger="mouseenter"
+                       popover="{{ node.$expanded ? 'Collapse' : 'Expand' }}"></i>
+                </a>
+            </span>
+            <small>
+                <!--<a ng-show="node.$children" ng-click="node.$toggle()">-->
+                    <!--({{ node.$num }}) -->
+                <!--</a>-->
+                <!--<span ng-hide="node.$children">-->
+                    <!--({{ node.$num }})-->
+                <!--</span>-->
+                <span class="muted">({{ node.$num }})</span>
+                <b>{{ node.id }}</b>
+            </small>
+        </td>
+        <td><small ng-class="{ muted:node.$children }">
+                <a ng-show="node.$children" ng-click="node.$toggle()">{{ node.value }}</a>
+                <span ng-hide="node.$children">{{ node.value }}</span>
+            </small>
+        </td>
+    </tr>
+    </tbody>
+</table>

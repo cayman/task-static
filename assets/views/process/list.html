@@ -1,0 +1,115 @@
+<div page-header="List of processes"></div>
+
+<div class="well">
+    <form class="form-horizontal form-search">
+        <div class="control-group">
+            <label class="control-label" for="customId"><small><b>CustomId:</b></small></label>
+            <div class="controls">
+                <input class="input search-query" style="width: 300px" type="text" id="customId" ng-model="processParams.customId">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="processId"><small><b>ProcessId:</b></small></label>
+            <div class="controls">
+                <input class="input search-query" style="width: 300px" type="text" id="processId" ng-model="processParams.processId">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="actorId"><small><b>ActorId:</b></small></label>
+            <div class="controls">
+                <input class="input search-query" style="width: 300px" type="text" id="actorId" ng-model="processParams.type">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="status"><small><b>State:</b></small></label>
+            <div class="controls">
+                <select id="status" ng-model="processParams.status"
+                        ng-options="status.id as status.name for status in statuses">
+                    <option value="">All</option>
+                </select>
+                <button class="btn" ng-click="update()">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<page-message></page-message>
+
+<div class="well">
+
+    <list-reload params="processParams" model="processesPage" update="update()">
+    </list-reload>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th style="width: 40px;">№</th>
+                <th>Process id</th>
+                <th>Start task</th>
+                <th>Custom id</th>
+                <th>Start time</th>
+                <th>End time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat="process in processesPageLoaded.items">
+                <td>
+                    {{ processesPageLoaded.$startIndex + $index}}
+                    <i class="{{ process.state | processStatus:'icon' }}" popover="{{ process.state | processStatus:'desc' }}" popover-trigger="mouseenter"></i>
+                 </td>
+                <td>
+                    <small>
+                        <a class="btn-link"
+                           ui-sref="process({processId:process.processId})">{{process.processId}}</a>
+                        <div class="muted"><b>{{ process.state | processStatus:'info' }}</b></div>
+                    </small>
+                </td>
+                <td>
+                    <a ui-sref="task({processId:process.processId,taskId:process.startTaskId})" class="btn-link">
+                        <small>{{process.startTaskId}}</small>
+                    </a><br/>
+                    <small class="muted"><b ng-bind-html="process.startTask.actorId | lineWrap"></b> - <b>{{ process.startTask.method }}</b></small>
+                </td>
+                <td>
+                    <small><b>{{ process.customId }}</b></small>
+                </td>
+                <td>
+                    <small ng-if="process.startTime>0">
+                           {{ process.startTime | date:dateFormat }}
+                        <i>{{ process.startTime | date:timeFormat }}</i>
+                    </small>
+                </td>
+                <td>
+                    <small ng-if="process.endTime>0">
+                           {{ process.endTime | date:dateFormat }}
+                        <i>{{ process.endTime | date:timeFormat }}</i>
+                    </small>
+                </td>
+                <td>
+                    <button ng-click="recovery(process)" class="btn btn-small"
+                            popover="Submit process to recovery service" popover-trigger="mouseenter"
+                            ng-hide="process.$recoverySubmited">
+                        <i class="icon-retweet"></i>
+                    </button>
+                    <button ng-click="abort(process)" class="btn btn-small"
+                            popover="Abort process" popover-trigger="mouseenter">
+                        <i class="icon-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="7">
+                    <list-paginator params="processParams" model="processesPageLoaded" update="update()">
+                    </list-paginator>
+                </td>
+            </tr>
+        </tfoot>
+
+    </table>
+    <div>Total: <b>{{processesPageLoaded.totalCount}}</b> processes</div>
+</div>

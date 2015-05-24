@@ -1,0 +1,146 @@
+<div page-header="Actors"></div>
+
+<div class="well">
+    <form class="form-search">
+        <table class="well">
+            <tr>
+                <td style="padding: 5px;" class="muted">Select metrics to show:</td>
+                <td style="padding: 5px;">
+                    <span class="alert" ng-hide="metrics">No metrics to show</span>
+                    <div style="display: inline-block; padding: 5px;" ng-repeat="metric in metrics">
+                        <input ng-show="!metricOptions[metric] || metricOptions[metric]==='hour'"
+                               type="checkbox" ng-model="metricOptions[metric]" ng-true-value="'hour'"/>
+                        <input ng-show="metricOptions[metric]==='day'"
+                               type="checkbox" ng-model="metricOptions[metric]" ng-true-value="'day'"/>
+                        {{metric}}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 5px;" class="muted">Actor metrics view:</td>
+                <td style="padding: 5px;">
+                    <i class="icon-question-sign" popover="Filter by ActorId *starts with* condition" popover-trigger="mouseenter"></i>
+                    <input ng-model="actorParams.filter" type="text" class="search-query" on-enter="update()" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div page-feedback="feedback">Error at updating:</div>
+
+<div class="well">
+    <list-reload params="actorParams" model="actorsPage" update="update()">
+    </list-reload>
+
+    <div style="overflow: auto;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width:35px;">
+                        <small>№</small>
+                    </th>
+                    <th>
+                        <small>Actor ID:</small>
+                    </th>
+                    <th ng-repeat="(metric, metricPeriod) in metricOptions" ng-show="metricPeriod"  style="width: 400px;">
+                        <small> {{metric}} </small>
+                        <select style="width:90px;" class="btn btn-mini" ng-model="metricOptions[metric]">
+                            <option value="hour">Last hour</option>
+                            <option value="day">Last day</option>
+                        </select>
+                        <span class="caret"></span>
+                    </th>
+                    <th width="80px;">
+                        <small>Actions:</small>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="actor in actorsPageLoaded.items" ng-class="{error: actor.blocked}">
+                    <td>
+                        <small>
+                            {{ actorsPageLoaded.$startIndex + $index }}
+                        </small>
+                        <i class="icon-ban-circle" ng-if="actor.blocked" style="width:25px; height:25px;cursor:help;" popover="Blocked: 'poll' and 'release' requests for this actor are rejected." popover-trigger="mouseenter"></i>
+                    </td>
+                    <td>
+                        <!--<small><b>{{ withNewLineOnDots(actor.id) }}</b></small>-->
+                        <small><b ng-bind-html="actor.id | lineWrap"></b></small>
+                    </td>
+                    <td ng-repeat="(metric, metricPeriod) in metricOptions" ng-show="metricPeriod" >
+                        <div ng-repeat="(nodeName, nodeItem) in metricsPageLoaded">
+                            {{ metric }}
+                            <hr ng-if="!$first" />
+                            <small>
+                                <table class="inner-table">
+                                    <tr>
+                                        <td style="width: 80px;"><i class="muted">Node:</i></td>
+                                        <td>{{nodeName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="muted">Last activity:</i></td>
+                                        <td> {{nodeItem.lastActivity | date:dateTimeFormat }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="muted">Rate({{ metricPeriod }}):</i></td>
+                                        <td>
+                                            <span ng-if="actor.queueState && metricPeriod === 'hour' &&
+                                                (actor.queueState.totalOutHour>=0 || actor.queueState.totalInHour>=0)">
+                                                <b ng-if="actor.hourRate>0" style="color: red;cursor: help;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.hourRate}}</b>
+                                                <b ng-if="actor.hourRate<=0" style="color: green;cursor: help;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.hourRate}}</b>
+                                                in: <b ng-if="actor.queueState.totalInHour>=0">{{actor.queueState.totalInHour}}</b>, out: <b ng-if="actor.queueState.totalOutHour>=0">{{actor.queueState.totalOutHour}}</b>
+                                            </span>
+
+                                            <span ng-if="actor.queueState && metricPeriod === 'day' &&
+                                                (actor.queueState.totalOutDay>=0 || actor.queueState.totalInDay>=0)">
+                                                <b ng-if="actor.dayRate>0" style="color: red;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.dayRate}}</b>
+                                                <b ng-if="actor.dayRate<=0" style="color: green;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.dayRate}}</b>
+                                                in: <b ng-if="actor.queueState.totalInDay>=0">{{actor.queueState.totalInDay}}</b>, out: <b ng-if="actor.queueState.totalOutDay>=0">{{actor.queueState.totalOutDay}}</b>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="muted">Stats:</i></td>
+                                        <td>
+                                            <div ng-if="metricPeriod === 'hour'">
+                                                Triggered: <b>{{nodeItem.totalCountsHour || 'n/a'}}</b> times<br />
+                                                Average: <b>{{nodeItem.meanTimeHour || 'n/a'}}</b> ms
+                                            </div>
+
+                                            <div ng-if="metricPeriod === 'day'">
+                                                Triggered: <b>{{nodeItem.totalCountsDay || 'n/a'}}</b> times <br />
+                                                Average: <b>{{nodeItem.meanTimeDay || 'n/a'}}</b> ms
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </small>
+                        </div>
+                    </td>
+                    <td>
+                        <button ng-show="actor.blocked" class="btn btn-mini" ng-click="unblock(actor)" popover="Unblock actor" popover-trigger="mouseenter">
+                            <i class="icon-play-circle" ></i>
+                        </button>
+                        <button ng-hide="actor.blocked" class="btn btn-mini" ng-click="block(actor)" popover="Block actor" popover-trigger="mouseenter">
+                            <i class="icon-ban-circle" />
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <table style="width: 100%">
+        <tfoot>
+            <tr>
+                <td>
+                    <list-paginator params="actorParams" model="actorsPageLoaded" update="update()">
+                    </list-paginator>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

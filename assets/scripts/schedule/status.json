@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1",
+    "name": "Active",
+    "style": "success"
+  },
+  {
+    "id": "-1",
+    "name": "Inactive",
+    "style": "info"
+  },
+  {
+    "id": "-2",
+    "name": "Error",
+    "style": "error"
+  }
+]

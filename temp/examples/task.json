@@ -1,0 +1,107 @@
+{
+  "taskId": "cc6a6b54-9ede-4328-ad70-82f82da20266",
+  "processId": "754bfba0-4937-4f96-9c71-aea3ec4f84be",
+  "pass": null,
+  "method": "toFlk",
+  "actorId": "ru.rr.flk.esb.actors.deciders.Adapter#1.0",
+  "type": "DECIDER_START",
+  "startTime": -1,
+  "errorAttempts": 0,
+  "args": [
+    {
+      "dataType": "java.lang.String",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": "80-1375"
+    },
+    {
+      "dataType": "java.lang.String",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": "application/zip; service=portal"
+    },
+    {
+      "dataType": "java.lang.String",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": "33333333333"
+    },
+    {
+      "dataType": "java.lang.String",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": "558101130000"
+    },
+    {
+      "dataType": "java.lang.String",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": "4c7/4c751991-a2ce-4e94-b106-b6e287d83400/4c751991-a2ce-4e94-b106-b6e287d83400.zip"
+    },
+    {
+      "dataType": "java.lang.String",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": "esb-fir"
+    },
+    {
+      "dataType": "java.util.Properties",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": {
+        "REQUEST_NUMBER": "80-1375",
+        "REQUEST_GUID": "4c751991-a2ce-4e94-b106-b6e287d83400",
+        "BEGIN_PROCESSING_DATE": 1432274761656,
+        "requestOkato": "33333333333",
+        "REQUEST_ORIGIN": "portal",
+        "requestType": "558101130000",
+        "ATTRIBUTES_DB_ID": 200878,
+        "CREATION_DATE": 1432274757419,
+        "QUERY_GUID": "4c751991-a2ce-4e94-b106-b6e287d83400",
+        "contentType": "application/zip; service=portal",
+        "rdataWaitCount": "0",
+        "REQUEST_DATA_STATUS": "FOUND"
+      }
+    }
+  ],
+  "options": {
+    "argTypes": null,
+    "taskConfigContainer": {
+      "customId": "80-1375",
+      "startTime": -1,
+      "taskList": null,
+      "retryPolicyConfigContainer": null
+    },
+    "promisesWaitFor": []
+  },
+  "unsafe": false,
+  "failTypes": null
+}
