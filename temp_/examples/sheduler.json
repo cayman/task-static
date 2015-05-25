@@ -1,0 +1,24 @@
+{
+  "id": 41,
+  "name": "GGMPChargeStatus",
+  "cron": "0 0/1 * * * ?",
+  "task": {
+    "taskId": "5c269c6b-60da-4c2d-be0c-32cda44ae08a",
+    "processId": "5c269c6b-60da-4c2d-be0c-32cda44ae08a",
+    "pass": null,
+    "method": "start",
+    "actorId": "ru.rr.gisgmp.module.worker.ChargeStatusStarter#1.0",
+    "type": "WORKER_SCHEDULED",
+    "startTime": -1,
+    "errorAttempts": 5,
+    "args": null,
+    "options": null,
+    "unsafe": false,
+    "failTypes": null
+  },
+  "queueLimit": 1,
+  "status": -1,
+  "errorCount": 0,
+  "lastError": null,
+  "maxErrors": 3
+}

@@ -1,0 +1,254 @@
+[
+  {
+    "nextExecutionTime": 1432047000000,
+    "local": true,
+    "job": {
+      "id": 21,
+      "name": "DRR starter",
+      "cron": "0 0/1 * * * ?",
+      "task": {
+        "taskId": "3d447d09-8060-4c7d-9d73-83755cf888a8",
+        "processId": "3d447d09-8060-4c7d-9d73-83755cf888a8",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.drr.starter.Starter#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": 1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": 3
+    }
+  },
+  {
+    "nextExecutionTime": null,
+    "local": false,
+    "job": {
+      "id": 22,
+      "name": "GGMPChargeImport",
+      "cron": "0 0/1 * * * ?",
+      "task": {
+        "taskId": "ee16041f-1300-4349-9c2d-9235b970ae5c",
+        "processId": "ee16041f-1300-4349-9c2d-9235b970ae5c",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.gisgmp.module.worker.ChargeImportStarter#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": -1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": 3
+    }
+  },
+  {
+    "nextExecutionTime": null,
+    "local": false,
+    "job": {
+      "id": 41,
+      "name": "GGMPChargeStatus",
+      "cron": "0 0/1 * * * ?",
+      "task": {
+        "taskId": "5c269c6b-60da-4c2d-be0c-32cda44ae08a",
+        "processId": "5c269c6b-60da-4c2d-be0c-32cda44ae08a",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.gisgmp.module.worker.ChargeStatusStarter#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": -1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": 3
+    }
+  },
+  {
+    "nextExecutionTime": null,
+    "local": false,
+    "job": {
+      "id": 42,
+      "name": "GGMPQuittanceExport",
+      "cron": "0 0/1 * * * ?",
+      "task": {
+        "taskId": "51aed1d9-c51b-4258-a0ac-60aa9f86756d",
+        "processId": "51aed1d9-c51b-4258-a0ac-60aa9f86756d",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.gisgmp.module.worker.QuittanceExportStarter#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": -1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": 3
+    }
+  },
+  {
+    "nextExecutionTime": null,
+    "local": false,
+    "job": {
+      "id": 61,
+      "name": "GGMPExpirationCheck",
+      "cron": "0 0/1 * * * ?",
+      "task": {
+        "taskId": "3e4e9d47-165c-41e2-963c-d8c07d5099ac",
+        "processId": "3e4e9d47-165c-41e2-963c-d8c07d5099ac",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.gisgmp.module.worker.ExpiredCheckStarter#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": -1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": 3
+    }
+  },
+  {
+    "nextExecutionTime": null,
+    "local": false,
+    "job": {
+      "id": 81,
+      "name": "FLK auto test",
+      "cron": "0 15 03 ? * MON-FRI",
+      "task": {
+        "taskId": "8d7a3fa8-b054-4770-9f27-54bb19bbb39d",
+        "processId": "8d7a3fa8-b054-4770-9f27-54bb19bbb39d",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.flk.test.auto.deciders.AutoTestProcess#1.0",
+        "type": "DECIDER_START",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": -1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": 3
+    }
+  },
+  {
+    "nextExecutionTime": 1432047000000,
+    "local": true,
+    "job": {
+      "id": 101,
+      "name": "Start AIRGKN subscription job check",
+      "cron": "0 0/5 * * * ?",
+      "task": {
+        "taskId": "83da301b-7221-42d3-9ba5-225b3e00f30e",
+        "processId": "83da301b-7221-42d3-9ba5-225b3e00f30e",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.airgkn.backend.worker.subscription.SubsriptionStarter#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": 1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": -1
+    }
+  },
+  {
+    "nextExecutionTime": 1432047600000,
+    "local": true,
+    "job": {
+      "id": 102,
+      "name": "AIRGKN expired subscription finalizer",
+      "cron": "0 0/15 * * * ?",
+      "task": {
+        "taskId": "678d4b34-08f5-428b-9937-08c837c2b899",
+        "processId": "678d4b34-08f5-428b-9937-08c837c2b899",
+        "pass": null,
+        "method": "processExpiration",
+        "actorId": "ru.rr.airgkn.backend.worker.subscription.SubscriptionFinalizer#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": 1,
+      "errorCount": 0,
+      "lastError": null,
+      "maxErrors": 5
+    }
+  },
+  {
+    "nextExecutionTime": null,
+    "local": false,
+    "job": {
+      "id": 121,
+      "name": "GGMPResponseSender",
+      "cron": "0 0/1 * * * ?",
+      "task": {
+        "taskId": "3dd5df2e-34fb-4fc0-a614-bc1385a35cbb",
+        "processId": "3dd5df2e-34fb-4fc0-a614-bc1385a35cbb",
+        "pass": null,
+        "method": "start",
+        "actorId": "ru.rr.gisgmp.module.worker.ResponseSenderStarter#1.0",
+        "type": "WORKER_SCHEDULED",
+        "startTime": -1,
+        "errorAttempts": 5,
+        "args": null,
+        "options": null,
+        "unsafe": false,
+        "failTypes": null
+      },
+      "queueLimit": 1,
+      "status": -2,
+      "errorCount": 2,
+      "lastError": "com.mongodb.MongoTimeoutException: Timed out after 10000 ms while waiting for a server that matches AnyServerSelector{}. Client view of cluster state is {type=Unknown, servers=[{address=test-tsk-db1-cnt.egron.net:27017, type=Unknown, state=Connecting, exception={com.mongodb.MongoException$Network: Exception opening the socket}, caused by {java.net.UnknownHostException: test-tsk-db1-cnt.egron.net: Name or service not known}}]",
+      "maxErrors": 3
+    }
+  }
+]

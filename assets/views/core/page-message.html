@@ -16,8 +16,9 @@
         </tr>
         <tr ng-if="messageEvent.detail">
             <td>
-                <div collapse="!messageEvent.$detail">
-                    <pre class="muted">{{ messageEvent.detail }}</pre>
+                <div collapse="!messageEvent.$detail" style="font-size: smaller">
+                    <pre ng-if="messageEvent.detail" class="muted">{{ messageEvent.detail }}</pre>
+                    <pre ng-if="messageEvent.detailObject">{{ messageEvent.detailObject | json }}</pre>
                 </div>
             </td>
             <td></td>

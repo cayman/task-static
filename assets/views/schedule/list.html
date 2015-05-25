@@ -1,10 +1,13 @@
-<div page-header="Create scheduled task"></div>
+<div page-header="Create scheduled task">
+    <!--<h6>{{ formParams }}</h6>-->
+    <!--<h6>{{ queryParams }}</h6>-->
+</div>
 
 <page-message></page-message>
 
 <div class="well" style="margin:5px;">
 
-    <list-reload params="scheduleParams" model="schedulesPage" update="update()">
+    <list-reload params="formParams" model="tempSchedulesModel" update="update()">
         <div style="float:right">
             <a ui-sref="schedule_create" class="btn btn-small" popover="Add scheduled task" popover-trigger="mouseenter">
                 <i class="icon-plus"></i>
@@ -26,9 +29,9 @@
         </thead>
 
         <tbody>
-           <tr ng-repeat="schedule in schedulesPageLoadedItems" class="{{ schedule.job.status | scheduleClass }}">
+           <tr ng-repeat="schedule in schedulesModel.items" class="{{ schedule.job.status | scheduleClass }}">
                <td>
-                   {{ schedulesPageLoaded.$startIndex + $index }}
+                   {{ schedulesModel.$startIndex + $index }}
                </td>
                 <td>
                     <a ui-sref="schedule({id:schedule.job.id})" class="btn-link">
@@ -78,7 +81,7 @@
         <tfoot>
         <tr>
             <td colspan="7">
-                <list-paginator params="scheduleParams" model="schedulesPageLoaded" update="update()">
+                <list-paginator params="formParams" model="schedulesModel" update="update()">
                     <span ng-if="total" class="muted">
                         Currently scheduled on node: <b>{{ total }}</b>
                     </span>
@@ -92,7 +95,7 @@
     <table width="100%" cellspacing="0" cellpadding="0">
         <tr>
             <td>
-                <div>Total: <b>{{schedulesPageLoaded.totalCount || schedulesPageLoadedItems.length}}</b> schedules</div>
+                <div>Total: <b>{{schedulesModel.totalCount || schedulesModel.items.length}}</b> schedules</div>
             </td>
             <td style="text-align: right">
                 <span ng-if="serverTime" class="muted">

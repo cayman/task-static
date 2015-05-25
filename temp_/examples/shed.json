@@ -1,0 +1,24 @@
+{
+  "id": 21,
+  "name": "DRR starter",
+  "cron": "0 0/1 * * * ?",
+  "task": {
+    "taskId": "3d447d09-8060-4c7d-9d73-83755cf888a8",
+    "processId": "3d447d09-8060-4c7d-9d73-83755cf888a8",
+    "pass": null,
+    "method": "start",
+    "actorId": "ru.rr.drr.starter.Starter#1.0",
+    "type": "WORKER_SCHEDULED",
+    "startTime": -1,
+    "errorAttempts": 5,
+    "args": null,
+    "options": null,
+    "unsafe": false,
+    "failTypes": null
+  },
+  "queueLimit": 1,
+  "status": 1,
+  "errorCount": 0,
+  "lastError": null,
+  "maxErrors": 3
+}

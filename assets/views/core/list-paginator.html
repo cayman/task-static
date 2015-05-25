@@ -14,12 +14,12 @@
 
 
     <div class="pagination pull-left">
-        <span class="muted info-text" ng-if="model">Showing <b>{{getMinIndex()}}</b> to <b>{{getMaxIndex()}}</b> of <b>{{genericPage.totalCount}}</b> entries</span>
+        <span class="muted info-text" ng-if="model">Showing <b>{{getMinIndex()}}</b> to <b>{{getMaxIndex()}}</b> of <b>{{modal.totalCount}}</b> entries</span>
     </div>
 
 
 
-    <div class="pagination pull-right" ng-if="model && model.pageNumber">
+    <div class="pagination pull-right" ng-if="pageCount">
         <ul>
             <li ng-class="{disabled: model.pageNumber === 1}">
                 <a ng-hide="model.pageNumber === 1" ng-click="go(1)">&lt;&lt; First</a>
@@ -31,11 +31,11 @@
                 <span ng-show="pageCount>1">{{ model.pageNumber }} of {{ pageCount }}</span>
                 <span ng-hide="pageCount>1">{{ pageCount }}</span>
             </li>
-            <li ng-class="{disabled: isNextDisabled()}">
-                <a ng-hide="isNextDisabled()" ng-click="go(model.pageNumber + 1)">Next &gt;</a>
+            <li ng-class="{disabled: model.pageNumber >= pageCount }">
+                <a ng-hide="model.pageNumber >= pageCount" ng-click="go(model.pageNumber + 1)">Next &gt;</a>
             </li>
-            <li ng-class="{disabled: isNextDisabled()}">
-                <a ng-hide="isNextDisabled()" ng-click="go(pageCount)">Last &gt;&gt;</a>
+            <li ng-class="{disabled: model.pageNumber >= pageCount }">
+                <a ng-hide="model.pageNumber >= pageCount" ng-click="go(pageCount)">Last &gt;&gt;</a>
             </li>
         </ul>
     </div>

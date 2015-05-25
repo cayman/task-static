@@ -15,46 +15,44 @@ angular.module('queueModule', ['coreApp'])
                 remove: {url: restQueueUrl + 'remove', method: 'POST', interceptor:rawInterceptor}
 
             }
-        )
+        );
     })
 
     .controller('queueListController', function ($log, $scope, queueRest, coreApp, $state, $stateParams, $timeout) {
-
-        $scope.queueParams = angular.copy($stateParams);
-        $log.info('queueListController',$scope.queueParams);
+        $log.info('queueListController',$stateParams);
 
         function getRest(params) {
-            // 'hoveringQueues/' or 'queues/'
             return params.periodSize ? queueRest.queryHovering : queueRest.query;
         }
 
-        //Updates queues  by polling REST resource
-        function loadModel() {
-            $log.info('loadModel', $scope.queueParams);
-
-            $scope.queuesPage = getRest($scope.queueParams)($scope.queueParams,
+        function loadModel(params) {
+            $log.info('loadModel',$scope.queryParams = params);
+            $scope.tempQueuesModel = getRest(params)(params,
                 function success(value) {
-                    $log.info('queueListController: successfully updated queues page');
-                    $scope.queuesPageLoaded = value;
-                    $scope.queuesPageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    $scope.queuesPageLoaded.$totalTasks = coreApp.getTotalCount(value);
-                    //@todo REST must return paginated object (not array)
-                    $scope.queuesPageLoadedItems = angular.isArray(value) ? value : value.items;
-                    coreApp.refreshRate($scope.queueParams, loadModel);
+                    $scope.queuesModel = coreApp.parseListModel(value);//cause array or object
+                    if($scope.queuesModel){
+                        $log.info('Successfully updated queues page');
+                        $scope.queuesModel.$totalTasks = coreApp.getTotalCount(value);
+                    }else{
+                        coreApp.info('Processes not found',value);
+                    }
+                    coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {
                     coreApp.error('Queues page update failed',reason);
                 });
         }
 
         //Initialization:
-        loadModel();
+        $scope.formParams = $stateParams;//separate form params
+        loadModel(angular.copy($scope.formParams));
 
         //Update command:
-        $scope.update = function () {
-            var params = angular.copy($scope.queueParams);
-            $log.info('update', params);
-            $state.go('queues', params, {replace: true, inherit: false, reload: true});
+        $scope.update = function (params) {
+            $state.go('queues', params || angular.copy($scope.formParams),
+                {replace: true, inherit: false, reload: true});
         };
+
+        //Finalization:
         $scope.$on('$destroy', function(){
             coreApp.stopRefreshRate();
         });
@@ -85,7 +83,7 @@ angular.module('queueModule', ['coreApp'])
                 function confirmed() {
                     queueRest.clear(queue.name,function(value){
                         $log.log('queueListController: queue cleared', value);
-                        loadModel();
+                        loadModel($scope.queryParams);
                     }, function(reason){
                         coreApp.error('Queue draining failed',reason);
                     });
@@ -98,14 +96,13 @@ angular.module('queueModule', ['coreApp'])
                 function confirmed() {
                     queueRest.remove(queue.name,function(value){
                         $log.log('queueListController: queue removed', value);
-                        loadModel();
+                        loadModel($scope.queryParams);
                     }, function(reason){
                         coreApp.error('Queue removal failed',reason);
                     });
                 });
 
         };
-
 
     })
 

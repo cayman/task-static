@@ -1,5 +1,5 @@
 angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
-    'ui.bootstrap','ui.bootstrap.datetimepicker' ])
+    'ui.bootstrap' ])
 
     .provider('coreApp', function () {
         console.log('coreApp.provider');
@@ -75,12 +75,20 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 getRawInterceptor: function () {
                     return rawInterceptor;
                 },
-                getStartIndex: function (model) {
-                    if (angular.isArray(model))
-                        return 1;
-                    else
-                        return (model.pageNumber - 1) * model.pageSize + 1;
+
+                parseListModel : function(value){
+                    if(!value){
+                        return null;
+                    }else if(angular.isArray(value) && value.length > 0){
+                        value = { items: value, $startIndex: 1 };
+                    }else if(value && value.items && value.items.length > 0){
+                        value.$startIndex = (value.pageNumber - 1) * value.pageSize + 1;
+                    }else{
+                       return null;
+                    }
+                    return value;
                 },
+
                 getTotalCount: function (value) {
                     var items = angular.isArray(value) ? value : value.items;
                     var result = 0;
@@ -102,16 +110,18 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 getKeysArray: function (list) {
                     var result = [];
                     for (var key in list) {
-                        if (list.hasOwnProperty(key) && list[key]) {
+                        if (list.hasOwnProperty(key) && list[key] && list[key]) {
                             result.push(key);
                         }
                     }
-                    return result
+                    return result;
                 },
                 objectSize: function(obj) {
                     var size = 0, key;
                     for (key in obj) {
-                        if (obj.hasOwnProperty(key)) size++;
+                        if (obj.hasOwnProperty(key)) {
+                            size++;
+                        }
                     }
                     return size;
                 },
@@ -127,7 +137,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                         //call after refreshRate
                         refreshRatePromise = $timeout(function () {
                             if (params.refreshRate > 0) {
-                                callback();
+                                callback(params);
                             }
                         }, params.refreshRate * 1000);
                     }
@@ -137,11 +147,12 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 },
                 findDictionary: function (dictionary, id, field, defaultValue) {
 
-                    if (dictionary.$resolved !== true)
+                    if (dictionary.$resolved !== true){
                         return '...';
+                    }
                     for (var i = 0, len = dictionary.length; i < len; i++) {
                         if (dictionary[i].id == id) {
-                            $log.debug('found ',id, dictionary[i][field]);
+                          //  $log.debug('found ',id, dictionary[i][field]);
                             return dictionary[i][field];
                         }
                         if (!defaultValue && dictionary[i].id == '_') {
@@ -430,7 +441,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
 
                 scope.changed = function () {
                     $log.log('Time changed to: ' + scope.timeModel);
-                }
+                };
 
             }
         };
@@ -464,8 +475,9 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
     .directive('listPaginator', function ($log,coreApp) {
 
         function pageCount(model) {
-            return Math.floor(model.totalCount / model.pageSize)
-                + ( (model.totalCount % model.pageSize ) > 0 ? 1 : 0);
+            return model.pageSize && model.totalCount?
+                (Math.floor(model.totalCount / model.pageSize) +
+                ( (model.totalCount % model.pageSize ) > 0 ? 1 : 0)): null;
 
         }
 
@@ -480,31 +492,30 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             controller: function ($scope, $element, $attrs) {
 
                 $scope.pageSizes = coreApp.getPageSizes();
+                $scope.pageCount = null;
+                var length = 0;
 
                 $scope.$watch('model', function (value) {
                     if (value) {
-                        $scope.pageCount = pageCount($scope.model);
+                        $scope.pageCount = pageCount(value);
+                        length = $scope.model.totalCount ||
+                            angular.isArray($scope.model) ? $scope.model.length :
+                                $scope.model.items.length;
                     }
                 });
 
                 $scope.getMinIndex = function () {
-                    if (angular.isArray($scope.model))//if simple array
-                        return $scope.model.length > 0 ? 1 : 0;
-                    return $scope.model.totalCount <= 0 ? 0 :
-                    ($scope.model.pageNumber - 1) * $scope.model.pageSize + 1;
+                    var min = $scope.model.pageNumber && $scope.model.pageSize ?
+                            (($scope.model.pageNumber - 1) * $scope.model.pageSize + 1) : 1;
+                    return length > 0 ? min : 0;
                 };
 
                 $scope.getMaxIndex = function () {
-                    if (angular.isArray($scope.model)) //if simple array
-                        return $scope.model.length;
-                    return $scope.model.pageNumber < $scope.pageCount ?
-                    $scope.model.pageNumber * $scope.model.pageSize :
-                        $scope.model.totalCount;
+                    return $scope.model.pageNumber && $scope.model.pageSize &&
+                    $scope.model.pageNumber < $scope.pageCount ?
+                        $scope.model.pageNumber * $scope.model.pageSize : length;
                 };
 
-                $scope.isNextDisabled = function () {
-                    return $scope.model.pageNumber >= $scope.pageCount;
-                };
 
 
                 //Update command:
@@ -559,12 +570,10 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                         $scope.messageEvent.message = message.reason.message;
                         $scope.messageEvent.detail = message.reason.stack;
                     } else if (isObject && message.reason.status) {
-                        $scope.messageEvent.message = 'Status ' + message.reason.status;
-                        $scope.messageEvent.message +=
-                            (message.reason.data && message.reason.data.trim().length>0) ?
-                            ('(' + message.reason.statusText + '):' + message.reason.data) :
+                        $scope.messageEvent.message = 'Status ' + message.reason.status +
                             ' : ' + message.reason.statusText;
-                        $scope.messageEvent.detail = message.reason.config;
+                        $scope.messageEvent.detail = message.reason.data;
+                        $scope.messageEvent.detailObject = message.reason.config;
 
                     } else {
                         $scope.messageEvent.message = message.reason;
@@ -619,13 +628,13 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             var skippingIndex = skippingIndexOf(word, skip || 25, delimiter || '.');
             if (skippingIndex >=0) {
                 //$log.log("skippingIndex["+skippingIndex+"] for["+word+"], sub1["+word.substr(0, skippingIndex+1)+"], sub 2["+word.substr(skippingIndex+1)+"]");
-                return words[word] = word.substr(0, skippingIndex+1) + '<wbr>' + word.substr(skippingIndex+1);
+                return ( words[word] = word.substr(0, skippingIndex+1) + '<wbr>' + word.substr(skippingIndex+1));
             }
-            return words[word] = word;
+            return (words[word] = word);
         }
         return function (word, skip, delimiter) {
             return words[word] || parseWord(word, skip, delimiter);
-        }
+        };
     })
     .filter('prettyStack', function (processRest, coreApp, $log) {
         return function (message) {

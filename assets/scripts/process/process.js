@@ -8,8 +8,8 @@ angular.module('processModule', ['taskModule', 'coreApp'])
         return $resource(restProcessUrl + 'process/:processId', {}, {
                 getTree: {url: '/rest/console/tree/process/:processId/:startTaskId', params: {}},
                 //list
-                query: {url: restProcessUrl + 'search', params: {}},
-                queryDefault: {url: restProcessUrl, params: {}},
+                query: {url: restProcessUrl + 'search', params: {}, isArray: true},
+                queryList: {url: restProcessUrl, params: {}},
                 //actions
                 create: {url: restOperationUrl + 'process/create', method: 'PUT', params: {}, interceptor:rawInterceptor},
                 recovery:  {url: restOperationUrl + 'recovery/add',method: 'POST', interceptor:rawInterceptor},
@@ -18,7 +18,7 @@ angular.module('processModule', ['taskModule', 'coreApp'])
                 //dictionaries
                 dictionaryStatus: {url: '/scripts/process/status.json', params: {}, isArray: true}
             }
-        )
+        );
     })
 
     .filter('processStatus', function (processRest,coreApp) {
@@ -29,36 +29,38 @@ angular.module('processModule', ['taskModule', 'coreApp'])
     })
 
     .controller('processListController', function ($log, $scope, processRest, coreApp, $state, $stateParams) {
-
-        $scope.processParams = angular.copy($stateParams);
-        $log.info('processListController',$scope.processParams);
+        $log.info('processListController',$stateParams);
 
         function getRest(params) {
-            return (params.processId || params.customId) ? processRest.query : processRest.queryDefault;
+            return (params.processId || params.customId) ? processRest.query : processRest.queryList;
         }
 
-        //Updates processes by polling REST resource
-        function loadModel() {
-            $log.info('loadModel', $scope.processParams);
-            $scope.processesPage = getRest($scope.processParams)($scope.processParams,
+        function loadModel(params) {
+            $log.info('loadModel', $scope.queryParams = params);
+            $scope.tempProcessesModel = getRest(params)(params,
                 function success(value) {
-                    $log.info('processListController: successfully updated processes page');
-                    $scope.processesPageLoaded = value;
-                    $scope.processesPageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    coreApp.refreshRate($scope.processParams, loadModel);
+                    $scope.processesModel = coreApp.parseListModel(value);//cause array or object
+                    if($scope.processesModel){
+                        $log.info('Successfully updated processes page');
+                    }else{
+                        coreApp.info('Processes not found',value);
+                    }
+                    //coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {
                     coreApp.error('Processes page update failed',reason);
                 });
         }
 
         //Initialization:
+        $scope.formParams = $stateParams;
         $scope.statuses = processRest.dictionaryStatus({},function success(){
-            loadModel();
+            loadModel(angular.copy($scope.formParams)); //separate form params
         });
 
         //Update command:
         $scope.update = function () {
-            $state.go('processes', angular.copy($scope.processParams), {replace: true, inherit: false, reload: true});
+            $state.go('processes', $scope.formParams, // @todo $scope.queryParams bug
+                {replace: true, inherit: false, reload: true});
         };
 
         //Finalization:
@@ -71,9 +73,9 @@ angular.module('processModule', ['taskModule', 'coreApp'])
             coreApp.openConfirmModal('Process will be sent to recovery service.',
                 function confirmed() {
                     processRest.recovery(process.processId, function success (value) {
-                        log.log('Process recovered', value);
+                        $log.log('Process recovered', value);
                         process.$recoverySubmited = true;
-                        $scope.update();
+                        loadModel($scope.queryParams);
                     }, function error(reason) {
                         coreApp.error('Processes recovery error',reason);
                     });
@@ -85,7 +87,7 @@ angular.module('processModule', ['taskModule', 'coreApp'])
                 function confirmed() {
                     processRest.abort(process.processId, function success(value) {
                         $log.log('Process abort success', value);
-                        $scope.update();
+                        loadModel($scope.queryParams);
                     }, function error(reason) {
                         coreApp.error('Process abort error',reason);
                     });

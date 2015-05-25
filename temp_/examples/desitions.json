@@ -1,0 +1,30 @@
+{
+  "taskId": "7c990609-8b9a-4ac4-8854-9a258260e6a5",
+  "processId": "53e94a76-f81e-459e-917b-111aea8e86c2",
+  "pass": null,
+  "value": {
+    "dataType": "ru.rr.flk.workers.PackageCheckerResult",
+    "taskId": null,
+    "valueType": "PLAIN",
+    "compositeValue": null,
+    "promise": false,
+    "errorContainer": null,
+    "ready": true,
+    "jsonvalue": {
+      "requestXmlFileName": "req_c006f44f-2f7f-408b-8632-5fcab173e859.xml",
+      "requestXmlLocation": "107/egrp02/req_c006f44f-2f7f-408b-8632-5fcab173e859.xml",
+      "requestSignatureLocation": null,
+      "attachmentsFileNames": [
+        "GKUZU_40eb5d16-e662-44181-bf26-02851fc21b9b_0002.xml",
+        "GUOKS_8c09d5f7-2ef1-4ae0-b41a-5a1eebe3fbdf.XML"
+      ],
+      "successfully": true,
+      "report": null
+    }
+  },
+  "errorContainer": null,
+  "restartTime": -1,
+  "tasks": null,
+  "actorId": "ru.rr.flk.workers.PackageChecker#1.0",
+  "executionTime": 0
+}

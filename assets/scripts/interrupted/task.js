@@ -6,12 +6,12 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         function dateFrom(){
             var from = this.from;
             this.from = undefined;
-            return interruptedUtil.parseDateRest(from,this.withTime)
+            return interruptedUtil.parseDateRest(from,this.withTime);
         }
         function dateTo(){
             var to = this.to;
             this.to = undefined;
-            return interruptedUtil.parseDateRest(to,this.withTime)
+            return interruptedUtil.parseDateRest(to,this.withTime);
         }
         return $resource(restTaskUrl + 'task', {}, {
                 //list
@@ -29,7 +29,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
                 dictionaryGroup: {url: '/scripts/interrupted/group.json', params: {}, isArray: true, cache: true}
 
             }
-        )
+        );
     })
     .run(function ($rootScope, interruptedRest) {
         $rootScope.groupsDitionairy = interruptedRest.dictionaryGroup();
@@ -55,7 +55,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         };
     })
 
-    .controller('interruptedGroupController', function ($log, $scope, $timeout, interruptedRest, interruptedUtil, coreApp, $state, $stateParams, $timeout) {
+    .controller('interruptedGroupController', function ($log, $scope, interruptedRest, interruptedUtil, coreApp, $state, $stateParams) {
 
         $scope.interruptedParams = angular.copy($stateParams);
         $log.info('interruptedGroupController', $scope.interruptedParams);

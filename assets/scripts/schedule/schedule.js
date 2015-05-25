@@ -18,7 +18,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
                 //dictionaries
                 dictionaryStatus: {url: '/scripts/schedule/status.json', params: {}, isArray: true}
             }
-        )
+        );
     })
 
     .filter('scheduleStatus', function (scheduleRest, coreApp) {
@@ -36,22 +36,19 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
     })
 
     .controller('scheduleListController', function ($log, $scope, scheduleRest,coreRest, coreApp, $state, $stateParams, $timeout) {
+        $log.info('scheduleListController', $stateParams);
 
-        $scope.scheduleParams = angular.copy($stateParams);
-        $log.info('scheduleListController', $scope.scheduleParams);
-
-        //Updates schedules  by polling REST resource
-        function loadModel() {
-            $log.info('load schedules params:', $scope.scheduleParams);
-
-            $scope.schedulesPage = scheduleRest.query($scope.scheduleParams,
+        function loadModel(params) {
+            $log.info('loadModel', $scope.queryParams = params);
+            $scope.tempSchedulesModel = scheduleRest.query(params,
                 function success(value) {
-                    $log.info('scheduleListController: successfully updated schedules page');
-                    $scope.schedulesPageLoaded = value;
-                    $scope.schedulesPageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    //@todo REST must return paginated object (not array)
-                    $scope.schedulesPageLoadedItems = angular.isArray(value) ? value : value.items;
-                    coreApp.refreshRate($scope.scheduleParams, loadModel);
+                    $scope.schedulesModel =  coreApp.parseListModel(value);//cause array or object
+                    if($scope.schedulesModel){
+                        $log.info('Successfully updated scheduled tasks page');
+                    }else{
+                        coreApp.info('Scheduled tasks not found',value);
+                    }
+                    coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {
                     coreApp.error('Schedules page update failed',reason);
                 });
@@ -72,15 +69,13 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
         }
 
         //Initialization:
-        loadModel();
+        $scope.formParams = $stateParams;
+        loadModel(angular.copy($scope.formParams));//separate form params
 
         //Update command:
-        $scope.update = function () {
-            $state.go('schedules', angular.copy($scope.scheduleParams), {
-                replace: true,
-                inherit: false,
-                reload: true
-            });
+        $scope.update = function (params) {
+            $state.go('schedules', params || angular.copy($scope.formParams),
+                {replace: true, inherit: false, reload: true});
         };
 
         //Finalization:
@@ -93,7 +88,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
             scheduleRest.activate({id: schedule.job.id},
                 function success(value) {
                     $log.log('scheduleListController: schedule activated', value);
-                    loadModel();
+                    loadModel($scope.queryParams);
                 }, function error(reason) {
                     coreApp.error('Schedule activate failed',reason);
                 });
@@ -103,7 +98,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
             scheduleRest.deactivate({id: schedule.job.id},
                 function success(value) {
                     $log.log('scheduleListController: schedule deactivated', value);
-                    loadModel();
+                    loadModel($scope.queryParams);
                 }, function error(reason) {
                     coreApp.error('Schedule deactivate failed',reason);
                 });
@@ -115,7 +110,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
                     scheduleRest.delete({id: schedule.job.id},
                         function success(value) {
                             $log.log('scheduleListController: schedule removed', value);
-                            loadModel();
+                            loadModel($scope.queryParams);
                         }, function error(reason) {
                             coreApp.error('Schedule removal failed',reason);
                         });
@@ -171,8 +166,12 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
             if ($scope.job.cron) {
                 scheduleRest.validate({value: $scope.job.cron},
                     function success(value) {
-                        $log.info('scheduleCardController: successfully cron validate', value);
-                        $scope.job.isCronValid = !(value.length > 0);
+                        if(value.length > 0) {
+                            $log.info('scheduleCardController: successfully cron validate', value);
+                            $scope.job.isCronValid = true;
+                        } else {
+                            $scope.job.isCronValid = false;
+                        }
                     }, function error(reason) {
                         coreApp.error('Schedule cron validate failed',reason);
                     });

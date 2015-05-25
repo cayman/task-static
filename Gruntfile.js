@@ -13,7 +13,7 @@ module.exports = function (grunt) {
                 'Gruntfile.js'
             ],
             js: [
-                '<%=params.build %>/js/console/**/*.js'
+                '<%=params.build %>/scripts/**/*.js'
             ]
         },
 
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
         watch: {
             assets: {
                 options: {
-                    cwd: '<%= params.watch %>/src',
+                    cwd: '<%= params.build %>',
                     livereload: true
                 },
                 files: [ '**/*.hbs', '**/*.html', '**/*.json', '**/*.js','**/*.yml','**/*.css'],

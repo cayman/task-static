@@ -1,0 +1,289 @@
+[
+  {
+    "taskId": "d99d29a7-2980-48bd-aacf-981df3ee73e9",
+    "processId": "56762643-46eb-42a1-88ac-42e9b7239609",
+    "pass": null,
+    "method": "compareFlkProcessResult",
+    "actorId": "ru.rr.flk.test.auto.deciders.TestProcess#1.0",
+    "type": "DECIDER_ASYNCHRONOUS",
+    "startTime": -1,
+    "errorAttempts": 0,
+    "args": [
+      {
+        "dataType": "ru.rr.flk.test.auto.model.TestPackage",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": {
+          "number": "35-811",
+          "contentType": "application/zip; service=portal",
+          "okato": "29202000000",
+          "requestCode": "0",
+          "packageLocation": "866/kais/request_body.zip",
+          "successfully": true,
+          "report": null,
+          "taxFree": true
+        }
+      },
+      {
+        "dataType": null,
+        "taskId": "faade404-c724-4069-be04-c11c4bc82ece",
+        "valueType": null,
+        "compositeValue": null,
+        "promise": true,
+        "errorContainer": null,
+        "ready": false,
+        "jsonvalue": null
+      }
+    ],
+    "options": null,
+    "unsafe": false,
+    "failTypes": null
+  },
+  {
+    "taskId": "bbef2be8-08db-4f42-8edd-806e86be4452",
+    "processId": "56762643-46eb-42a1-88ac-42e9b7239609",
+    "pass": null,
+    "method": "decode",
+    "actorId": "ru.rr.crypto.encryption.workers.EncryptionWorker#1.0",
+    "type": "WORKER",
+    "startTime": -1,
+    "errorAttempts": 3,
+    "args": [
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "866/kais/request_body.zip"
+      },
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "866/kais/request_body.zip.decoded"
+      },
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "flk-stress"
+      }
+    ],
+    "options": null,
+    "unsafe": true,
+    "failTypes": []
+  },
+  {
+    "taskId": "633d75e2-bec6-4350-9475-18e686781d68",
+    "processId": "56762643-46eb-42a1-88ac-42e9b7239609",
+    "pass": null,
+    "method": "unzipPackage",
+    "actorId": "ru.rr.flk.deciders.FlkProcess#1.0",
+    "type": "DECIDER_ASYNCHRONOUS",
+    "startTime": -1,
+    "errorAttempts": 0,
+    "args": [
+      {
+        "dataType": "ru.rr.flk.model.RequestMetaData",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": {
+          "storageName": "flk-stress",
+          "number": "35-811",
+          "contentType": "application/zip; service=portal",
+          "okato": "29202000000",
+          "requestCode": "0",
+          "packageFileName": "request_body.zip",
+          "packageLocation": "866/kais/request_body.zip",
+          "decodedPackageLocation": null,
+          "packageDirectoryLocation": null,
+          "requestXmlLocation": null,
+          "requestXmlFileName": null,
+          "requestSignatureLocation": null,
+          "attachmentsFileNames": null,
+          "certificateBase64": null,
+          "requestType": null,
+          "snils": null,
+          "ogrn": null,
+          "oids": null,
+          "requestData": null,
+          "stepRegistrar": {
+            "steps": [
+              {
+                "id": "start",
+                "result": true,
+                "input": {
+                  "requestCode": "0",
+                  "packageLocation": "866/kais/request_body.zip",
+                  "okato": "29202000000",
+                  "contentType": "application/zip; service=portal",
+                  "requestNumber": "35-811",
+                  "buildVersion": "2.0-SNAPSHOT#ef21d6b4 from 20150513-1453"
+                }
+              },
+              {
+                "id": "packageDecoding",
+                "input": {
+                  "fileLocation": "866/kais/request_body.zip",
+                  "storageName": "flk-stress",
+                  "decodedFileLocation": "866/kais/request_body.zip.decoded"
+                }
+              }
+            ]
+          },
+          "taxFree": false
+        }
+      },
+      {
+        "dataType": null,
+        "taskId": "bbef2be8-08db-4f42-8edd-806e86be4452",
+        "valueType": null,
+        "compositeValue": null,
+        "promise": true,
+        "errorContainer": null,
+        "ready": false,
+        "jsonvalue": null
+      }
+    ],
+    "options": null,
+    "unsafe": false,
+    "failTypes": null
+  },
+  {
+    "taskId": "a43ba247-48c0-4a76-9158-3dc02c3f42ea",
+    "processId": "56762643-46eb-42a1-88ac-42e9b7239609",
+    "pass": null,
+    "method": "isPassed",
+    "actorId": "ru.rr.flk.test.auto.deciders.TestProcess#1.0",
+    "type": "DECIDER_START",
+    "startTime": -1,
+    "errorAttempts": 0,
+    "args": [
+      {
+        "dataType": "ru.rr.flk.test.auto.model.TestPackage",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": {
+          "number": "35-811",
+          "contentType": "application/zip; service=portal",
+          "okato": "29202000000",
+          "requestCode": "0",
+          "packageLocation": "866/kais/request_body.zip",
+          "successfully": true,
+          "report": null,
+          "taxFree": true
+        }
+      }
+    ],
+    "options": null,
+    "unsafe": false,
+    "failTypes": null
+  },
+  {
+    "taskId": "faade404-c724-4069-be04-c11c4bc82ece",
+    "processId": "56762643-46eb-42a1-88ac-42e9b7239609",
+    "pass": null,
+    "method": "start",
+    "actorId": "ru.rr.flk.deciders.FlkProcess#1.0",
+    "type": "DECIDER_START",
+    "startTime": -1,
+    "errorAttempts": 0,
+    "args": [
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "35-811"
+      },
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "application/zip; service=portal"
+      },
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "29202000000"
+      },
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "0"
+      },
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "866/kais/request_body.zip"
+      },
+      {
+        "dataType": "java.lang.String",
+        "taskId": null,
+        "valueType": "PLAIN",
+        "compositeValue": null,
+        "promise": false,
+        "errorContainer": null,
+        "ready": true,
+        "jsonvalue": "flk-stress"
+      }
+    ],
+    "options": {
+      "argTypes": null,
+      "taskConfigContainer": {
+        "customId": "35-811",
+        "startTime": -1,
+        "taskList": null,
+        "retryPolicyConfigContainer": null
+      },
+      "promisesWaitFor": []
+    },
+    "unsafe": false,
+    "failTypes": null
+  }
+]

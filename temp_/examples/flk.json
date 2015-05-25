@@ -1,0 +1,128 @@
+[
+  {
+    "message": "OK",
+    "id": "initRequest",
+    "result": true,
+    "num": 1,
+    "output": {
+      "fromPerson": true,
+      "fromGoverment": false,
+      "fromForeignOrganisation": false,
+      "fromLegal": false
+    }
+  },
+  {
+    "message": "OK",
+    "id": "verifyCertificateBySmev",
+    "result": true,
+    "num": 2,
+    "output": {"smevResultCode": 0}
+  },
+  {
+    "message": "OK",
+    "id": "verifyCertificateByTechnoKad",
+    "result": true,
+    "num": 3,
+    "output": {"technokadResultCode": 0}
+  },
+  {
+    "message": "OK",
+    "id": "checkSignature",
+    "result": true,
+    "input": {"documentName": "req_d94b63ee-8d89-4aad-98ab-3902e4e30b3f.xml"},
+    "num": 4
+  },
+  {
+    "message": "OK",
+    "id": "validateRequestType",
+    "result": true,
+    "input": {"requestType": "КУ"},
+    "num": 5
+  },
+  {
+    "message": "OK",
+    "id": "validateWEBRequest",
+    "result": true,
+    "input": {"deliveryKind": "785003000000"},
+    "num": 6
+  },
+  {
+    "message": "OK",
+    "id": "validateAgentRestricted",
+    "result": true,
+    "input": {
+      "isAgentRestricted": false,
+      "fromPerson": true,
+      "isAgentNull": true
+    },
+    "num": 7
+  },
+  {
+    "message": "OK",
+    "id": "validatePossibility",
+    "result": true,
+    "num": 8
+  },
+  {
+    "message": "OK",
+    "id": "checkSignature",
+    "result": true,
+    "num": 9
+  },
+  {
+    "message": "OK",
+    "id": "validateSigned",
+    "result": true,
+    "num": 10
+  },
+  {
+    "message": "OK",
+    "id": "validateSpecial",
+    "result": true,
+    "num": 11
+  },
+  {
+    "message": "OK",
+    "id": "validatePerson",
+    "result": true,
+    "num": 12
+  },
+  {
+    "message": "OK",
+    "id": "validateDeliveryKind",
+    "result": true,
+    "input": {
+      "deliveryKind": "785003000000",
+      "isDeliveryKindRequired": true
+    },
+    "num": 13
+  },
+  {
+    "message": "OK",
+    "id": "verifyCertificateBySmev",
+    "result": true,
+    "num": 14,
+    "output": {"smevResultCode": 0}
+  },
+  {
+    "message": "OK",
+    "id": "verifyCertificateByTechnoKad",
+    "result": true,
+    "num": 15,
+    "output": {"technokadResultCode": 0}
+  },
+  {
+    "message": "OK",
+    "id": "checkSignature",
+    "result": true,
+    "input": {"documentName": "gkuzu_29072014_d94b63ee-8d89-4aad-98ab-3902e4e30b3f.xml"},
+    "num": 16
+  },
+  {
+    "message": "Межевой план не подписан электронной цифровой подписью кадастрового инженера.",
+    "id": "checkLandmarkPlan",
+    "result": false,
+    "input": {"landmarkPlanName": "GKUZU_29072014_d94b63ee-8d89-4aad-98ab-3902e4e30b3f.zip"},
+    "num": 17
+  }
+]

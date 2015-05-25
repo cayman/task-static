@@ -1,0 +1,44 @@
+{
+  "taskId": "d99d29a7-2980-48bd-aacf-981df3ee73e9",
+  "processId": "56762643-46eb-42a1-88ac-42e9b7239609",
+  "pass": null,
+  "method": "compareFlkProcessResult",
+  "actorId": "ru.rr.flk.test.auto.deciders.TestProcess#1.0",
+  "type": "DECIDER_ASYNCHRONOUS",
+  "startTime": -1,
+  "errorAttempts": 0,
+  "args": [
+    {
+      "dataType": "ru.rr.flk.test.auto.model.TestPackage",
+      "taskId": null,
+      "valueType": "PLAIN",
+      "compositeValue": null,
+      "promise": false,
+      "errorContainer": null,
+      "ready": true,
+      "jsonvalue": {
+        "number": "35-811",
+        "contentType": "application/zip; service=portal",
+        "okato": "29202000000",
+        "requestCode": "0",
+        "packageLocation": "866/kais/request_body.zip",
+        "successfully": true,
+        "report": null,
+        "taxFree": true
+      }
+    },
+    {
+      "dataType": null,
+      "taskId": "faade404-c724-4069-be04-c11c4bc82ece",
+      "valueType": null,
+      "compositeValue": null,
+      "promise": true,
+      "errorContainer": null,
+      "ready": false,
+      "jsonvalue": null
+    }
+  ],
+  "options": null,
+  "unsafe": false,
+  "failTypes": null
+}

@@ -1,0 +1,145 @@
+{
+  "id": "85f49cc4-5402-4951-8cb8-1296854d7e19",
+  "parent": null,
+  "desc": "ru.rr.flk.esb.actors.deciders.Adapter#1.0 - toFlk",
+  "state": 1,
+  "children": [
+    {
+      "id": "6452d593-6614-481d-aabb-80cdfc40282f",
+      "parent": "85f49cc4-5402-4951-8cb8-1296854d7e19",
+      "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - start",
+      "state": 1,
+      "children": [
+        {
+          "id": "f2e7a5fe-dde1-4ac5-b13e-214fa6f2c8e3",
+          "parent": "6452d593-6614-481d-aabb-80cdfc40282f",
+          "desc": "ru.rr.crypto.encryption.workers.EncryptionWorker#1.0 - decode",
+          "state": 1,
+          "children": null,
+          "tasksCount": 1
+        },
+        {
+          "id": "d1ec46c1-ef83-4b21-9a34-3fd63f7b8bd1",
+          "parent": "6452d593-6614-481d-aabb-80cdfc40282f",
+          "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - unzipPackage",
+          "state": 1,
+          "children": [
+            {
+              "id": "10445d01-120f-4f59-92aa-3225085c61de",
+              "parent": "d1ec46c1-ef83-4b21-9a34-3fd63f7b8bd1",
+              "desc": "ru.rr.flk.workers.ZipWorker#1.0 - unzip",
+              "state": 1,
+              "children": null,
+              "tasksCount": 1
+            },
+            {
+              "id": "c9a6e421-bd81-437e-8cb9-23678f8bc4b6",
+              "parent": "d1ec46c1-ef83-4b21-9a34-3fd63f7b8bd1",
+              "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - checkPackage",
+              "state": 1,
+              "children": [
+                {
+                  "id": "85f36504-1879-47f8-bb91-a96022a14c90",
+                  "parent": "c9a6e421-bd81-437e-8cb9-23678f8bc4b6",
+                  "desc": "ru.rr.flk.workers.PackageChecker#1.0 - check",
+                  "state": 1,
+                  "children": null,
+                  "tasksCount": 1
+                },
+                {
+                  "id": "ed4b0ce3-f49f-4368-bc1e-e5b8ff2f000c",
+                  "parent": "c9a6e421-bd81-437e-8cb9-23678f8bc4b6",
+                  "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - detectRequestSchema",
+                  "state": 1,
+                  "children": [
+                    {
+                      "id": "3ca58767-7a62-43d8-aacf-aab4d7abdd7f",
+                      "parent": "ed4b0ce3-f49f-4368-bc1e-e5b8ff2f000c",
+                      "desc": "ru.rr.flk.workers.RequestTypeDetector#1.0 - detect",
+                      "state": 1,
+                      "children": null,
+                      "tasksCount": 1
+                    },
+                    {
+                      "id": "0128c338-46f6-4f15-9f94-33f559c70d9e",
+                      "parent": "ed4b0ce3-f49f-4368-bc1e-e5b8ff2f000c",
+                      "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - validationBySchema",
+                      "state": 1,
+                      "children": [
+                        {
+                          "id": "967514ec-1ec0-4a13-9f60-664304903769",
+                          "parent": "0128c338-46f6-4f15-9f94-33f559c70d9e",
+                          "desc": "ru.rr.flk.workers.DocumentSchemaValidator#1.0 - isValid",
+                          "state": 1,
+                          "children": null,
+                          "tasksCount": 1
+                        },
+                        {
+                          "id": "7ba3ba75-4128-4db4-a7e0-952978be6667",
+                          "parent": "0128c338-46f6-4f15-9f94-33f559c70d9e",
+                          "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - checkSignature",
+                          "state": 1,
+                          "children": [
+                            {
+                              "id": "e0e1204a-d4fe-498a-b436-1c6d439f8ff3",
+                              "parent": "7ba3ba75-4128-4db4-a7e0-952978be6667",
+                              "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - requestValidation",
+                              "state": 1,
+                              "children": [
+                                {
+                                  "id": "4759b9f9-35d8-49df-ad07-bb0cd3d5e458",
+                                  "parent": "e0e1204a-d4fe-498a-b436-1c6d439f8ff3",
+                                  "desc": "ru.rr.flk.validators.deciders.GknIr02Validator#1.0 - validate",
+                                  "state": 1,
+                                  "children": null,
+                                  "tasksCount": 1
+                                },
+                                {
+                                  "id": "d27ec2e5-bfed-42ae-bf5f-4d88d0ad282b",
+                                  "parent": "e0e1204a-d4fe-498a-b436-1c6d439f8ff3",
+                                  "desc": "ru.rr.flk.deciders.FlkProcess#1.0 - finish",
+                                  "state": 1,
+                                  "children": null,
+                                  "tasksCount": 1
+                                }
+                              ],
+                              "tasksCount": 3
+                            }
+                          ],
+                          "tasksCount": 4
+                        }
+                      ],
+                      "tasksCount": 6
+                    }
+                  ],
+                  "tasksCount": 8
+                }
+              ],
+              "tasksCount": 10
+            }
+          ],
+          "tasksCount": 12
+        }
+      ],
+      "tasksCount": 14
+    },
+    {
+      "id": "0015c575-b26e-4ce1-aafc-9b38cfdb3b75",
+      "parent": "85f49cc4-5402-4951-8cb8-1296854d7e19",
+      "desc": "ru.rr.flk.esb.actors.deciders.Adapter#1.0 - toEsb",
+      "state": 1,
+      "children": [
+        {
+          "id": "3a487c21-7b09-441a-b5ae-25c26872dc0b",
+          "parent": "0015c575-b26e-4ce1-aafc-9b38cfdb3b75",
+          "desc": "ru.rr.flk.esb.actors.workers.Sender#1.0 - send",
+          "state": 1,
+          "children": null,
+          "tasksCount": 1
+        }
+      ],
+      "tasksCount": 2
+    }
+  ],
+  "tasksCount": 17
+}

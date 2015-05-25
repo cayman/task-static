@@ -7,13 +7,13 @@ angular.module('taskModule', ['coreApp'])
                 getTree: {url: coreApp.getRestUrl() + 'tree/task/:processId/:taskId', params: {}},
                 //list
                 query: {url: restTaskUrl + 'search', params: {}, isArray: true},
-                queryDefault: {url: restTaskUrl, params: {}},
+                queryList: {url: restTaskUrl, params: {}},
                 queryRepeated: {url: coreApp.getRestUrl() + 'repeatedTasks/', params: {}, isArray: true},
                 //dictionaries
                 dictionaryStatus: {url: '/scripts/task/status.json', params: {}, isArray: true}
 
             }
-        )
+        );
     })
 
     .filter('taskStatus', function (taskRest, coreApp) {
@@ -39,7 +39,7 @@ angular.module('taskModule', ['coreApp'])
                     if (value && value.$resolved) {
                         scope.taskTreeItems = coreTree.getFlatArray([value], 'children');
                     }
-                }, true)
+                }, true);
 
             }
         };
@@ -77,37 +77,38 @@ angular.module('taskModule', ['coreApp'])
     })
 
     .controller('taskListController', function ($log, $scope, taskRest, coreApp, coreTree, $state, $stateParams, $timeout) {
-
-        $scope.taskParams = angular.copy($stateParams);
-        $log.info('taskListController', $scope.taskParams);
+        $log.info('taskListController', $stateParams);
 
         function getRest(params) {
-            return params.iterationCount ? taskRest.queryRepeated :
-                ((params.taskId || params.processId) ? taskRest.query : taskRest.queryDefault );
+            return params.iterationCount ? taskRest.queryRepeated:
+                ((params.taskId || params.processId) ?
+                    taskRest.query : taskRest.queryList );
         }
 
-        //Updates tasks  by polling REST resource
-        function loadModel() {
-            $log.info('load tasks params:', $scope.taskParams);
-            $scope.tasksPage = getRest($scope.taskParams)($scope.taskParams,
+        function loadModel(params) {
+            $log.info('loadModel', $scope.queryParams = params);
+            $scope.tempTasksModel = getRest(params)(params,
                 function success(value) {
-                    $log.info('taskListController: successfully updated tasks page');
-                    $scope.tasksPageLoaded = value;
-                    $scope.tasksPageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    //@todo REST must return paginated object (not array)
-                    $scope.tasksPageLoadedItems = angular.isArray(value) ? value : value.items;
-                    coreApp.refreshRate($scope.taskParams, loadModel, $scope);
+                    $scope.tasksModel =  coreApp.parseListModel(value); //cause array or object
+                    if($scope.tasksModel){
+                        $log.info('Successfully updated tasks page');
+                    }else{
+                        coreApp.info('Tasks not found',value);
+                    }
+                    coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {
-                    $log.error('Tasks page update failed', reason);
+                    coreApp.error('Tasks page update failed', reason);
                 });
         }
 
         //Initialization:
-        loadModel();
+        $scope.formParams = $stateParams;
+        loadModel(angular.copy($scope.formParams));//separate form params
 
         //Update command:
-        $scope.update = function () {
-            $state.go('tasks', angular.copy($scope.taskParams), {replace: true, inherit: false, reload: true});
+        $scope.update = function (params) {
+            $state.go('tasks', params || angular.copy($scope.formParams),
+                {replace: true, inherit: false, reload: true});
         };
 
         //Finalization:
@@ -118,7 +119,7 @@ angular.module('taskModule', ['coreApp'])
         //Actions
         $scope.showArgs = function (task) {
             coreApp.openPropertiesModal(task.args, task.taskId);
-        }
+        };
 
     })
     .controller('taskCardController', function ($log, $scope, taskRest, coreApp, $state, $stateParams) {

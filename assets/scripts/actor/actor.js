@@ -16,62 +16,65 @@ angular.module('actorModule', ['coreApp'])
     })
 
     .controller('actorListController', function ($log, $scope, actorRest, coreApp, $state, $stateParams, $timeout) {
+        $log.info('actorListController',$stateParams);
 
-        $scope.actorParams = angular.copy($stateParams);
-        $log.info('actorListController',$scope.actorParams);
-
-        //Updates test  by polling REST resource
-        function loadModel() {
-            $log.info('loadModel', $scope.actorParams);
-            $scope.actorsPage = actorRest.query($scope.actorParams,
+        function loadModel(params) {
+            $log.info('loadModel', $scope.queryParams = params);
+            $scope.tempActorsModel = actorRest.query(params,
                 function success(value) {
-                    $log.info('actorListController: successfully updated actors page',value);
-                    $scope.actorsPageLoaded = value;
-                    $scope.actorsPageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    loadMetrics();
-                    coreApp.refreshRate($scope.actorParams, loadModel);
+                    $scope.actorsModel  =  coreApp.parseListModel(value); //cause array or object
+                    if($scope.actorsModel){
+                        $log.info('Successfully updated actors page');
+                        loadMetrics(params,value);
+                    }else{
+                        coreApp.info('Actors not found',reason);
+                    }
+                    coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {
                     coreApp.error('Actors page update failed',reason);
                 });
         }
 
-        function loadMetrics() {
-            var metricNames = coreApp.getKeysArray($scope.metricOptions);
-            if(metricNames.length > 0 && $scope.actorsPageLoaded.items.length > 0){
+        function loadMetrics(params,actorsModel) {
+            var metricNames = coreApp.getKeysArray(params.metrics);
+            if(metricNames.length > 0){
                 $log.info('actorListController: load metric data');
-                $scope.metricsPage = actorRest.loadMetrics({ metrics: metricNames,
-                        actorIds: coreApp.getIdValueArray($scope.actorsPageLoaded.items)},
+                $scope.tempMetricsModel = actorRest.loadMetrics(
+                        { metrics: metricNames,
+                        actorIds: coreApp.getIdValueArray(actorsModel.items)},
                     function success(value) {
                         $log.info('actorListController: successfully updated metrics page');
-                        $scope.metricsPageLoaded = value;
+                        $scope.metricsModel = value;
                     }, function error(reason) {
                         coreApp.error('Metrics for actors update failed',reason);
+                        $scope.metricsModel = null;
                     });
             }
         }
 
-        //Initialization: after load metrics dictionary
-        $scope.metrics = actorRest.dictionaryMetrics({},function success(value) {
-            $log.log('Loaded metrics',$scope.metrics);
-            loadModel();
-        });
-        //Initialization: get selected metrics from url param 'metrics'
-        $scope.metricOptions = $scope.actorParams.metrics ? JSON.parse($scope.actorParams.metrics) : {};
+        //Initialization:
+        $scope.formParams = $stateParams;
+        $scope.formParams.metrics = $scope.formParams.metrics ?
+            JSON.parse($scope.formParams.metrics) : {};
 
-        $scope.$watch('metricOptions',function(newValue, oldValue){
-            if(newValue && newValue!=oldValue){
-                $log.info('metrics',newValue);
-                //change url param 'metrics'
-                $scope.actorParams.metrics = JSON.stringify(newValue);
-                if($scope.actorsPage.$resolved){
-                    loadMetrics();
-                }
-            }
-        },true);
+        $scope.metrics = actorRest.dictionaryMetrics({},
+            function success(value) {
+                $log.log('Loaded metrics dictionary', value);
+                loadModel(angular.copy($scope.formParams));
+            }, function error(reason) {
+                coreApp.error('Metrics update failed', reason);
+            });
 
         //Update command:
         $scope.update = function () {
-            $state.go('actors', angular.copy($scope.actorParams), {replace: true, inherit: false, reload: true});
+            var params = angular.copy($scope.formParams);
+            Object.keys(params.metrics).forEach(function(k) {
+                if (!params.metrics[k]) {
+                    delete params.metrics[k];
+                }
+            });
+            params.metrics = JSON.stringify(params.metrics);
+            $state.go('actors', params, {replace: true, inherit: false, reload: true});
         };
 
         //Finalization:
@@ -81,27 +84,25 @@ angular.module('actorModule', ['coreApp'])
 
         //Actions
         $scope.unblock = function (actor) {
-            coreApp.openConfirmModal('Actor will be set to unblock.').result.then(
+            coreApp.openConfirmModal('Actor will be set to unblock.',
                 function confirmed() {
                     actorRest.unblock(actor.id,function success() {
                         $log.log('Actor ['+actor.id+'] have been set to unblocked');
-                        loadModel();
+                        loadModel($scope.queryParams);
                     }, function error(reason) {
                         coreApp.error('Error setting unblocked for actor ['+actor.id+']',reason);
-                       // $scope.update();
                     });
                 });
         };
 
         $scope.block = function (actor) {
-            coreApp.openConfirmModal('Actor will be set to block.').result.then(
+            coreApp.openConfirmModal('Actor will be set to block.',
                 function confirmed() {
                     actorRest.block(actor.id,function success() {
                         $log.log('Actor ['+actor.id+'] have been set to blocked');
-                        loadModel();
+                        loadModel($scope.queryParams);
                     }, function error(reason) {
                         coreApp.error('Error setting blocked for actor ['+actor.id+']',reason);
-                        // $scope.update();
                     });
                 });
         };
