@@ -76,10 +76,24 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                     return rawInterceptor;
                 },
 
+
+                toObject: function(list){
+                    return  _.reduce(list, function(object, item ){
+                        object[item.id] = item;
+                        return object;
+                    }, {});
+                },
+                clearObject: function(list){
+                    return  _.reduce(list, function(object, value, property ){
+                        if(value) {
+                            object[property] = value;
+                        }
+                        return object;
+                    }, {});
+                },
+
                 parseListModel : function(value){
-                    if(!value){
-                        return null;
-                    }else if(angular.isArray(value) && value.length > 0){
+                    if(angular.isArray(value) && value.length > 0){
                         value = { items: value, $startIndex: 1 };
                     }else if(value && value.items && value.items.length > 0){
                         value.$startIndex =
@@ -109,25 +123,6 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 },
                 getDateString: function (date){
                     return $filter('date')(date || new Date(), 'yyyy-MM-dd');
-                },
-
-                findDictionary: function (dictionary, id, field, defaultValue) {
-                    if (dictionary.$resolved !== true){
-                        return '...';
-                    }
-                    var item = _.find(dictionary, function(item){
-                        return item.id == id;
-                    });
-                    if(item){
-                        return item[field] || defaultValue || 'Unknown';
-                    }else{
-                        if(!defaultValue){
-                            var defaultItem = _.find(dictionary, function(item){
-                                return item.id == '_';
-                            });
-                        }
-                        return item[field] || defaultValue || defaultItem[field] || 'Unknown';
-                    }
                 },
 
                 openModal: function (dialogConfig, params) {
@@ -180,6 +175,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
         datepickerConfig.showWeeks = false;
         datepickerConfig.minDate="2010-01-01";
         datepickerConfig.maxDate="2050-01-01";
+
     })
 
     //Services
@@ -196,15 +192,15 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
     .factory('coreTree', function ($log, coreApp) {
 
         function walkRecursiveObject(list, baseItems, subItemsField, parent) {
-            var subNum = 0;
+
             var contItems = baseItems.length;
-            baseItems.forEach(function (baseItem) {
+            _.each(baseItems, function (baseItem, index) {
                // $log.debug('baseItem',baseItem);
                 var item = angular.copy(baseItem);
                 item.$children = baseItem[subItemsField] ? baseItem[subItemsField].length : 0;
 
                 item.$key = list.length;
-                item.$num = parent ? (parent.$num + '.' + (++subNum)) : ('' + (++subNum));
+                item.$num = parent ? (parent.$num + '.' + (index + 1)) : ('' + (index + 1));
                 item.$level = parent ? (parent.$level + 1 ) : 0;
                 item.$parentKey = parent ? parent.$key : null;
                 item.$expanded = !parent && (item.$children === 0 || contItems === 1);
@@ -415,7 +411,10 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 $scope.refreshRate = $stateParams.refreshRate;
                 //Update command:
                 $scope.reload = function () {
-                    $state.go($state.current,{refreshRate:$scope.refreshRate},
+
+                    $stateParams.refreshRate = $scope.refreshRate;
+                    $log.log('reload', $stateParams);
+                    $state.go($state.current,$stateParams.refreshRate,
                         {replace: true, inherit: true, reload: true});//update model
                 };
 
@@ -425,7 +424,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
         };
     })
 
-    .directive('listPaginator', function ($log,coreApp,$state) {
+    .directive('listPaginator', function ($log,coreApp,$state,$stateParams) {
 
         function pageCount(model) {
             return model.pageSize && model.totalCount?
@@ -471,9 +470,11 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
 
                 //Update command:
                 $scope.go = function (pageNum) {
-                    //&$log.log('go')
-                    $state.go($state.current,
-                        {pageNum: pageNum, pageSize:  $scope.model.pageSize},
+                    $stateParams.pageNum = pageNum;
+                    $stateParams.pageSize = $scope.model.pageSize;
+
+                    $log.log('go',$stateParams);
+                    $state.go($state.current,$stateParams,
                         {replace: true, inherit: true, reload: true});//update model
                 };
 

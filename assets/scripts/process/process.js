@@ -16,15 +16,19 @@ angular.module('processModule', ['taskModule', 'coreApp'])
                 clone: {url: restOperationUrl + 'process/clone', method: 'POST', interceptor:rawInterceptor},
                 abort: {url: restOperationUrl + 'process/abort',method: 'POST', interceptor:rawInterceptor},
                 //dictionaries
-                dictionaryStatus: {url: '/scripts/process/status.json', params: {}, isArray: true}
+                dictionaryState: {url: '/scripts/process/states.json', params: {}, isArray: true}
             }
         );
     })
 
-    .filter('processStatus', function (processRest,coreApp) {
-        var statuses = processRest.dictionaryStatus();
+    .filter('processState', function (processRest,coreApp) {
+        var states;
+        processRest.dictionaryState(function(list){
+             states = coreApp.toObject(list);
+        });
         return function (id,field) {
-            return coreApp.findDictionary(statuses,id,field);
+            if(!states){ return '...'; }
+            return states[id] ? states[id][field] : states.unknown[field];
         };
     })
 
@@ -53,7 +57,7 @@ angular.module('processModule', ['taskModule', 'coreApp'])
 
         //Initialization:
         $scope.formParams = angular.copy($stateParams);
-        $scope.statuses = processRest.dictionaryStatus({},function success(){
+        $scope.statuses = processRest.dictionaryState(function success(){
             loadModel(angular.copy($scope.formParams)); //separate form params
         });
 

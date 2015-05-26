@@ -1,6 +1,7 @@
 <div page-header="Interrupted tasks groups">
     <h6>{{ formParams }}</h6>
-    <h6>{{ loadParams }}</h6>
+    <!--<h6>{{ loadParams }}</h6>-->
+    <!--<h6>{{ groups }}</h6>-->
 </div>
 
 <div class="well">
@@ -13,10 +14,10 @@
             </label>
             <table class="controls">
                 <tr>
-                    <td valign="center">From:<span input-date="formParams.from"></span></td>
-                    <td ng-if="formParams.withTime"><span input-time="formParams.from"></span></td>
-                    <td valign="center">&nbsp;To:<span input-date="formParams.to"></span></td>
-                    <td ng-if="formParams.withTime"><span input-time="formParams.to"></span></td>
+                    <td valign="center">From:<span input-date="formParams.dateFrom"></span></td>
+                    <td ng-if="formParams.withTime"><span input-time="formParams.dateFrom"></span></td>
+                    <td valign="center">&nbsp;To:<span input-date="formParams.dateTo"></span></td>
+                    <td ng-if="formParams.withTime"><span input-time="formParams.dateTo"></span></td>
                 </tr>
             </table>
         </div>
@@ -24,34 +25,35 @@
             <label class="control-label" for="group"><small><b>Grouped by:</b></small></label>
             <div class="controls">
                 <select class="input search-query" id="group" ng-model="formParams.group"
-                        ng-options="groupOption.id as groupOption.id for groupOption in groups">
+                        ng-options="key as key for (key , group) in (groups | orderBy:'+order')">
+
                 </select>
             </div>
         </div>
         <fieldset class="scheduler-border">
             <!--<legend class="scheduler-border">Filtered by:</legend>-->
             <div class="control-group">
-                <label class="control-label" for="starter"><small><b>{{ 'starter' | interruptedGroup:'label' }}:</b></small></label>
+                <label class="control-label" for="starter"><small><b>{{ groups.starter.label }}:</b></small></label>
                 <div class="controls">
                     <input class="input search-query" type="text" id="starter" placeholder="ru.taskurotta.Example#1.0"
                            ng-model="formParams.starterId" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="{{ 'starter' | interruptedGroup:'desc'}}" popover-trigger="mouseenter" popover-placement="right"></i>
+                    <i class="icon-question-sign" popover="{{ groups.starter.desc }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="actor"><small><b>{{ 'actor' | interruptedGroup:'label' }}:</b></small></label>
+                <label class="control-label" for="actor"><small><b>{{ groups.actor.label }}:</b></small></label>
                 <div class="controls">
                     <input class="input search-query" type="text" id="actor" placeholder="ru.taskurotta.Example#1.0"
                            ng-model="formParams.actorId" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="{{ 'actor' | interruptedGroup:'desc' }}" popover-trigger="mouseenter" popover-placement="right"></i>
+                    <i class="icon-question-sign" popover="{{ groups.actor.desc }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="exception"><small><b>{{ 'exception' | interruptedGroup:'label' }}:</b></small></label>
+                <label class="control-label" for="exception"><small><b>{{ groups.exception.label }}:</b></small></label>
                 <div class="controls">
                     <input class="input search-query" type="text" id="exception" placeholder="ru.taskurotta.ExampleException"
                            ng-model="formParams.exception" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="{{ 'exception' | interruptedGroup:'desc' }}" popover-trigger="mouseenter" popover-placement="right"></i>
+                    <i class="icon-question-sign" popover="{{ groups.exception.desc }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
         </fieldset>
@@ -76,16 +78,16 @@
                 №
             </td>
             <td>
-                {{ loadParams.group | interruptedGroup:'label' }}
+                {{ groups[loadParams.group].label }}
             </td>
-            <td ng-hide="loadParams.$starter"  style="width: 200px;">
-                {{ 'starter' | interruptedGroup }}:
+            <td ng-hide="groups.starter.selected"  style="width: 200px;">
+                {{ groups.starter.name }}:
             </td>
-            <td ng-hide="loadParams.$actor" style="width: 200px;">
-                {{ 'actor' | interruptedGroup }}:
+            <td ng-hide="groups.actor.selected" style="width: 200px;">
+                {{ groups.actor.name }}:
             </td>
-            <td ng-hide="loadParams.$exception" style="width: 200px;">
-                {{ 'exception' | interruptedGroup }}:
+            <td ng-hide="groups.exception.selected" style="width: 200px;">
+                {{ groups.exception.name }}:
             </td>
             <td style="width: 100px;">
                 Total count:
@@ -98,31 +100,31 @@
         <tbody>
              <tr ng-repeat="group in interruptedModel.items">
                 <td style="width: 25px;">
-                    <small>{{ interruptedModel.$startIndex }}</small>
+                    <small>{{ interruptedModel.$startIndex + $index }}</small>
                 </td>
                 <td>
                     <a ui-sref="interrupted(joinFilterParam({},group.name))" class="btn-link">
                         <span ng-bind-html="group.name | lineWrap"></span></a>
                 </td>
 
-                <td ng-hide="loadParams.$starter" style="width: 200px;">
-                    <a ui-sref="interrupted({group:'starter'})" popover="{{ 'starter' | interruptedGroup:'regroup' }}" popover-trigger="mouseenter" class="btn-link">
+                <td ng-hide="groups.starter.selected" style="width: 200px;">
+                    <a ui-sref="interrupted({group:'starter'})" popover="{{ groups.starter.regroup }}" popover-trigger="mouseenter" class="btn-link">
                         <i class="icon-random" style="cursor: pointer;margin-right:5px;"></i>
-                        {{ 'starter' | interruptedGroup }}</a> in group:
+                        {{ groups.starter.name }}</a> in group:
                     <a ui-sref="interrupted(joinFilterParam({group:'starter'},group.name))" class="btn-link" popover="List all group's tasks" popover-trigger="mouseenter">
                         <b>{{group.startersCount}}</b></a>
                 </td>
-                <td ng-hide="loadParams.$actor" style="width: 200px;">
-                    <a ui-sref="interrupted({group:'actor'})" popover="{{ 'actor' | interruptedGroup:'regroup' }}" popover-trigger="mouseenter" class="btn-link">
+                <td ng-hide="groups.actor.selected" style="width: 200px;">
+                    <a ui-sref="interrupted({group:'actor'})" popover="{{ groups.actor.regroup }}" popover-trigger="mouseenter" class="btn-link">
                         <i class="icon-random" style="cursor: pointer;margin-right:5px;"></i>
-                        {{ 'actor' | interruptedGroup }}</a> in group:
+                        {{ groups.actor.name }}</a> in group:
                     <a ui-sref="interrupted(joinFilterParam({group:'actor'},group.name))" class="btn-link" popover="List all group's tasks" popover-trigger="mouseenter">
                         <b>{{group.actorsCount}}</b></a>
                 </td>
-                <td ng-hide="loadParams.$exception" style="width: 200px;">
-                    <a ui-sref="interrupted({group:'exception'})" popover="{{ 'exception' | interruptedGroup:'regroup' }}" popover-trigger="mouseenter" class="btn-link">
+                <td ng-hide="groups.exception.selected" style="width: 200px;">
+                    <a ui-sref="interrupted({group:'exception'})" popover="{{ groups.exception.regroup }}" popover-trigger="mouseenter" class="btn-link">
                         <i class="icon-random" style="cursor: pointer;margin-right:5px;"></i>
-                        {{ 'exception' | interruptedGroup }}</a> in group:
+                        {{ groups.exception.name }}</a> in group:
                     <a ui-sref="interrupted(joinFilterParam({group:'exception'},group.name))" class="btn-link" popover="List all group's tasks" popover-trigger="mouseenter">
                         <b>{{group.exceptionsCount}}</b></a>
 

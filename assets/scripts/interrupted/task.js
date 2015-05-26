@@ -1,6 +1,6 @@
 angular.module('interruptedModule', ['taskModule', 'coreApp'])
 
-    .factory('interruptedRest', function ($log, coreApp, interruptedUtil, $resource) {
+    .factory('interruptedRest', function ($log, coreApp, $resource) {
         var restTaskUrl = coreApp.getRestUrl() + 'process/tasks/interrupted/';
 
         return $resource(restTaskUrl + 'task', {}, {
@@ -9,50 +9,28 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
                 //actions
                 restart: {url: restTaskUrl + 'restart', params: {}},
                 //dictionaries
-                dictionaryGroup: {url: '/scripts/interrupted/group.json', params: {}, isArray: true, cache: true}
+                dictionaryGroup: {url: '/scripts/interrupted/groups.json', params: {}, isArray: true, cache: true}
 
             }
         );
     })
-    .run(function ($rootScope, interruptedRest) {
-        $rootScope.groupsDitionairy = interruptedRest.dictionaryGroup();
 
-    })
-
-    .filter('interruptedGroup', function ($log, $rootScope, interruptedRest, coreApp) {
-        var groups = $rootScope.groupsDitionairy;
-        return function (id, field) {
-            return coreApp.findDictionary(groups, id, field || 'name');
-        };
-    })
-
-    .factory('interruptedUtil', function ($log, coreApp, $filter) {
-        return {
-            parseDateRest: function (date, withTime) {
-                return $filter('date')(date || new Date(), withTime ? 'dd.MM.yyyy HH.mm' : 'dd.MM.yyyy');
-            },
-            parseDate: function (date, withTime) {
-                return $filter('date')(date || new Date(), withTime ? 'yyyy-MM-ddTHH.mm' : 'yyyy-MM-dd');
-            }
-        };
-    })
-
-    .controller('interruptedController', function ($log, $scope, interruptedRest, interruptedUtil, coreApp, $state, $stateParams) {
+    .controller('interruptedController', function ($log, $scope, interruptedRest, coreApp, $state, $stateParams) {
         $log.info('interruptedController', $stateParams);
+
+        function parseDate(date, withTime, rest) {
+            return (angular.isDate(date) ? moment(date) : moment(date, moment.ISO_8601))
+                .format((rest ? 'DD.MM.YYYY' : 'YYYY-MM-DD') + (withTime ? (rest ? ' HH:mm' : 'THH:mm') : ''));
+        }
 
         function loadModel(params) {
             $log.info('loadModel', $scope.loadParams = params);
 
             //mark selected filter or group
             params.query = $state.is('interrupted')? 'group':'list';
-            params.dateFrom = interruptedUtil.parseDateRest(params.from,params.withTime);
-            params.dateTo = interruptedUtil.parseDateRest(params.to,params.withTime);
-            params.$starter = params.starterId || params.group === 'starter';
-            params.$actor = params.actorId || params.group === 'actor';
-            params.$exception = params.exception || params.group === 'exception';
-            params.withTime = undefined;
-            params.from = undefined;
-            params.to = undefined;
+            params.dateFrom = parseDate(params.dateFrom, params.withTime, true);
+            params.dateTo = parseDate(params.dateTo, params.withTime, true);
+            delete params.withTime;
 
             $scope.tempInterruptedModel = interruptedRest.query(params,
                 function success(value) {
@@ -69,13 +47,19 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = angular.copy($stateParams);
         $scope.$stateParams = $stateParams;
-        $scope.groups = interruptedRest.dictionaryGroup({}, function success(groups) {
+        $scope.formParams = angular.copy($stateParams);
+
+        interruptedRest.dictionaryGroup({}, function success(groups) {
+            $scope.groups = coreApp.toObject(groups);
+            $scope.groups.starter.selected = $stateParams.starterId || $stateParams.group === 'starter';
+            $scope.groups.actor.selected = $stateParams.actorId || $stateParams.group === 'actor';
+            $scope.groups.exception.selected = $stateParams.exception || $stateParams.group === 'exception';
+
             loadModel(angular.copy($scope.formParams));
 
             $scope.joinFilterParam = function (params, value) {
-                var param = coreApp.findDictionary(groups, $scope.loadParams.group, 'param');
+                var param = $scope.groups[$scope.loadParams.group].param;
                 params[param] = value;
                 return params;
             };
@@ -84,11 +68,11 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
 
         //Submit form command:
         $scope.search = function () {
-            var param = angular.copy($scope.formParams);
-            param.from = interruptedUtil.parseDate(param.from, param.withTime);
-            param.to = interruptedUtil.parseDate(param.to, param.withTime);
-            $log.info('search', param);
-            $state.go($state.current, param ,
+            var params = angular.copy($scope.formParams);
+            params.dateFrom = parseDate(params.dateFrom, params.withTime);
+            params.dateTo = parseDate(params.dateTo, params.withTime);
+            $log.warn('search', $scope.formParams, params);
+            $state.go($state.current, params ,
                 {replace: true, inherit: false, reload: true});
         };
 

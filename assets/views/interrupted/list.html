@@ -1,6 +1,6 @@
 <div page-header="Interrupted tasks">
     <h6>{{ formParams }}</h6>
-    <h6>{{ loadParams }}</h6>
+    <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
 <div class="well">
@@ -13,10 +13,10 @@
             </label>
             <table class="controls">
                 <tr>
-                    <td valign="center">From:<span input-date="formParams.from"></span></td>
-                    <td ng-if="formParams.withTime"><span input-time="formParams.from"></span></td>
-                    <td valign="center">&nbsp;To:<span input-date="formParams.to"></span></td>
-                    <td ng-if="formParams.withTime"><span input-time="formParams.to"></span></td>
+                    <td valign="center">From:<span input-date="formParams.dateFrom"></span></td>
+                    <td ng-if="formParams.withTime"><span input-time="formParams.dateFrom"></span></td>
+                    <td valign="center">&nbsp;To:<span input-date="formParams.dateTo"></span></td>
+                    <td ng-if="formParams.withTime"><span input-time="formParams.dateTo"></span></td>
                 </tr>
             </table>
         </div>
@@ -24,34 +24,33 @@
             <label class="control-label" for="group"><small><b>Grouped by:</b></small></label>
             <div class="controls">
                 <select class="input search-query" id="group" ng-model="formParams.group"
-                        ng-options="groupOption.id as groupOption.id for groupOption in groups">
-                </select>
+                        ng-options="key as key for (key , group) in (groups | orderBy:'+order')">              </select>
             </div>
         </div>
         <fieldset class="scheduler-border">
             <!--<legend class="scheduler-border">Filtered by:</legend>-->
             <div class="control-group">
-                <label class="control-label" for="starter"><small><b>{{ 'starter' | interruptedGroup:'label' }}:</b></small></label>
+                <label class="control-label" for="starter"><small><b>{{ groups.starter.label }}:</b></small></label>
                 <div class="controls">
                     <input class="input search-query" type="text" id="starter" placeholder="ru.taskurotta.Example#1.0"
                            ng-model="formParams.starterId" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="{{ 'starter' | interruptedGroup:'desc'}}" popover-trigger="mouseenter" popover-placement="right"></i>
+                    <i class="icon-question-sign" popover="{{ groups.starter.desc }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="actor"><small><b>{{ 'actor' | interruptedGroup:'label' }}:</b></small></label>
+                <label class="control-label" for="actor"><small><b>{{ groups.actor.label }}:</b></small></label>
                 <div class="controls">
                     <input class="input search-query" type="text" id="actor" placeholder="ru.taskurotta.Example#1.0"
                            ng-model="formParams.actorId" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="{{ 'actor' | interruptedGroup:'desc' }}" popover-trigger="mouseenter" popover-placement="right"></i>
+                    <i class="icon-question-sign" popover="{{ groups.actor.desc }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="exception"><small><b>{{ 'exception' | interruptedGroup:'label' }}:</b></small></label>
+                <label class="control-label" for="exception"><small><b>{{ groups.exception.label }}:</b></small></label>
                 <div class="controls">
                     <input class="input search-query" type="text" id="exception" placeholder="ru.taskurotta.ExampleException"
                            ng-model="formParams.exception" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="{{ 'exception' | interruptedGroup:'desc' }}" popover-trigger="mouseenter" popover-placement="right"></i>
+                    <i class="icon-question-sign" popover="{{ groups.exception.desc }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
         </fieldset>
@@ -94,7 +93,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="task in interruptedModel.items">
-                <td>
+                <td nowrap>
                     <small>
                         <a class="btn-link" ui-sref="task({processId: task.processId, taskId:task.taskId })">
                             <b>{{ task.taskId }}</b></a>

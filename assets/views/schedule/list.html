@@ -29,7 +29,7 @@
         </thead>
 
         <tbody>
-           <tr ng-repeat="schedule in schedulesModel.items" class="{{ schedule.job.status | scheduleClass }}">
+           <tr ng-repeat="schedule in schedulesModel.items" class="{{ schedule.job.status | scheduleState:'class' }}">
                <td>
                    {{ schedulesModel.$startIndex + $index }}
                </td>
@@ -60,9 +60,9 @@
                 </td>
                 <td>
                     <table cellspacing="0" cellpadding="0">
-                        <tr class="{{ schedule.job.status | scheduleClass }}">
+                        <tr class="{{ schedule.job.status | scheduleState:'class' }}">
                             <td>
-                                <span class="{{ 'badge badge-' + (schedule.job.status | scheduleClass) }}">{{ schedule.job.status | scheduleStatus }}</span>
+                                <span class="{{ 'badge badge-' + (schedule.job.status | scheduleState:'class') }}">{{ schedule.job.status | scheduleState:'name' }}</span>
                             </td>
                             <td ng-if="schedule.job.status==1 && schedule.local"><i class="icon-flag" popover="Scheduled on current node" popover-trigger="mouseenter" ></i></td>
                             <td ng-if="schedule.job.status==1 && !schedule.local"><i class="icon-globe" popover="Scheduled on some remote node" popover-trigger="mouseenter" ></i></td>

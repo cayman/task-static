@@ -10,16 +10,20 @@ angular.module('taskModule', ['coreApp'])
                 queryList: {url: restTaskUrl, params: {}},
                 queryRepeated: {url: coreApp.getRestUrl() + 'repeatedTasks/', params: {}, isArray: true},
                 //dictionaries
-                dictionaryStatus: {url: '/scripts/task/status.json', params: {}, isArray: true}
+                dictionaryState: {url: '/scripts/task/states.json', params: {}, isArray: true}
 
             }
         );
     })
 
-    .filter('taskStatus', function (taskRest, coreApp) {
-        var statuses = taskRest.dictionaryStatus();
-        return function (id, field) {
-            return coreApp.findDictionary(statuses, id, field);
+    .filter('taskState', function (taskRest,coreApp) {
+        var states;
+        taskRest.dictionaryState(function(list){
+            states = coreApp.toObject(list);
+        });
+        return function (id,field) {
+            if(!states){ return '...'; }
+            return states[id] ? states[id][field] : states.unknown[field];
         };
     })
 

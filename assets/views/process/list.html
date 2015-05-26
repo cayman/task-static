@@ -1,6 +1,6 @@
 <div page-header="List of processes">
     <h6>{{ formParams }}</h6>
-    <h6>{{ loadParams }}</h6>
+    <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
 <div class="well">
@@ -30,7 +30,7 @@
             <label class="control-label" for="status"><small><b>State:</b></small></label>
             <div class="controls">
                 <select id="status" ng-model="formParams.status"
-                        ng-options="status.id as status.name for status in statuses">
+                        ng-options="status.id as status.name for status in ( statuses | filter:'!unknown') ">
                     <option value="">All</option>
                 </select>
                 <button class="btn" ng-click="search()">Search</button>
@@ -63,13 +63,13 @@
             <tr ng-repeat="process in processesModel.items">
                 <td>
                     {{ processesModel.$startIndex + $index}}
-                    <i class="{{ process.state | processStatus:'icon' }}" popover="{{ process.state | processStatus:'desc' }}" popover-trigger="mouseenter"></i>
+                    <i class="{{ process.state | processState:'icon' }}" popover="{{ process.state | processState:'desc' }}" popover-trigger="mouseenter"></i>
                  </td>
                 <td>
                     <small>
                         <a class="btn-link"
                            ui-sref="process({processId:process.processId})">{{process.processId}}</a>
-                        <div class="muted"><b>{{ process.state | processStatus:'info' }}</b></div>
+                        <div class="muted"><b>{{ process.state | processState:'info' }}</b></div>
                     </small>
                 </td>
                 <td>

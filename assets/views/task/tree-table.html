@@ -15,7 +15,7 @@
                 </a>
             </td>
             <td>
-                <i class="{{ node.state | taskStatus:'icon' }}" popover="{{ node.state | taskStatus:'desc' }}" popover-trigger="mouseenter"></i>
+                <i class="{{ node.state | taskState:'icon' }}" popover="{{ node.state | taskState:'desc' }}" popover-trigger="mouseenter"></i>
                 <span class="muted">{{ node.desc }}</span>
             </td>
         </tr>

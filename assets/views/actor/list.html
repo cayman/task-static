@@ -54,7 +54,8 @@
                     </th>
                     <th ng-repeat="(metric, metricPeriod) in loadParams.metrics" style="width: 400px;">
                         <small> {{metric}} </small>
-                        <select style="width:90px;" class="btn btn-mini" ng-model="loadParams.metrics[metric]">
+                        <select style="width:90px;" class="btn btn-mini"
+                                ng-model="loadParams.metrics[metric]" ng-change="changeLoaded()">
                             <option value="hour">Last hour</option>
                             <option value="day">Last day</option>
                         </select>

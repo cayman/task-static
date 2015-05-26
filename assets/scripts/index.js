@@ -133,11 +133,16 @@ angular.module('indexApp', ['coreApp',
             }
         });
 
+        var interruptedParams = {
+            group: 'starter', refreshRate: 0,
+            dateFrom: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+            dateTo: moment().format('YYYY-MM-DD')
+        };
 
         //Interrupted tasks pages configs
         $stateProvider.state('interrupted', {
-            url: '/interrupted?{group}&{starterId}&{actorId}&{withTime}&{exception}&{from:string}&{to:string}&{refreshRate:int}',
-            params: { group: 'starter', refreshRate: 0},
+            url: '/interrupted?{group}&{starterId}&{actorId}&{exception}&{dateFrom}&{dateTo}&{withTime}&{refreshRate:int}',
+            params: interruptedParams,
             views: {
                 'navigation': {
                     templateUrl: '/views/navigation.html'
@@ -153,8 +158,8 @@ angular.module('indexApp', ['coreApp',
         });
 
         $stateProvider.state('interrupted_list', {
-            url: '/interrupted/list?{group}&{from}&{to}&{withTime}&{starterId}&{actorId}&{exception}&{refreshRate:int}',
-            params: { group: 'starter',refreshRate: 0},
+            url: '/interrupted/list?{group}&{starterId}&{actorId}&{exception}&{dateFrom}&{dateTo}&{withTime}&{refreshRate:int}',
+            params: interruptedParams,
             views: {
                 'navigation': {
                     templateUrl: '/views/navigation.html'

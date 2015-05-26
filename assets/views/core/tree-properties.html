@@ -25,7 +25,8 @@
                 <b>{{ node.id }}</b>
             </small>
         </td>
-        <td><span ng-class="{ muted:node.$children }">
+        <td style="word-wrap: break-word">
+            <span ng-class="{ muted:node.$children }">
                 <a ng-show="node.$children" ng-click="node.$toggle()">
                     <small>{{ node.value }}</small>
                 </a>

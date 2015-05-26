@@ -16,22 +16,19 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
                 deactivate: {url: restScheduleUrl + 'action/deactivate/', method: 'POST', params: {}},
                 delete: {url: restScheduleUrl + 'action/delete/', method: 'POST', params: {}},
                 //dictionaries
-                dictionaryStatus: {url: '/scripts/schedule/status.json', params: {}, isArray: true}
+                dictionaryState: {url: '/scripts/schedule/states.json', params: {}, isArray: true}
             }
         );
     })
 
-    .filter('scheduleStatus', function (scheduleRest, coreApp) {
-        var statuses = scheduleRest.dictionaryStatus();
-        return function (id) {
-            return coreApp.findDictionary(statuses, id, 'name', 'Undefined status');
-        };
-    })
-
-    .filter('scheduleClass', function (scheduleRest, coreApp) {
-        var statuses = scheduleRest.dictionaryStatus();
-        return function (id) {
-            return coreApp.findDictionary(statuses, id, 'style', 'warning');
+    .filter('scheduleState', function (scheduleRest,coreApp) {
+        var states;
+        scheduleRest.dictionaryState(function(list){
+            states = coreApp.toObject(list);
+        });
+        return function (id,field) {
+            if(!states){ return '...'; }
+            return states[id] ? states[id][field] : states.unknown[field];
         };
     })
 
