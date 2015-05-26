@@ -19,7 +19,7 @@ angular.module('actorModule', ['coreApp'])
         $log.info('actorListController',$stateParams);
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.queryParams = params);
+            $log.info('loadModel', $scope.loadParams = params);
             $scope.tempActorsModel = actorRest.query(params,
                 function success(value) {
                     $scope.actorsModel  =  coreApp.parseListModel(value); //cause array or object
@@ -53,7 +53,7 @@ angular.module('actorModule', ['coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = $stateParams;
+        $scope.formParams = angular.copy($stateParams);
         $scope.formParams.metrics = $scope.formParams.metrics ?
             JSON.parse($scope.formParams.metrics) : {};
 
@@ -66,7 +66,7 @@ angular.module('actorModule', ['coreApp'])
             });
 
         //Update command:
-        $scope.update = function () {
+        $scope.search = function () {
             var params = angular.copy($scope.formParams);
             Object.keys(params.metrics).forEach(function(k) {
                 if (!params.metrics[k]) {
@@ -88,7 +88,7 @@ angular.module('actorModule', ['coreApp'])
                 function confirmed() {
                     actorRest.unblock(actor.id,function success() {
                         $log.log('Actor ['+actor.id+'] have been set to unblocked');
-                        loadModel($scope.queryParams);
+                        loadModel($scope.loadParams);
                     }, function error(reason) {
                         coreApp.error('Error setting unblocked for actor ['+actor.id+']',reason);
                     });
@@ -100,7 +100,7 @@ angular.module('actorModule', ['coreApp'])
                 function confirmed() {
                     actorRest.block(actor.id,function success() {
                         $log.log('Actor ['+actor.id+'] have been set to blocked');
-                        loadModel($scope.queryParams);
+                        loadModel($scope.loadParams);
                     }, function error(reason) {
                         coreApp.error('Error setting blocked for actor ['+actor.id+']',reason);
                     });

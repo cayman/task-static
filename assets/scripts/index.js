@@ -144,7 +144,7 @@ angular.module('indexApp', ['coreApp',
                 },
                 '': {
                     templateUrl: '/views/interrupted/group.html',
-                    controller: /*@ngInject*/ 'interruptedGroupController'
+                    controller: /*@ngInject*/ 'interruptedController'
                 },
                 'footer': {
                     templateUrl: '/views/footer.html'
@@ -161,7 +161,7 @@ angular.module('indexApp', ['coreApp',
                 },
                 '': {
                     templateUrl: '/views/interrupted/list.html',
-                    controller: /*@ngInject*/ 'interruptedListController'
+                    controller: /*@ngInject*/ 'interruptedController'
                 },
                 'footer': {
                     templateUrl: '/views/footer.html'

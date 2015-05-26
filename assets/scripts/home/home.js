@@ -5,18 +5,18 @@ angular.module('homeModule', ['coreApp'])
 
         function loadModel() {
             $log.info('loadModel');
-            coreRest.getVersion({},
-                function success(value) {
-                    $scope.serverVersion = value;
-                },
-                function error(reason) {
-                    $log.error(reason);
-                    $scope.serverVersion = '-';
-                });
-
             $scope.servicePage = coreRest.queryService({},
                 function success(value) {
                     $log.info('indexController: successfully updated service', value);
+                    coreRest.getVersion({},
+                        function success(value) {
+                            $scope.serverVersion = value;
+                        },
+                        function error(reason) {
+                            $log.error(reason);
+                            $scope.serverVersion = '-';
+                        });
+
                 }, function error(reason) {
                     coreApp.error('Service update failed',reason);
                 });

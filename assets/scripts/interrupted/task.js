@@ -3,26 +3,9 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
     .factory('interruptedRest', function ($log, coreApp, interruptedUtil, $resource) {
         var restTaskUrl = coreApp.getRestUrl() + 'process/tasks/interrupted/';
 
-        function dateFrom(){
-            var from = this.from;
-            this.from = undefined;
-            return interruptedUtil.parseDateRest(from,this.withTime);
-        }
-        function dateTo(){
-            var to = this.to;
-            this.to = undefined;
-            return interruptedUtil.parseDateRest(to,this.withTime);
-        }
         return $resource(restTaskUrl + 'task', {}, {
                 //list
-                query: {url: restTaskUrl + 'list', params: {
-                    dateFrom : dateFrom,
-                    dateTo : dateTo
-                }, isArray: true},
-                queryGroup: {url: restTaskUrl + 'group', params: {
-                    dateFrom : dateFrom,
-                    dateTo : dateTo
-                }, isArray: true},
+                query: {url: restTaskUrl + ':query', params: {}, isArray: true},
                 //actions
                 restart: {url: restTaskUrl + 'restart', params: {}},
                 //dictionaries
@@ -39,7 +22,6 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
     .filter('interruptedGroup', function ($log, $rootScope, interruptedRest, coreApp) {
         var groups = $rootScope.groupsDitionairy;
         return function (id, field) {
-            $log.debug(id, field);
             return coreApp.findDictionary(groups, id, field || 'name');
         };
     })
@@ -50,128 +32,64 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
                 return $filter('date')(date || new Date(), withTime ? 'dd.MM.yyyy HH.mm' : 'dd.MM.yyyy');
             },
             parseDate: function (date, withTime) {
-                return $filter('date')(date || new Date(), withTime ? 'yyyy-MM-dd HH.mm.ss' : 'yyyy-MM-dd');
+                return $filter('date')(date || new Date(), withTime ? 'yyyy-MM-ddTHH.mm' : 'yyyy-MM-dd');
             }
         };
     })
 
-    .controller('interruptedGroupController', function ($log, $scope, interruptedRest, interruptedUtil, coreApp, $state, $stateParams) {
+    .controller('interruptedController', function ($log, $scope, interruptedRest, interruptedUtil, coreApp, $state, $stateParams) {
+        $log.info('interruptedController', $stateParams);
 
-        $scope.interruptedParams = angular.copy($stateParams);
-        $log.info('interruptedGroupController', $scope.interruptedParams);
-
-
-        //Updates interrupted tasks  by polling REST resource
-        function loadModel() {
-            $scope.interruptedParamsLoaded = angular.copy($scope.interruptedParams);
+        function loadModel(params) {
+            $log.info('loadModel', $scope.loadParams = params);
 
             //mark selected filter or group
-            $scope.interruptedParamsLoaded.$starter = $scope.interruptedParamsLoaded.starterId || $scope.interruptedParamsLoaded.group === 'starter';
-            $scope.interruptedParamsLoaded.$actor = $scope.interruptedParamsLoaded.actorId || $scope.interruptedParamsLoaded.group === 'actor';
-            $scope.interruptedParamsLoaded.$exception = $scope.interruptedParamsLoaded.exception || $scope.interruptedParamsLoaded.group === 'exception';
+            params.query = $state.is('interrupted')? 'group':'list';
+            params.dateFrom = interruptedUtil.parseDateRest(params.from,params.withTime);
+            params.dateTo = interruptedUtil.parseDateRest(params.to,params.withTime);
+            params.$starter = params.starterId || params.group === 'starter';
+            params.$actor = params.actorId || params.group === 'actor';
+            params.$exception = params.exception || params.group === 'exception';
+            params.withTime = undefined;
+            params.from = undefined;
+            params.to = undefined;
 
-
-            $log.info('load interrupted tasks params:', $scope.interruptedParams);
-            $scope.interruptedPage = interruptedRest.queryGroup($scope.interruptedParams,
+            $scope.tempInterruptedModel = interruptedRest.query(params,
                 function success(value) {
-                    if(value.length > 0 ){
-                        $log.info('successfully updated interrupted tasks page');
+                    $scope.interruptedModel = coreApp.parseListModel(value);//cause array or object
+                    if($scope.interruptedModel){
+                        $log.info('Successfully updated interrupted tasks page');
                     }else{
-                        coreApp.warn('Not found any interrupted tasks');
+                        coreApp.warn('Not found any interrupted tasks',value);
                     }
-                    $scope.interruptedPageLoaded = value;
-                    $scope.interruptedPageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    //@todo REST must return paginated object (not array)
-                    $scope.interruptedPageLoadedItems = angular.isArray(value) ? value : value.items;
-                    coreApp.refreshRate($scope.interruptedParams, loadModel, $scope);
+                    coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {
                     coreApp.error('Interrupted tasks page update failed',reason);
                 });
         }
 
         //Initialization:
+        $scope.formParams = angular.copy($stateParams);
+        $scope.$stateParams = $stateParams;
         $scope.groups = interruptedRest.dictionaryGroup({}, function success(groups) {
-            loadModel();
-
+            loadModel(angular.copy($scope.formParams));
 
             $scope.joinFilterParam = function (params, value) {
-                var param = coreApp.findDictionary(groups, $scope.interruptedParamsLoaded.group, 'param');
+                var param = coreApp.findDictionary(groups, $scope.loadParams.group, 'param');
                 params[param] = value;
                 return params;
             };
 
         });
 
-
-        //Update command:
-        $scope.update = function () {
-            var param = angular.copy($scope.interruptedParams);
+        //Submit form command:
+        $scope.search = function () {
+            var param = angular.copy($scope.formParams);
             param.from = interruptedUtil.parseDate(param.from, param.withTime);
             param.to = interruptedUtil.parseDate(param.to, param.withTime);
-            $log.info('update', param);
-            $state.go('interrupted',param , {
-                replace: true,
-                inherit: false,
-                reload: true
-            });
-        };
-
-        //Finalization:
-        $scope.$on('$destroy', function () {
-            coreApp.stopRefreshRate();
-        });
-
-        //Actions
-
-
-    })
-    .controller('interruptedListController', function ($log, $scope, $filter, interruptedUtil, interruptedRest, coreApp, $state, $stateParams, $timeout) {
-        //Actions
-
-        $scope.interruptedParams = angular.copy($stateParams);
-        $log.info('interruptedListController', $scope.interruptedParams);
-
-
-        //Updates interrupted tasks  by polling REST resource
-        function loadModel() {
-            $scope.interruptedParamsLoaded = angular.copy($scope.interruptedParams);
-
-            $log.info('load interrupted tasks params:', $scope.interruptedParams);
-            $scope.interruptedPage = interruptedRest.query($scope.interruptedParams,
-                function success(value) {
-                    if(value.length > 0 ){
-                        $log.info('successfully updated interrupted tasks page');
-                    }else{
-                        coreApp.warn('Not found any interrupted tasks');
-                    }
-                    $scope.interruptedPageLoaded = value;
-                    $scope.interruptedPageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    //@todo REST must return paginated object (not array)
-                    $scope.interruptedPageLoadedItems = angular.isArray(value) ? value : value.items;
-                    coreApp.refreshRate($scope.interruptedParams, loadModel, $scope);
-                }, function error(reason) {
-                    coreApp.error('Interrupted tasks page update failed',reason);
-                });
-        }
-
-        //Initialization:
-        $scope.groups = interruptedRest.dictionaryGroup({}, function success(groups) {
-            loadModel();
-
-        });
-
-
-        //Update command:
-        $scope.update = function () {
-            var param = angular.copy($scope.interruptedParams);
-            param.from = interruptedUtil.parseDate(param.from, param.withTime);
-            param.to = interruptedUtil.parseDate(param.to, param.withTime);
-            $log.info('update', param);
-            $state.go('interrupted_list',param , {
-                replace: true,
-                inherit: false,
-                reload: true
-            });
+            $log.info('search', param);
+            $state.go($state.current, param ,
+                {replace: true, inherit: false, reload: true});
         };
 
         //Finalization:
@@ -182,6 +100,14 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         //Actions
         $scope.showStackTrace = function (message) {
             coreApp.openStacktraceModal(message, 'StackTrace');
+        };
+
+        $scope.restartGroup = function (group) {
+
+        };
+
+        $scope.restart = function (task) {
+
         };
 
     });

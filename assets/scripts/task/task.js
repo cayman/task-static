@@ -86,7 +86,7 @@ angular.module('taskModule', ['coreApp'])
         }
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.queryParams = params);
+            $log.info('loadModel', $scope.loadParams = params);
             $scope.tempTasksModel = getRest(params)(params,
                 function success(value) {
                     $scope.tasksModel =  coreApp.parseListModel(value); //cause array or object
@@ -102,12 +102,12 @@ angular.module('taskModule', ['coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = $stateParams;
-        loadModel(angular.copy($scope.formParams));//separate form params
+        $scope.formParams = angular.copy($stateParams);//separate form params
+        loadModel(angular.copy($scope.formParams));
 
-        //Update command:
-        $scope.update = function (params) {
-            $state.go('tasks', params || angular.copy($scope.formParams),
+        //Submit form command:
+        $scope.search = function () {
+            $state.go($state.current, $scope.formParams,
                 {replace: true, inherit: false, reload: true});
         };
 

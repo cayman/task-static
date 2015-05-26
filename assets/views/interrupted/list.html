@@ -1,5 +1,6 @@
 <div page-header="Interrupted tasks">
-    {{ interruptedParams }}
+    <h6>{{ formParams }}</h6>
+    <h6>{{ loadParams }}</h6>
 </div>
 
 <div class="well">
@@ -7,22 +8,22 @@
         <div class="control-group">
             <label class="control-label">
                 <small>
-                    <b>Date period <a ng-click="interruptedParams.withTime = !interruptedParams.withTime">(with time)</a>:</b>
+                    <b>Date period <a ng-click="formParams.withTime = !formParams.withTime">(with time)</a>:</b>
                 </small>
             </label>
             <table class="controls">
                 <tr>
-                    <td valign="center">From:<span input-date="interruptedParams.from"></span></td>
-                    <td ng-if="interruptedParams.withTime"><span input-time="interruptedParams.from"></span></td>
-                    <td valign="center">&nbsp;To:<span input-date="interruptedParams.to"></span></td>
-                    <td ng-if="interruptedParams.withTime"><span input-time="interruptedParams.to"></span></td>
+                    <td valign="center">From:<span input-date="formParams.from"></span></td>
+                    <td ng-if="formParams.withTime"><span input-time="formParams.from"></span></td>
+                    <td valign="center">&nbsp;To:<span input-date="formParams.to"></span></td>
+                    <td ng-if="formParams.withTime"><span input-time="formParams.to"></span></td>
                 </tr>
             </table>
         </div>
         <div class="control-group">
             <label class="control-label" for="group"><small><b>Grouped by:</b></small></label>
             <div class="controls">
-                <select class="input search-query" id="group" ng-model="interruptedParams.group"
+                <select class="input search-query" id="group" ng-model="formParams.group"
                         ng-options="groupOption.id as groupOption.id for groupOption in groups">
                 </select>
             </div>
@@ -32,28 +33,31 @@
             <div class="control-group">
                 <label class="control-label" for="starter"><small><b>{{ 'starter' | interruptedGroup:'label' }}:</b></small></label>
                 <div class="controls">
-                    <input class="input search-query" type="text" id="starter" placeholder="ru.taskurotta.Example#1.0" ng-model="interruptedParams.starterId">
+                    <input class="input search-query" type="text" id="starter" placeholder="ru.taskurotta.Example#1.0"
+                           ng-model="formParams.starterId" on-enter="search()"/>
                     <i class="icon-question-sign" popover="{{ 'starter' | interruptedGroup:'desc'}}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="actor"><small><b>{{ 'actor' | interruptedGroup:'label' }}:</b></small></label>
                 <div class="controls">
-                    <input class="input search-query" type="text" id="actor" placeholder="ru.taskurotta.Example#1.0" ng-model="interruptedParams.actorId">
+                    <input class="input search-query" type="text" id="actor" placeholder="ru.taskurotta.Example#1.0"
+                           ng-model="formParams.actorId" on-enter="search()"/>
                     <i class="icon-question-sign" popover="{{ 'actor' | interruptedGroup:'desc' }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="exception"><small><b>{{ 'exception' | interruptedGroup:'label' }}:</b></small></label>
                 <div class="controls">
-                    <input class="input search-query" type="text" id="exception" placeholder="ru.taskurotta.ExampleException" ng-model="interruptedParams.exception">
+                    <input class="input search-query" type="text" id="exception" placeholder="ru.taskurotta.ExampleException"
+                           ng-model="formParams.exception" on-enter="search()"/>
                     <i class="icon-question-sign" popover="{{ 'exception' | interruptedGroup:'desc' }}" popover-trigger="mouseenter" popover-placement="right"></i>
                 </div>
             </div>
         </fieldset>
         <div class="control-group">
             <div class="controls">
-                <button class="btn" ng-click="update()">Search</button>
+                <button class="btn" ng-click="search()">Search</button>
             </div>
         </div>
     </form>
@@ -62,10 +66,10 @@
 <page-message></page-message>
 
 <div class="well" >
-    <list-reload params="interruptedParams" model="interruptedPage" update="update()">
+    <list-reload model="tempInterruptedModel">
     </list-reload>
 
-    <table class="table table-striped table-condensed table-bordered" ng-if="interruptedParamsLoaded">
+    <table class="table table-striped table-condensed table-bordered">
         <thead>
             <tr>
                 <th>
@@ -89,7 +93,7 @@
             </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="task in interruptedPageLoadedItems">
+        <tr ng-repeat="task in interruptedModel.items">
                 <td>
                     <small>
                         <a class="btn-link" ui-sref="task({processId: task.processId, taskId:task.taskId })">
@@ -121,6 +125,15 @@
                 </td>
             </tr>
         </tbody>
-        </table>
 
-        </div>
+        <tfoot>
+            <tr>
+                <td colspan="7">
+                    <list-paginator model="interruptedModel">
+                    </list-paginator>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

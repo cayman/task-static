@@ -1,13 +1,13 @@
 <div page-header="Create scheduled task">
     <!--<h6>{{ formParams }}</h6>-->
-    <!--<h6>{{ queryParams }}</h6>-->
+    <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
 <page-message></page-message>
 
 <div class="well" style="margin:5px;">
 
-    <list-reload params="formParams" model="tempSchedulesModel" update="update()">
+    <list-reload model="tempSchedulesModel">
         <div style="float:right">
             <a ui-sref="schedule_create" class="btn btn-small" popover="Add scheduled task" popover-trigger="mouseenter">
                 <i class="icon-plus"></i>
@@ -81,7 +81,7 @@
         <tfoot>
         <tr>
             <td colspan="7">
-                <list-paginator params="formParams" model="schedulesModel" update="update()">
+                <list-paginator model="schedulesModel">
                     <span ng-if="total" class="muted">
                         Currently scheduled on node: <b>{{ total }}</b>
                     </span>

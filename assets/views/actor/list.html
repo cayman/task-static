@@ -1,6 +1,6 @@
 <div page-header="Actors">
     <h6>{{ formParams }}</h6>
-    <h6>{{ queryParams }}</h6>
+    <h6>{{ loadParams }}</h6>
 </div>
 
 <div class="well">
@@ -23,13 +23,13 @@
                 <td style="padding: 5px;" class="muted">Actor metrics view:</td>
                 <td style="padding: 5px;">
                     <i class="icon-question-sign" popover="Filter by ActorId *starts with* condition" popover-trigger="mouseenter"></i>
-                    <input ng-model="formParams.filter" type="text" class="search-query" on-enter="update()" />
+                    <input ng-model="formParams.filter" type="text" class="search-query" on-enter="search()"/>
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td style="padding: 5px;">
-                    <button class="btn" ng-click="update()">Search</button>
+                    <button class="btn" ng-click="search()">Search</button>
                 </td>
             </tr>
         </table>
@@ -39,7 +39,7 @@
 <page-message></page-message>
 
 <div class="well">
-    <list-reload params="formParams" model="tempActorsModel" update="update()">
+    <list-reload  model="tempActorsModel">
     </list-reload>
 
     <div style="overflow: auto;">
@@ -52,9 +52,9 @@
                     <th>
                         <small>Actor ID:</small>
                     </th>
-                    <th ng-repeat="(metric, metricPeriod) in queryParams.metrics" style="width: 400px;">
+                    <th ng-repeat="(metric, metricPeriod) in loadParams.metrics" style="width: 400px;">
                         <small> {{metric}} </small>
-                        <select style="width:90px;" class="btn btn-mini" ng-model="queryParams.metrics[metric]">
+                        <select style="width:90px;" class="btn btn-mini" ng-model="loadParams.metrics[metric]">
                             <option value="hour">Last hour</option>
                             <option value="day">Last day</option>
                         </select>
@@ -77,7 +77,7 @@
                     <td>
                         <small><b ng-bind-html="actor.id | lineWrap"></b></small>
                     </td>
-                    <td ng-repeat="(metric, metricPeriod) in queryParams.metrics" >
+                    <td ng-repeat="(metric, metricPeriod) in loadParams.metrics" >
                         <span></span>
                         <div ng-repeat="(nodeName, nodeItem) in metricsModel">
                             {{ metric }}
@@ -145,7 +145,7 @@
         <tfoot>
             <tr>
                 <td>
-                    <list-paginator params="formParams" model="actorsModel" update="update()">
+                    <list-paginator model="actorsModel">
                     </list-paginator>
                 </td>
             </tr>

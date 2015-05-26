@@ -447,24 +447,22 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
         };
     })
 
-    .directive('listReload', function ($log,coreApp) {
+    .directive('listReload', function ($log,coreApp,$state, $stateParams) {
         return {
             restrict: 'EA',//Element, Attribute
             transclude: true,
             scope: {
-                params: '=',
-                model: '=',
-                update: '&'
+                model: '='
             },
             controller: function ($scope, $element, $attrs) {
 
                 $scope.refreshRates = coreApp.getRefreshRates();
-
-                $scope.$watch('params.refreshRate', function (value, oldValue) {
-                    if (value !== oldValue) {
-                        $scope.update();//update model
-                    }
-                });
+                $scope.refreshRate = $stateParams.refreshRate;
+                //Update command:
+                $scope.reload = function () {
+                    $state.go($state.current,{refreshRate:$scope.refreshRate},
+                        {replace: true, inherit: true, reload: true});//update model
+                };
 
             },
             templateUrl: '/views/core/list-reload.html',
@@ -472,7 +470,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
         };
     })
 
-    .directive('listPaginator', function ($log,coreApp) {
+    .directive('listPaginator', function ($log,coreApp,$state) {
 
         function pageCount(model) {
             return model.pageSize && model.totalCount?
@@ -485,50 +483,44 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             restrict: 'EA',//Element, Class, Attribute
             transclude: true,
             scope: {
-                params: '=',
-                model: '=',
-                update: '&'
+                model: '='
             },
             controller: function ($scope, $element, $attrs) {
 
                 $scope.pageSizes = coreApp.getPageSizes();
-                $scope.pageCount = null;
-                var length = 0;
 
-                $scope.$watch('model', function (value) {
-                    if (value) {
-                        $scope.pageCount = pageCount(value);
-                        length = $scope.model.totalCount ||
-                            angular.isArray($scope.model) ? $scope.model.length :
-                                $scope.model.items.length;
+                $scope.$watch('model', function (value,oldValue) {
+                    if (value, value!=oldValue) {
+                        $scope.totalCount = $scope.model.totalCount || $scope.model.items.length;
+
+                        if($scope.model.pageNumber && $scope.model.pageSize){
+
+                            $scope.pageCount = Math.floor($scope.totalCount / $scope.model.pageSize) +
+                                ( $scope.totalCount % $scope.model.pageSize > 0 ? 1 : 0);
+                            $scope.minIndex = $scope.totalCount > 0 ?
+                                (($scope.model.pageNumber - 1) * $scope.model.pageSize + 1) : 0;
+
+                            $scope.maxIndex = $scope.model.pageNumber < $scope.pageCount ?
+                                $scope.model.pageNumber * $scope.model.pageSize :
+                                    $scope.totalCount;
+
+                        }else{
+                            $scope.pageCount = null;
+                            $scope.minIndex = $scope.totalCount > 0 ? 1 : 0;
+                            $scope.maxIndex = $scope.totalCount;
+                        }
+
                     }
                 });
-
-                $scope.getMinIndex = function () {
-                    var min = $scope.model.pageNumber && $scope.model.pageSize ?
-                            (($scope.model.pageNumber - 1) * $scope.model.pageSize + 1) : 1;
-                    return length > 0 ? min : 0;
-                };
-
-                $scope.getMaxIndex = function () {
-                    return $scope.model.pageNumber && $scope.model.pageSize &&
-                    $scope.model.pageNumber < $scope.pageCount ?
-                        $scope.model.pageNumber * $scope.model.pageSize : length;
-                };
-
 
 
                 //Update command:
                 $scope.go = function (pageNum) {
-                    $scope.params.pageNum = pageNum;
-                    $scope.update();//update model
+                    //&$log.log('go')
+                    $state.go($state.current,
+                        {pageNum: pageNum, pageSize:  $scope.model.pageSize},
+                        {replace: true, inherit: true, reload: true});//update model
                 };
-
-                $scope.$watch('params.pageSize', function (value, oldValue) {
-                    if (value !== oldValue) {
-                        $scope.go(1);//update model
-                    }
-                });
 
 
             },

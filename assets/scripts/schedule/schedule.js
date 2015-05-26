@@ -39,7 +39,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
         $log.info('scheduleListController', $stateParams);
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.queryParams = params);
+            $log.info('loadModel', $scope.loadParams = params);
             $scope.tempSchedulesModel = scheduleRest.query(params,
                 function success(value) {
                     $scope.schedulesModel =  coreApp.parseListModel(value);//cause array or object
@@ -69,12 +69,12 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = $stateParams;
-        loadModel(angular.copy($scope.formParams));//separate form params
+        $scope.formParams = angular.copy($stateParams);//separate form params
+        loadModel(angular.copy($scope.formParams));
 
-        //Update command:
-        $scope.update = function (params) {
-            $state.go('schedules', params || angular.copy($scope.formParams),
+        //Submit form command:
+        $scope.search = function () {
+            $state.go($state.current, $scope.formParams,
                 {replace: true, inherit: false, reload: true});
         };
 
@@ -88,7 +88,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
             scheduleRest.activate({id: schedule.job.id},
                 function success(value) {
                     $log.log('scheduleListController: schedule activated', value);
-                    loadModel($scope.queryParams);
+                    loadModel($scope.loadParams);
                 }, function error(reason) {
                     coreApp.error('Schedule activate failed',reason);
                 });
@@ -98,7 +98,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
             scheduleRest.deactivate({id: schedule.job.id},
                 function success(value) {
                     $log.log('scheduleListController: schedule deactivated', value);
-                    loadModel($scope.queryParams);
+                    loadModel($scope.loadParams);
                 }, function error(reason) {
                     coreApp.error('Schedule deactivate failed',reason);
                 });
@@ -110,7 +110,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
                     scheduleRest.delete({id: schedule.job.id},
                         function success(value) {
                             $log.log('scheduleListController: schedule removed', value);
-                            loadModel($scope.queryParams);
+                            loadModel($scope.loadParams);
                         }, function error(reason) {
                             coreApp.error('Schedule removal failed',reason);
                         });

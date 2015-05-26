@@ -1,10 +1,10 @@
 <div>
 
     <div class="pagination pull-left" style="width: 40%">
-        <span ng-if="model && model.pageNumber">
+        <span ng-if="model.pageSize">
             <span class="muted">Show </span>
-            <select ng-model="params.pageSize" style="height:30px;width:55px;"
-                ng-options="ps for ps in pageSizes">
+            <select ng-model="model.pageSize" style="height:30px;width:55px;"
+                ng-options="ps for ps in pageSizes" ng-change="go(1)">
             </select>
             <span class="muted"> entries</span>
         </span>
@@ -14,7 +14,7 @@
 
 
     <div class="pagination pull-left">
-        <span class="muted info-text" ng-if="model">Showing <b>{{getMinIndex()}}</b> to <b>{{getMaxIndex()}}</b> of <b>{{modal.totalCount}}</b> entries</span>
+        <span class="muted info-text" ng-if="model">Showing <b>{{minIndex}}</b> to <b>{{maxIndex}}</b> of <b>{{totalCount}}</b> entries</span>
     </div>
 
 
