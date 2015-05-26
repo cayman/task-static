@@ -82,49 +82,14 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                     }else if(angular.isArray(value) && value.length > 0){
                         value = { items: value, $startIndex: 1 };
                     }else if(value && value.items && value.items.length > 0){
-                        value.$startIndex = (value.pageNumber - 1) * value.pageSize + 1;
+                        value.$startIndex =
+                            (value.pageNumber - 1) * value.pageSize + 1;
                     }else{
                        return null;
                     }
                     return value;
                 },
 
-                getTotalCount: function (value) {
-                    var items = angular.isArray(value) ? value : value.items;
-                    var result = 0;
-                    for (var i = 0; i < items.length; i++) {
-                        result += items[i].count;
-                    }
-                    return result;
-                },
-                getIdValueArray: function (items) {
-                    var result = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].id) {
-                            result.push(items[i].id);
-                        }
-                    }
-                    return result;
-                },
-
-                getKeysArray: function (list) {
-                    var result = [];
-                    for (var key in list) {
-                        if (list.hasOwnProperty(key) && list[key] && list[key]) {
-                            result.push(key);
-                        }
-                    }
-                    return result;
-                },
-                objectSize: function(obj) {
-                    var size = 0, key;
-                    for (key in obj) {
-                        if (obj.hasOwnProperty(key)) {
-                            size++;
-                        }
-                    }
-                    return size;
-                },
                 stopRefreshRate: function () {
                     if(refreshRatePromise){
                         $timeout.cancel(refreshRatePromise);
@@ -145,49 +110,23 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 getDateString: function (date){
                     return $filter('date')(date || new Date(), 'yyyy-MM-dd');
                 },
-                findDictionary: function (dictionary, id, field, defaultValue) {
 
+                findDictionary: function (dictionary, id, field, defaultValue) {
                     if (dictionary.$resolved !== true){
                         return '...';
                     }
-                    for (var i = 0, len = dictionary.length; i < len; i++) {
-                        if (dictionary[i].id == id) {
-                          //  $log.debug('found ',id, dictionary[i][field]);
-                            return dictionary[i][field];
-                        }
-                        if (!defaultValue && dictionary[i].id == '_') {
-                            defaultValue = dictionary[i][field];
-                        }
-                    }
-                    $log.debug('not found ');
-                    return defaultValue || 'Unknown';
-                },
-                forEach: function(list,callback){
-                    if(angular.isArray(list)){
-                        list.forEach(function (item,i) {
-                              callback(item,i);
-                        });
-                    }else if(angular.isObject(list)){
-                        for(var name in list){
-                            if(list.hasOwnProperty(name) && !name.startsWith('$')){
-                                callback(list[name],name);
-                            }
-                        }
+                    var item = _.find(dictionary, function(item){
+                        return item.id == id;
+                    });
+                    if(item){
+                        return item[field] || defaultValue || 'Unknown';
                     }else{
-                        callback(list,'=');
-                    }
-                },
-                itemLength: function(list,callback){
-                    if(angular.isArray(list)){
-                        list.forEach(function (item,i) {
-                            callback(item,i);
-                        });
-                    }else{
-                        for(var name in list){
-                            if(list.hasOwnProperty(name) && !name.startsWith('$')){
-                                callback(list[name],name);
-                            }
+                        if(!defaultValue){
+                            var defaultItem = _.find(dictionary, function(item){
+                                return item.id == '_';
+                            });
                         }
+                        return item[field] || defaultValue || defaultItem[field] || 'Unknown';
                     }
                 },
 
@@ -289,7 +228,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                         'display': 'inline-block',
                         'text-align': 'right',
                         'box-sizing': 'content-box',
-                        'width': '30px'
+                        'width': '20px'
                     };
                 };
 
@@ -306,16 +245,32 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
 
         }
 
+        function forEach(list,callback){
+            if(angular.isArray(list)){
+                list.forEach(function (item,i) {
+                    callback(item,i);
+                });
+            }else if(angular.isObject(list)){
+                for(var name in list){
+                    if(list.hasOwnProperty(name) && !name.startsWith('$')){
+                        callback(list[name],name);
+                    }
+                }
+            }else{
+                callback(list,'=');
+            }
+        }
+
         function walkRecursiveProperty(list, baseItems, parent) {
             var subNum = 0;
-            coreApp.forEach(baseItems,function(baseItemValue,baseItemId){
+            forEach(baseItems,function(baseItemValue,baseItemId){
                 // $log.debug('baseItem',baseItem);
                 var item = { id:baseItemId};
                 if(angular.isArray(baseItemValue)){
                     item.$children = baseItemValue.length;
                     item.value =  '[Array]('+item.$children +')';
                 }else if(angular.isObject(baseItemValue)){
-                    item.$children = coreApp.objectSize(baseItemValue);
+                    item.$children = _.size(baseItemValue);
                     item.value = '[Object]('+item.$children +')';
                 }else{
                     item.value = baseItemValue !== null ? baseItemValue : 'null';
@@ -342,11 +297,11 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
 
                 item.$padding = function getPadding(intend) {
                     return {
-                        'padding-left': this.$level * intend,
                         'display': 'inline-block',
+                        'padding-left': this.$level * intend + 'px',
                         'text-align': 'right',
                         'box-sizing': 'content-box',
-                        'width': '30px'
+                        'width': '20px'
                     };
                 };
 

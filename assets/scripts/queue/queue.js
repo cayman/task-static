@@ -32,7 +32,9 @@ angular.module('queueModule', ['coreApp'])
                     $scope.queuesModel = coreApp.parseListModel(value);//cause array or object
                     if($scope.queuesModel){
                         $log.info('Successfully updated queues page');
-                        $scope.queuesModel.$totalTasks = coreApp.getTotalCount(value);
+                        $scope.queuesModel.$totalTasks = _.reduce($scope.queuesModel.items, function(sum, item) {
+                            return sum + item.count;
+                        }, 0);
                     }else{
                         coreApp.info('Processes not found',value);
                     }

@@ -4,8 +4,11 @@
 <table ng-if="treeProperties.length" class="table table-bordered table-condensed">
     <tbody>
     <tr ng-repeat="node in treeProperties" ng-show="node.$visible()">
+        <td width="3%">
+            <small class="muted">{{ node.$level }}</small>
+        </td>
         <td style="min-width: 40%" nowrap>
-            <span ng-style="node.$padding(20)">
+            <span ng-style="node.$padding(10)">
                 <a ng-if="node.$children" ng-click="node.$toggle()">
                     <i class="icon-chevron-{{ node.$expanded ? 'down' : 'up' }}" popover-trigger="mouseenter"
                        popover="{{ node.$expanded ? 'Collapse' : 'Expand' }}"></i>
@@ -22,10 +25,14 @@
                 <b>{{ node.id }}</b>
             </small>
         </td>
-        <td><small ng-class="{ muted:node.$children }">
-                <a ng-show="node.$children" ng-click="node.$toggle()">{{ node.value }}</a>
-                <span ng-hide="node.$children">{{ node.value }}</span>
-            </small>
+        <td><span ng-class="{ muted:node.$children }">
+                <a ng-show="node.$children" ng-click="node.$toggle()">
+                    <small>{{ node.value }}</small>
+                </a>
+                <span ng-hide="node.$children">
+                    <small ng-class="{ muted:node.value === 'null' }">{{ node.value }}</small>
+                </span>
+            </span>
         </td>
     </tr>
     </tbody>

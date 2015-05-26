@@ -6,6 +6,7 @@
     "html5shiv": "~3.7.0",
     "jquery": "~1.9.0",
     "jquery-flot": "~0.8.0",
+    "underscore": "latest",
     "bootstrap": "~2.3.0",
     "angular": "~1.3.0",
     "angular-resource": "~1.3.0",
@@ -14,8 +15,7 @@
     "angular-route": "~1.3.0",
     "angular-touch": "~1.3.0",
     "angular-ui-router": "~0.2.0",
-    "angular-bootstrap": "~0.8.0",
-    "angular-bootstrap-datetimepicker": "latest"
+    "angular-bootstrap": "~0.8.0"
   },
   "devDependencies": {
   },

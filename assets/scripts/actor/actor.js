@@ -25,7 +25,7 @@ angular.module('actorModule', ['coreApp'])
                     $scope.actorsModel  =  coreApp.parseListModel(value); //cause array or object
                     if($scope.actorsModel){
                         $log.info('Successfully updated actors page');
-                        loadMetrics(params,value);
+                        loadMetrics(params.metrics,value);
                     }else{
                         coreApp.info('Actors not found',reason);
                     }
@@ -35,13 +35,19 @@ angular.module('actorModule', ['coreApp'])
                 });
         }
 
-        function loadMetrics(params,actorsModel) {
-            var metricNames = coreApp.getKeysArray(params.metrics);
-            if(metricNames.length > 0){
+        function loadMetrics(metrics,actorsModel) {
+            var params = {
+                //get seted array of metric names
+                metrics: _.reduce(metrics, function(keys, value, key ) {
+                    return value ? keys.concat(key) : keys;
+                }, [])
+            };
+            if(params.metrics.length > 0){
+                params.actorIds = _.map(actorsModel.items, function (item) {
+                    return item.id;
+                });
                 $log.info('actorListController: load metric data');
-                $scope.tempMetricsModel = actorRest.loadMetrics(
-                        { metrics: metricNames,
-                        actorIds: coreApp.getIdValueArray(actorsModel.items)},
+                $scope.tempMetricsModel = actorRest.loadMetrics(params,
                     function success(value) {
                         $log.info('actorListController: successfully updated metrics page');
                         $scope.metricsModel = value;
