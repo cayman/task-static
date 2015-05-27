@@ -67,7 +67,7 @@ angular.module('actorModule', ['coreApp'])
                 $log.log('Loaded metrics dictionary', value);
                 loadModel(angular.copy($scope.formParams));
             }, function error(reason) {
-                coreApp.error('Metrics update failed', reason);
+                coreApp.error('Metrics dictionary update failed', reason);
             });
 
 

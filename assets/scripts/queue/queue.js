@@ -40,7 +40,7 @@ angular.module('queueModule', ['coreApp'])
                     }
                     coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {
-                    coreApp.error('Queues page update failed',reason);
+                    coreApp.error('Processes model update failed',reason);
                 });
         }
 
@@ -62,7 +62,7 @@ angular.module('queueModule', ['coreApp'])
         $scope.showRealSize = function (queue) {
             queueRest.getSize({name: queue.name},
                 function success(value) {
-                    $log.info('queueListController: realSize',value);
+                    $log.info('Queue storage' + queue.name + ' realSize:',value);
                     queue.realSize = value;
                 }, function error(reason){
                     queue.realSize = 'n/a';
@@ -72,7 +72,7 @@ angular.module('queueModule', ['coreApp'])
         $scope.showStorageRealSize = function (queue) {
             queueRest.getStorageSize({name: queue.name},
                 function success(value) {
-                    $log.info('queueListController: realSize',value);
+                    $log.info('Queue storage' + queue.name + ' realSize:',value);
                     queue.realSize = value;
                 }, function error(reason){
                     queue.realSize = 'n/a';
@@ -83,7 +83,7 @@ angular.module('queueModule', ['coreApp'])
             coreApp.openConfirmModal('All current elements of the queue would be completely lost.',
                 function confirmed() {
                     queueRest.clear(queue.name,function(value){
-                        $log.log('queueListController: queue cleared', value);
+                        $log.log('Queue cleared', value);
                         loadModel($scope.loadParams);
                     }, function(reason){
                         coreApp.error('Queue draining failed',reason);
@@ -96,7 +96,7 @@ angular.module('queueModule', ['coreApp'])
             coreApp.openConfirmModal('Current queue, all of its content and actor preference data would be lost',
                 function confirmed() {
                     queueRest.remove(queue.name,function(value){
-                        $log.log('queueListController: queue removed', value);
+                        $log.log('Queue removed', value);
                         loadModel($scope.loadParams);
                     }, function(reason){
                         coreApp.error('Queue removal failed',reason);

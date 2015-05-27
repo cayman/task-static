@@ -498,7 +498,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             transclude: true,
             scope: {title: '@pageHeader'},
             templateUrl: '/views/core/page-header.html',
-            replace: false,
+            replace: true,
             link: function (scope, element, attrs) {
                 scope.back = function () {
                     $window.history.back();

@@ -6,30 +6,16 @@
 </div>
 
 <div class="well">
-    <form class="form-search">
-        <table class="well">
-            <tr>
-                <td style="padding: 5px;" class="muted">Filter:</td>
-                <td style="padding: 5px;">
-                    <input ng-model="formParams.filter" ng-disabled="formParams.periodSize" type="text"
-                           class="search-query" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="Filter queue list by *starts with* condition" popover-trigger="mouseenter"></i>
-                </td>
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="padding: 5px;" class="muted">Period size:</td>-->
-                <!--<td style="padding: 5px;">-->
-                    <!--<input type="number" min="0" ng-model="formParams.periodSize"-->
-                           <!--class="input-medium search-query" style="width: 50px" on-enter="search()"/>-->
-                <!--</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td></td>-->
-                <td style="padding: 5px;">
-                    <button class="btn" ng-click="search()">Search</button>
-                </td>
-            </tr>
-        </table>
+    <form class="form-horizontal form-small">
+        <div class="control-group">
+            <label class="control-label" for="filter">Filter:</label>
+            <div class="controls">
+                <input id="filter" type="text" ng-model="formParams.filter"
+                       ng-disabled="formParams.periodSize" class="search-query" on-enter="search()"/>
+                <i class="icon-question-sign" popover="Filter queue list by *starts with* condition" popover-trigger="mouseenter"></i>
+                <button class="btn" ng-click="search()">Search</button>
+            </div>
+        </div>
     </form>
 </div>
 

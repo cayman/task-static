@@ -1,35 +1,35 @@
 <div page-header="List of processes">
-    <h6>{{ formParams }}</h6>
+    <!--<h6>{{ formParams }}</h6>-->
     <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
 <div class="well">
-    <form class="form-horizontal form-search">
+    <form class="form-horizontal form-small">
         <div class="control-group">
-            <label class="control-label" for="customId"><small><b>CustomId:</b></small></label>
+            <label class="control-label" for="customId">CustomId:</label>
             <div class="controls">
-                <input class="input search-query" style="width: 300px" type="text" id="customId"
+                <input class="input-xlarge" type="text" id="customId"
                        ng-model="formParams.customId" on-enter="search()">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="processId"><small><b>ProcessId:</b></small></label>
+            <label class="control-label" for="processId">ProcessId:</label>
             <div class="controls">
-                <input class="input search-query" style="width: 300px" type="text" id="processId"
+                <input class="input-xlarge"  type="text" id="processId"
                        ng-model="formParams.processId" on-enter="search()">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="actorId"><small><b>ActorId:</b></small></label>
+            <label class="control-label" for="actorId">ActorId:</label>
             <div class="controls">
-                <input class="input search-query" style="width: 300px" type="text" id="actorId"
+                <input class="input-xlarge" type="text" id="actorId"
                        ng-model="formParams.type" on-enter="search()">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="status"><small><b>State:</b></small></label>
+            <label class="control-label" for="status">State:</label>
             <div class="controls">
-                <select id="status" ng-model="formParams.status"
+                <select id="status" ng-model="formParams.status" class="input-small"
                         ng-options="status.id as status.name for status in ( statuses | filter:'!unknown') ">
                     <option value="">All</option>
                 </select>

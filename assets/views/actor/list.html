@@ -1,38 +1,32 @@
 <div page-header="Actors">
-    <h6>{{ formParams }}</h6>
-    <h6>{{ loadParams }}</h6>
+    <!--<h6>{{ formParams }}</h6>-->
+    <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
 <div class="well">
-    <form class="form-search">
-        <table class="well">
-            <tr>
-                <td style="padding: 5px;" class="muted">Select metrics to show:</td>
-                <td style="padding: 5px;">
-                    <span class="alert" ng-hide="metrics">No metrics to show</span>
-                    <div style="display: inline-block; padding: 5px;" ng-repeat="metric in metrics">
-                        <input ng-show="!formParams.metrics[metric] || formParams.metrics[metric]==='hour'"
-                               type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'hour'"/>
-                        <input ng-show="formParams.metrics[metric]==='day'"
-                               type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'day'"/>
-                        {{metric}}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 5px;" class="muted">Actor metrics view:</td>
-                <td style="padding: 5px;">
-                    <i class="icon-question-sign" popover="Filter by ActorId *starts with* condition" popover-trigger="mouseenter"></i>
-                    <input ng-model="formParams.filter" type="text" class="search-query" on-enter="search()"/>
-                <!--</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td></td>-->
-                <!--<td style="padding: 5px;">-->
-                    <button class="btn" ng-click="search()">Search</button>
-                </td>
-            </tr>
-        </table>
+    <form class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label">Select metrics to show:</label>
+            <div class="controls">
+                 <label class="checkbox inline inline-label" ng-repeat="metric in metrics">
+                     <input ng-show="!formParams.metrics[metric] || formParams.metrics[metric]==='hour'"
+                            type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'hour'"/>
+                     <input ng-show="formParams.metrics[metric]==='day'"
+                            type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'day'"/>
+
+                    {{metric}}
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="actorId">Actor metrics view:</label>
+            <div class="controls">
+                <i class="icon-question-sign" popover="Filter by ActorId *starts with* condition" popover-trigger="mouseenter"></i>
+                <input id="actorId" ng-model="formParams.filter" type="text"
+                       class="input-large" on-enter="search()"/>
+                <button class="btn" ng-click="search()">Search</button>
+            </div>
+        </div>
     </form>
 </div>
 
