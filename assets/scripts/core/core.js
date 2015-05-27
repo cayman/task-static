@@ -35,8 +35,8 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             dialogPropertiesConfig = dialogConfig;
         };
 
-        this.$get = function ($log, $timeout, $modal, $filter, $rootScope) {
-
+        this.$get = function ($log, $timeout, $modal, $filter, $rootScope, $state, $stateParams) {
+            var currentStateParams;
             var refreshRatePromise;
             var rawInterceptor = {
                 response: function (response) {
@@ -76,6 +76,21 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                     return rawInterceptor;
                 },
 
+                copyStateParams: function(){
+                    $log.info('$stateParams',$stateParams);
+                    currentStateParams = $stateParams;
+                    //separate form params from urlParams
+                    return angular.copy($stateParams);
+                },
+                getStateParams: function(){
+                    return currentStateParams || $stateParams;
+                },
+
+                reloadState: function(params){
+                   $log.debug('reload ' + $state.current.name, params || this.getStateParams() );
+                   $state.go($state.current, params || this.getStateParams(),
+                       {replace: true, inherit: false, reload: true});
+                },
 
                 toObject: function(list){
                     return  _.reduce(list, function(object, item ){
@@ -167,14 +182,14 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 }
             };
         };
-        this.$get.$inject = ['$log', '$timeout', '$modal','$filter','$rootScope'];
+        this.$get.$inject = ['$log', '$timeout', '$modal','$filter','$rootScope','$state','$stateParams'];
     })
     // Config
     .config(function (datepickerConfig) {
         datepickerConfig.startingDay = 1;
         datepickerConfig.showWeeks = false;
         datepickerConfig.minDate="2010-01-01";
-        datepickerConfig.maxDate="2050-01-01";
+        datepickerConfig.maxDate="2100-01-01";
 
     })
 
@@ -191,7 +206,17 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
 
     .factory('coreTree', function ($log, coreApp) {
 
-        function walkRecursiveObject(list, baseItems, subItemsField, parent) {
+        function getPadding(intend) {
+            return {
+                'display': 'inline-block',
+                'padding-left': this.$level * intend + 'px',
+                'text-align': 'right',
+                'box-sizing': 'content-box',
+                'width': '20px'
+            };
+        }
+
+        function walkArrayRecursive(list, baseItems, subItemsField, parent) {
 
             var contItems = baseItems.length;
             _.each(baseItems, function (baseItem, index) {
@@ -218,15 +243,8 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                     return parent.$visible() && parent.$expanded;
                 };
 
-                item.$padding = function getPadding(intend) {
-                    return {
-                        'padding-left': this.$level * intend,
-                        'display': 'inline-block',
-                        'text-align': 'right',
-                        'box-sizing': 'content-box',
-                        'width': '20px'
-                    };
-                };
+                item.$padding = getPadding;
+
 
                 item.$toggle = function toggleItem(){
                     this.$expanded = !this.$expanded;
@@ -235,7 +253,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 list[item.$key] = item;
 
                 if (item.$children > 0) {
-                    walkRecursiveObject(list, baseItem[subItemsField], subItemsField, item);
+                    walkArrayRecursive(list, baseItem[subItemsField], subItemsField, item);
                 }
             });
 
@@ -257,7 +275,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             }
         }
 
-        function walkRecursiveProperty(list, baseItems, parent) {
+        function walkPropertiesRecursive(list, baseItems, parent) {
             var subNum = 0;
             forEach(baseItems,function(baseItemValue,baseItemId){
                 // $log.debug('baseItem',baseItem);
@@ -291,15 +309,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                     return parent.$visible() && parent.$expanded;
                 };
 
-                item.$padding = function getPadding(intend) {
-                    return {
-                        'display': 'inline-block',
-                        'padding-left': this.$level * intend + 'px',
-                        'text-align': 'right',
-                        'box-sizing': 'content-box',
-                        'width': '20px'
-                    };
-                };
+                item.$padding = getPadding;
 
                 item.$toggle = function toggleItem(){
                     this.$expanded = !this.$expanded;
@@ -308,7 +318,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 list[item.$key] = item;
 
                 if(item.$children > 0){
-                     walkRecursiveProperty(list, baseItemValue, item);
+                    walkPropertiesRecursive(list, baseItemValue, item);
                 }
 
             });
@@ -318,14 +328,14 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             getFlatArray: function(treeArray, subItemsField) {
                 var flatArray = [];
                 if (treeArray) {
-                    walkRecursiveObject(flatArray, angular.isArray(treeArray) ? treeArray : [treeArray], subItemsField, null);
+                    walkArrayRecursive(flatArray, angular.isArray(treeArray) ? treeArray : [treeArray], subItemsField, null);
                 }
                 return flatArray;
             },
             getPropertyArray: function(tree) {
                 var flatArray = [];
                 if (tree) {
-                    walkRecursiveProperty(flatArray, tree, null);
+                    walkPropertiesRecursive(flatArray, tree, null);
                 }
                 return flatArray;
             }
@@ -398,7 +408,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
         };
     })
 
-    .directive('listReload', function ($log,coreApp,$state, $stateParams) {
+    .directive('listReload', function ($log,coreApp) {
         return {
             restrict: 'EA',//Element, Attribute
             transclude: true,
@@ -408,14 +418,13 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             controller: function ($scope, $element, $attrs) {
 
                 $scope.refreshRates = coreApp.getRefreshRates();
-                $scope.refreshRate = $stateParams.refreshRate;
+                $scope.refreshRate = coreApp.getStateParams().refreshRate;
                 //Update command:
                 $scope.reload = function () {
+                    var params = coreApp.getStateParams();
+                    params.refreshRate = $scope.refreshRate;
+                    coreApp.reloadState(params);
 
-                    $stateParams.refreshRate = $scope.refreshRate;
-                    $log.log('reload', $stateParams);
-                    $state.go($state.current,$stateParams.refreshRate,
-                        {replace: true, inherit: true, reload: true});//update model
                 };
 
             },
@@ -470,12 +479,10 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
 
                 //Update command:
                 $scope.go = function (pageNum) {
-                    $stateParams.pageNum = pageNum;
-                    $stateParams.pageSize = $scope.model.pageSize;
-
-                    $log.log('go',$stateParams);
-                    $state.go($state.current,$stateParams,
-                        {replace: true, inherit: true, reload: true});//update model
+                    var params = coreApp.getStateParams();
+                    params.pageNum = pageNum;
+                    params.pageSize = $scope.model.pageSize;
+                    coreApp.reloadState(params);
                 };
 
 

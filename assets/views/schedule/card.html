@@ -11,7 +11,7 @@
                     <table class="table table-condensed">
                         <tr>
                             <td style="width: 200px;">
-                                <i class="icon-question-sign" popover="Specify the human readable name of the job." popover-trigger="mouseenter" />
+                                <i class="icon-question-sign" popover="Specify the human readable name of the job." popover-trigger="mouseenter"></i>
                                 <b>Job name:</b>
                             </td>
                             <td>
@@ -20,19 +20,19 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="icon-question-sign" popover="Cron expression to trigger task." popover-trigger="mouseenter" />
+                                <i class="icon-question-sign" popover="Cron expression to trigger task." popover-trigger="mouseenter"></i>
                                 <b>Cron:</b>
                             </td>
                             <td>
                                 <input class="input-small search-query" type="text" ng-model="job.cron" ng-change="changeCron()" required />
-                                <span ng-if="job.isCronValid === true" popover="Valid cron expression" popover-trigger="mouseenter" class="icon-thumbs-up" ></span>
-                                <span ng-if="job.isCronValid === false" popover = "Incorrect cron expression" popover-trigger="mouseenter" class="icon-thumbs-down"></span>
+                                <i ng-if="job.isCronValid === true" popover="Valid cron expression" popover-trigger="mouseenter" class="icon-thumbs-up"></i>
+                                <i ng-if="job.isCronValid === false" popover = "Incorrect cron expression" popover-trigger="mouseenter" class="icon-thumbs-down"></i>
 
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <i class="icon-question-sign" popover="Max tasks count per actor queue. If queue size exceeds that value on current scheduler iteration, scheduler would just skip until queue is ready. Use negative or zero value to disable this option." popover-trigger="mouseenter" />
+                                <i class="icon-question-sign" popover="Max tasks count per actor queue. If queue size exceeds that value on current scheduler iteration, scheduler would just skip until queue is ready. Use negative or zero value to disable this option." popover-trigger="mouseenter"></i>
                                 <b>Queue limit:</b>
                             </td>
                             <td>
@@ -42,7 +42,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="icon-question-sign" popover="The job would stop after exceeding this number of attempts to create task interrupted due to error. Note that it doesn't concern task execution on actor itself. Use negative or zero value to disable this option." popover-trigger="mouseenter" />
+                                <i class="icon-question-sign" popover="The job would stop after exceeding this number of attempts to create task interrupted due to error. Note that it doesn't concern task execution on actor itself. Use negative or zero value to disable this option." popover-trigger="mouseenter"></i>
                                 <b>Max errors:</b>
                             </td>
                             <td>

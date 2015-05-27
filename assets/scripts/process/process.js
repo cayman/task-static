@@ -32,15 +32,15 @@ angular.module('processModule', ['taskModule', 'coreApp'])
         };
     })
 
-    .controller('processListController', function ($log, $scope, processRest, coreApp, $state, $stateParams) {
-        $log.info('processListController',$stateParams);
+    .controller('processListController', function ($log, $scope, processRest, coreApp) {
+        $log.info('processListController');
 
         function getRest(params) {
             return (params.processId || params.customId) ? processRest.query : processRest.queryList;
         }
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.loadParams = params);
+            $log.info('Load model', $scope.loadParams = params);
             $scope.tempProcessesModel = getRest(params)(params,
                 function success(value) {
                     $scope.processesModel = coreApp.parseListModel(value);//cause array or object
@@ -56,15 +56,14 @@ angular.module('processModule', ['taskModule', 'coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = angular.copy($stateParams);
+        $scope.formParams = coreApp.copyStateParams();
         $scope.statuses = processRest.dictionaryState(function success(){
             loadModel(angular.copy($scope.formParams)); //separate form params
         });
 
         //Submit form command:
         $scope.search = function () {
-            $state.go($state.current, $scope.formParams,
-                {replace: true, inherit: false, reload: true});
+            coreApp.reloadState($scope.formParams);
         };
 
         //Finalization:

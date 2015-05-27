@@ -47,8 +47,8 @@ angular.module('indexApp', ['coreApp',
 
         //Queues pages configs
         $stateProvider.state('queues', {
-            url: '/queues?{filter}&{periodSize:int}&{balancePeriod}&{pageNum:int}&{pageSize:int}&{refreshRate:int}', // root route
-            params: {balancePeriod: 'hour', pageNum: 1, pageSize: 5, refreshRate: 0, periodSize: 0},
+            url: '/queues?{filter}&{balancePeriod}&{pageNum:int}&{pageSize:int}&{refreshRate:int}', // root route
+            params: {balancePeriod: 'hour', pageNum: 1, pageSize: 5, refreshRate: 0},
             views: {
                 'navigation': {
                     templateUrl: '/views/navigation.html'
@@ -61,23 +61,6 @@ angular.module('indexApp', ['coreApp',
                     templateUrl: '/views/footer.html'
                 }
         }
-        });
-
-        $stateProvider.state('queue', {
-            url: '/queues/:queueName/card?{pageNum:int}&{pageSize:int}&{refreshRate:int}', // root route
-            params: {pageNum: 1, pageSize: 5, refreshRate: 0},
-            views: {
-                'navigation': {
-                    templateUrl: '/views/navigation.html'
-                },
-                '': {
-                    templateUrl: '/views/queue/card.html',
-                    controller: /*@ngInject*/ 'queueCardController'
-                },
-                'footer': {
-                    templateUrl: '/views/footer.html'
-                }
-            }
         });
 
         //Actors pages configs
@@ -136,12 +119,13 @@ angular.module('indexApp', ['coreApp',
         var interruptedParams = {
             group: 'starter', refreshRate: 0,
             dateFrom: moment().subtract(1, 'days').format('YYYY-MM-DD'),
-            dateTo: moment().format('YYYY-MM-DD')
+            dateTo: moment().format('YYYY-MM-DD'),
+            withTime: false
         };
 
         //Interrupted tasks pages configs
         $stateProvider.state('interrupted', {
-            url: '/interrupted?{group}&{starterId}&{actorId}&{exception}&{dateFrom}&{dateTo}&{withTime}&{refreshRate:int}',
+            url: '/interrupted?{group}&{starterId}&{actorId}&{exception}&{dateFrom}&{dateTo}&{withTime:bool}&{refreshRate:int}',
             params: interruptedParams,
             views: {
                 'navigation': {
@@ -158,7 +142,7 @@ angular.module('indexApp', ['coreApp',
         });
 
         $stateProvider.state('interrupted_list', {
-            url: '/interrupted/list?{group}&{starterId}&{actorId}&{exception}&{dateFrom}&{dateTo}&{withTime}&{refreshRate:int}',
+            url: '/interrupted/list?{group}&{starterId}&{actorId}&{exception}&{dateFrom}&{dateTo}&{withTime:bool}&{refreshRate:int}',
             params: interruptedParams,
             views: {
                 'navigation': {

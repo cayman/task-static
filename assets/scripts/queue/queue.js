@@ -9,7 +9,7 @@ angular.module('queueModule', ['coreApp'])
                 getStorageSize: {url: restQueueUrl + ':name/storage/size', interceptor:rawInterceptor},
                 //list
                 query: {url: restQueueUrl, params: {}},
-                queryHovering: {url: coreApp.getRestUrl() + 'hoveringQueues/', params: {}, isArray: true},
+                //queryHovering: {url: coreApp.getRestUrl() + 'hoveringQueues/', params: {}, isArray: true},
                 //actions
                 clear: {url: restQueueUrl + 'clear', method: 'POST', interceptor:rawInterceptor},
                 remove: {url: restQueueUrl + 'remove', method: 'POST', interceptor:rawInterceptor}
@@ -18,16 +18,16 @@ angular.module('queueModule', ['coreApp'])
         );
     })
 
-    .controller('queueListController', function ($log, $scope, queueRest, coreApp, $state, $stateParams, $timeout) {
-        $log.info('queueListController',$stateParams);
+    .controller('queueListController', function ($log, $scope, queueRest, coreApp) {
+        $log.info('queueListController');
 
-        function getRest(params) {
-            return params.periodSize ? queueRest.queryHovering : queueRest.query;
-        }
+        //function getRest(params) {
+        //    return params.periodSize ? queueRest.queryHovering : queueRest.query;
+        //}
 
         function loadModel(params) {
-            $log.info('loadModel',$scope.loadParams = params);
-            $scope.tempQueuesModel = getRest(params)(params,
+            $log.info('Load model',$scope.loadParams = params);
+            $scope.tempQueuesModel = queueRest.query(params,
                 function success(value) {
                     $scope.queuesModel = coreApp.parseListModel(value);//cause array or object
                     if($scope.queuesModel){
@@ -45,13 +45,12 @@ angular.module('queueModule', ['coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = angular.copy($stateParams);//separate form params
+        $scope.formParams = coreApp.copyStateParams();
         loadModel(angular.copy($scope.formParams));
 
         //Submit form command:
         $scope.search = function () {
-            $state.go($state.current, $scope.formParams,
-                {replace: true, inherit: false, reload: true});
+            coreApp.reloadState($scope.formParams);
         };
 
         //Finalization:
@@ -105,39 +104,5 @@ angular.module('queueModule', ['coreApp'])
                 });
 
         };
-
-    })
-
-    .controller('queueCardController', function ($log, $scope,  queueRest, coreApp, $state, $stateParams) {
-
-        $scope.queueParams = angular.copy($stateParams);
-        $log.info('queueCardController',$scope.queueParams);
-
-        //Updates queue items by polling REST resource
-        function loadModel() {
-            $log.info('loadModel', $scope.queueParams);
-            $scope.queuePage = queueRest.get($scope.queueParams,
-                function success(value) {
-                    $log.info('queueContentController: successfully updated queue content');
-                    $scope.queuePageLoaded = value;
-                    $scope.queuePageLoaded.$startIndex = coreApp.getStartIndex(value);
-                    coreApp.refreshRate($scope.queueParams, loadModel);
-                }, function error(reason) {
-                    coreApp.error('Queue content update failed',reason);
-                });
-        }
-
-        //Initialization:
-        loadModel();
-
-        //Update command:
-        $scope.update = function () {
-            $state.go('queue', angular.copy($scope.queueParams), {replace: true, inherit: false, reload: true});
-        };
-
-        //Finalization:
-        $scope.$on('$destroy', function(){
-            coreApp.stopRefreshRate();
-        });
 
     });

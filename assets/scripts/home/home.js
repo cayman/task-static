@@ -4,7 +4,7 @@ angular.module('homeModule', ['coreApp'])
         $log.info('homeController');
 
         function loadModel() {
-            $log.info('loadModel');
+            $log.info('Load model');
             $scope.servicePage = coreRest.queryService({},
                 function success(value) {
                     $log.info('indexController: successfully updated service', value);

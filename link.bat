@@ -1,1 +1,1 @@
-mklink /D .\assets ..\taskurotta\dropwizard\src\main\resources\assets
+mklink /D .\old ..\taskurotta\dropwizard\src\main\resources\assets

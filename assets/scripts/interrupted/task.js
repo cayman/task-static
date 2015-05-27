@@ -15,21 +15,21 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         );
     })
 
-    .controller('interruptedController', function ($log, $scope, interruptedRest, coreApp, $state, $stateParams) {
-        $log.info('interruptedController', $stateParams);
+    .controller('interruptedController', function ($log, $scope, interruptedRest, coreApp, $state,$stateParams) {
+        $log.info('interruptedController');
 
-        function parseDate(date, withTime, rest) {
+        function getRestDateFormat(date, withTime) {
             return (angular.isDate(date) ? moment(date) : moment(date, moment.ISO_8601))
-                .format((rest ? 'DD.MM.YYYY' : 'YYYY-MM-DD') + (withTime ? (rest ? ' HH:mm' : 'THH:mm') : ''));
+                .format('DD.MM.YYYY' + (withTime ? ' HH:mm' : ''));
         }
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.loadParams = params);
+            $log.info('Load model', $scope.loadParams = params);
 
             //mark selected filter or group
             params.query = $state.is('interrupted')? 'group':'list';
-            params.dateFrom = parseDate(params.dateFrom, params.withTime, true);
-            params.dateTo = parseDate(params.dateTo, params.withTime, true);
+            params.dateFrom = getRestDateFormat(params.dateFrom, params.withTime, true);
+            params.dateTo = getRestDateFormat(params.dateTo, params.withTime, true);
             delete params.withTime;
 
             $scope.tempInterruptedModel = interruptedRest.query(params,
@@ -48,7 +48,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
 
         //Initialization:
         $scope.$stateParams = $stateParams;
-        $scope.formParams = angular.copy($stateParams);
+        $scope.formParams = coreApp.copyStateParams();
 
         interruptedRest.dictionaryGroup({}, function success(groups) {
             $scope.groups = coreApp.toObject(groups);
@@ -68,12 +68,14 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
 
         //Submit form command:
         $scope.search = function () {
+            function getIsoDateFormat(date, withTime) {
+                return (angular.isDate(date) ? moment(date) : moment(date, moment.ISO_8601))
+                    .format('YYYY-MM-DD' + (withTime ? 'THH:mm' : ''));
+            }
             var params = angular.copy($scope.formParams);
-            params.dateFrom = parseDate(params.dateFrom, params.withTime);
-            params.dateTo = parseDate(params.dateTo, params.withTime);
-            $log.warn('search', $scope.formParams, params);
-            $state.go($state.current, params ,
-                {replace: true, inherit: false, reload: true});
+            params.dateFrom = getIsoDateFormat(params.dateFrom, params.withTime);
+            params.dateTo = getIsoDateFormat(params.dateTo, params.withTime);
+            coreApp.reloadState(params);
         };
 
         //Finalization:
@@ -87,11 +89,39 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         };
 
         $scope.restartGroup = function (group) {
-
+            coreApp.openConfirmModal('Tasks of group '+group.name +' will be restarted.',
+                function confirmed() {
+                    interruptedRest.restart({
+                        restartIds: _.map(group.tasks, function (item) {
+                            return {
+                                taskId: item.taskId,
+                                processId: item.processId
+                            };
+                        })
+                    }, function success() {
+                        $log.log('Tasks of group ' + group.name + ' have been restarted');
+                        loadModel($scope.loadParams);
+                    }, function error(reason) {
+                        coreApp.error('Error task group '+group.name +' restarting', reason);
+                    });
+                });
         };
 
         $scope.restart = function (task) {
-
+            coreApp.openConfirmModal('Task [' + task.taskId + '] will be restarted.',
+                function confirmed() {
+                    interruptedRest.restart({
+                        restartIds: [{
+                            taskId: task.taskId,
+                            processId: task.processId
+                        }]
+                    }, function success() {
+                        $log.log('Task [' + task.taskId + '] have been restarted');
+                        loadModel($scope.loadParams);
+                    }, function error(reason) {
+                        coreApp.error('Error task [' + task.taskId + '] restarting', reason);
+                    });
+                });
         };
 
     });

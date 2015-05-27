@@ -80,8 +80,8 @@ angular.module('taskModule', ['coreApp'])
         };
     })
 
-    .controller('taskListController', function ($log, $scope, taskRest, coreApp, coreTree, $state, $stateParams, $timeout) {
-        $log.info('taskListController', $stateParams);
+    .controller('taskListController', function ($log, $scope, taskRest, coreApp) {
+        $log.info('taskListController');
 
         function getRest(params) {
             return params.iterationCount ? taskRest.queryRepeated:
@@ -90,7 +90,7 @@ angular.module('taskModule', ['coreApp'])
         }
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.loadParams = params);
+            $log.info('Load model', $scope.loadParams = params);
             $scope.tempTasksModel = getRest(params)(params,
                 function success(value) {
                     $scope.tasksModel =  coreApp.parseListModel(value); //cause array or object
@@ -106,13 +106,12 @@ angular.module('taskModule', ['coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = angular.copy($stateParams);//separate form params
+        $scope.formParams = coreApp.copyStateParams();
         loadModel(angular.copy($scope.formParams));
 
         //Submit form command:
         $scope.search = function () {
-            $state.go($state.current, $scope.formParams,
-                {replace: true, inherit: false, reload: true});
+            coreApp.reloadState($scope.formParams);
         };
 
         //Finalization:
@@ -126,14 +125,14 @@ angular.module('taskModule', ['coreApp'])
         };
 
     })
-    .controller('taskCardController', function ($log, $scope, taskRest, coreApp, $state, $stateParams) {
-
-        $scope.taskParams = angular.copy($stateParams);
+    .controller('taskCardController', function ($log, $scope, taskRest, coreApp) {
+        $log.info('taskCardController');
+        $scope.taskParams = coreApp.copyStateParams();
 
         //Updates tasks  by polling REST resource
         function loadModel() {
 
-            $log.info('loadModel', $scope.taskParams);
+            $log.info('Load model', $scope.taskParams);
 
             $scope.task = taskRest.get($scope.taskParams,
                 function success(value) {

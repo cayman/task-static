@@ -13,18 +13,18 @@
                 <td style="padding: 5px;">
                     <input ng-model="formParams.filter" ng-disabled="formParams.periodSize" type="text"
                            class="search-query" on-enter="search()"/>
-                    <i class="icon-question-sign" popover="Filter queue list by *starts with* condition" popover-trigger="mouseenter" />
+                    <i class="icon-question-sign" popover="Filter queue list by *starts with* condition" popover-trigger="mouseenter"></i>
                 </td>
-            </tr>
-            <tr>
-                <td style="padding: 5px;" class="muted">Period size:</td>
-                <td style="padding: 5px;">
-                    <input type="number" min="0" ng-model="formParams.periodSize"
-                           class="input-medium search-query" style="width: 50px" on-enter="search()"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td style="padding: 5px;" class="muted">Period size:</td>-->
+                <!--<td style="padding: 5px;">-->
+                    <!--<input type="number" min="0" ng-model="formParams.periodSize"-->
+                           <!--class="input-medium search-query" style="width: 50px" on-enter="search()"/>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td></td>-->
                 <td style="padding: 5px;">
                     <button class="btn" ng-click="search()">Search</button>
                 </td>
@@ -60,7 +60,9 @@
                     <span class="caret"></span>
                 </th>
                 <th style="width: 50px">
-                    <small>Size <span class="icon-question-sign" popover="Value is measured by metrics handler and could be several seconds delayed from real current size" popover-trigger="mouseenter"/></small>
+                    <small>Size
+                        <i class="icon-question-sign" popover="Value is measured by metrics handler and could be several seconds delayed from real current size" popover-trigger="mouseenter"></i>
+                    </small>
                 </th>
                 <th>
                     <small>Actions</small>
@@ -79,10 +81,7 @@
                 </td>
                 <td>
                     <small>
-                        <a clas="btn btn-link" style="cursor: pointer;"
-                        ui-sref="queue({queueName: queue.name})">
                             <b ng-bind-html=" queue.name | lineWrap"></b>
-                        </a>
                     </small>
                 </td>
                 <td nowrap>
@@ -120,25 +119,25 @@
                     <button ng-click="showRealSize(queue)" class="btn btn-mini"
                             popover="Show current real size of the queue"
                             popover-trigger="mouseenter">
-                        <span class="icon-info-sign" />
+                        <i class="icon-info-sign"></i>
                     </button>
 
                     <button ng-click="showStorageRealSize(queue)" class="btn btn-mini"
                             popover="Show current size of the storage for this queue. Storage contains tasks that would be enqueued in future."
                             popover-trigger="mouseenter">
-                        <span class="icon-hdd" />
+                        <i class="icon-hdd"></i>
                     </button>
 
                     <button ng-click="clear(queue)" class="btn btn-mini"
                             popover="Remove all elements from the queue"
                             popover-trigger="mouseenter" >
-                        <span class="icon-eject" />
+                        <i class="icon-eject"></i>
                     </button>
 
                     <button ng-click="remove(queue)" class="btn btn-mini"
                             popover="Remove the queue"
                             popover-trigger="mouseenter">
-                        <span class="icon-trash" />
+                        <i class="icon-trash"></i>
                     </button>
                 </td>
             </tr>

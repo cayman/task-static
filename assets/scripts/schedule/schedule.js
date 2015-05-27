@@ -32,11 +32,11 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
         };
     })
 
-    .controller('scheduleListController', function ($log, $scope, scheduleRest,coreRest, coreApp, $state, $stateParams, $timeout) {
-        $log.info('scheduleListController', $stateParams);
+    .controller('scheduleListController', function ($log, $scope, scheduleRest,coreRest, coreApp) {
+        $log.info('scheduleListController');
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.loadParams = params);
+            $log.info('Load model', $scope.loadParams = params);
             $scope.tempSchedulesModel = scheduleRest.query(params,
                 function success(value) {
                     $scope.schedulesModel =  coreApp.parseListModel(value);//cause array or object
@@ -66,13 +66,12 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
         }
 
         //Initialization:
-        $scope.formParams = angular.copy($stateParams);//separate form params
+        $scope.formParams = coreApp.copyStateParams();
         loadModel(angular.copy($scope.formParams));
 
         //Submit form command:
         $scope.search = function () {
-            $state.go($state.current, $scope.formParams,
-                {replace: true, inherit: false, reload: true});
+            coreApp.reloadState($scope.formParams);
         };
 
         //Finalization:
@@ -127,7 +126,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
 
         //Updates schedules  by polling REST resource
         function loadModel() {
-            $log.info('loadModel', $stateParams.id);
+            $log.info('Load model', $stateParams.id);
             $scope.job = $stateParams.id ?
                 scheduleRest.get($stateParams,
                     function success(value) {

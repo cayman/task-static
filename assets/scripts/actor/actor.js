@@ -15,16 +15,16 @@ angular.module('actorModule', ['coreApp'])
         });
     })
 
-    .controller('actorListController', function ($log, $scope, actorRest, coreApp, $state, $stateParams, $timeout) {
-        $log.info('actorListController', $stateParams);
+    .controller('actorListController', function ($log, $scope, actorRest, coreApp) {
+        $log.info('actorListController');
 
         function loadModel(params) {
-            $log.info('loadModel', $scope.loadParams = params);
+            $log.info('Load model', $scope.loadParams = params);
             $scope.tempActorsModel = actorRest.query(params,
                 function success(value) {
                     $scope.actorsModel = coreApp.parseListModel(value); //cause array or object
                     if ($scope.actorsModel) {
-                        $log.info('Successfully updated actors page');
+                        $log.info('Successfully updated actors data');
                         params.metrics = coreApp.clearObject(params.metrics);
                         if (_.size(params.metrics) > 0) {
                             loadMetrics(params.metrics, $scope.actorsModel.items);
@@ -39,7 +39,7 @@ angular.module('actorModule', ['coreApp'])
         }
 
         function loadMetrics(metrics, actors) {
-            $log.info('actorListController: load metric data');
+            $log.info('Load metric data');
             $scope.tempMetricsModel = actorRest.loadMetrics({
                     metrics: _.reduce(metrics, function (keys, value, key) {
                         return value ? keys.concat(key) : keys;
@@ -49,7 +49,7 @@ angular.module('actorModule', ['coreApp'])
                     })
                 },
                 function success(value) {
-                    $log.info('actorListController: successfully updated metrics page');
+                    $log.info('Successfully updated metrics data');
                     $scope.metricsModel = value;
                 }, function error(reason) {
                     coreApp.error('Metrics for actors update failed', reason);
@@ -58,9 +58,9 @@ angular.module('actorModule', ['coreApp'])
         }
 
         //Initialization:
-        $scope.$stateParams = $stateParams;
-        $scope.formParams = angular.copy($stateParams);
-        $scope.formParams.metrics = $scope.formParams.metrics ? JSON.parse($scope.formParams.metrics) : {};
+        $scope.formParams = coreApp.copyStateParams();
+        $scope.formParams.metrics = $scope.formParams.metrics ?
+            JSON.parse($scope.formParams.metrics) : {};
 
         $scope.metrics = actorRest.dictionaryMetrics({},
             function success(value) {
@@ -72,16 +72,16 @@ angular.module('actorModule', ['coreApp'])
 
 
         $scope.changeLoaded = function () {
-            $stateParams.metrics = JSON.stringify($scope.loadParams.metrics);
-            $log.log('$stateParams', $stateParams);
+            var params = coreApp.getStateParams();
+            params.metrics = JSON.stringify($scope.loadParams.metrics);
+            $log.debug('change $stateParams', params);
         };
 
         //Update command:
         $scope.search = function () {
             var params = angular.copy($scope.formParams);
             params.metrics = JSON.stringify(coreApp.clearObject(params.metrics));
-            $log.log('search', params);
-            $state.go('actors', params, {replace: true, inherit: false, reload: true});
+            coreApp.reloadState(params);
         };
 
         //Finalization:
