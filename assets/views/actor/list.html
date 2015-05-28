@@ -3,31 +3,29 @@
     <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
-<div class="well">
-    <form class="form-horizontal">
-        <div class="control-group">
-            <label class="control-label">Select metrics to show:</label>
-            <div class="controls">
-                 <label class="checkbox inline inline-label" ng-repeat="metric in metrics">
-                     <input ng-show="!formParams.metrics[metric] || formParams.metrics[metric]==='hour'"
-                            type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'hour'"/>
-                     <input ng-show="formParams.metrics[metric]==='day'"
-                            type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'day'"/>
+<div page-form="Actors search form">
+    <div class="control-group" ng-if="metrics.length">
+        <label class="control-label">Select metrics to show:</label>
+        <div class="controls">
+             <label class="checkbox inline inline-label" ng-repeat="metric in metrics">
+                 <input ng-show="!formParams.metrics[metric] || formParams.metrics[metric]==='hour'"
+                        type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'hour'"/>
+                 <input ng-show="formParams.metrics[metric]==='day'"
+                        type="checkbox" ng-model="formParams.metrics[metric]" ng-true-value="'day'"/>
 
-                    {{metric}}
-                </label>
-            </div>
+                {{metric}}
+            </label>
         </div>
-        <div class="control-group">
-            <label class="control-label" for="actorId">Actor metrics view:</label>
-            <div class="controls">
-                <i class="icon-question-sign" popover="Filter by ActorId *starts with* condition" popover-trigger="mouseenter"></i>
-                <input id="actorId" ng-model="formParams.filter" type="text"
-                       class="input-large" on-enter="search()"/>
-                <button class="btn" ng-click="search()">Search</button>
-            </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="actorId">Actor metrics view:</label>
+        <div class="controls">
+            <input id="actorId" ng-model="formParams.filter" type="text"
+                   class="input-xlarge" on-enter="search()"/>
+            <i icon-info="Filter by Actor id *starts with* condition" model="formParams.filter" remove="formParams.filter = null"></i>
+            <button class="btn" ng-click="search()">Search</button>
         </div>
-    </form>
+    </div>
 </div>
 
 <page-message></page-message>
@@ -42,15 +40,14 @@
                 <tr>
                     <th style="width:35px;">№
                     </th>
-                    <th>Actor ID:</th>
-                    <th ng-repeat="(metric, metricPeriod) in loadParams.metrics" style="width: 400px;">
+                    <th>Actor id:</th>
+                    <th ng-show="loadParams.metrics[metric]" ng-repeat="metric in metrics" style="min-width:190px;">
                        {{metric}}
                         <select style="width:90px;" class="btn btn-mini"
                                 ng-model="loadParams.metrics[metric]" ng-change="changeLoaded()">
                             <option value="hour">Last hour</option>
                             <option value="day">Last day</option>
                         </select>
-                        <span class="caret"></span>
                     </th>
                     <th width="80px;">
                         Actions:
@@ -67,7 +64,7 @@
                     <td>
                         <span ng-bind-html="actor.id | lineWrap"></span>
                     </td>
-                    <td ng-repeat="(metric, metricPeriod) in loadParams.metrics" >
+                    <td ng-show="loadParams.metrics[metric]" ng-repeat="metric in metrics" >
                         <div ng-repeat="(nodeName, nodeItem) in metricsModel">
                             <hr ng-if="!$first" />
                             <table class="inner-table">
@@ -80,16 +77,16 @@
                                     <td> {{nodeItem.lastActivity | date:dateTimeFormat }}</td>
                                 </tr>
                                 <tr>
-                                    <td><i class="muted">Rate({{ metricPeriod }}):</i></td>
+                                    <td><i class="muted">Rate({{ loadParams.metrics[metric] }}):</i></td>
                                     <td>
-                                        <span ng-if="actor.queueState && metricPeriod === 'hour' &&
+                                        <span ng-if="actor.queueState && loadParams.metrics[metric] === 'hour' &&
                                             (actor.queueState.totalOutHour>=0 || actor.queueState.totalInHour>=0)">
                                             <b ng-if="actor.hourRate>0" style="color: red;cursor: help;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.hourRate}}</b>
                                             <b ng-if="actor.hourRate<=0" style="color: green;cursor: help;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.hourRate}}</b>
                                             in: <b ng-if="actor.queueState.totalInHour>=0">{{actor.queueState.totalInHour}}</b>, out: <b ng-if="actor.queueState.totalOutHour>=0">{{actor.queueState.totalOutHour}}</b>
                                         </span>
 
-                                        <span ng-if="actor.queueState && metricPeriod === 'day' &&
+                                        <span ng-if="actor.queueState && loadParams.metrics[metric] === 'day' &&
                                             (actor.queueState.totalOutDay>=0 || actor.queueState.totalInDay>=0)">
                                             <b ng-if="actor.dayRate>0" style="color: red;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.dayRate}}</b>
                                             <b ng-if="actor.dayRate<=0" style="color: green;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.dayRate}}</b>
@@ -100,12 +97,12 @@
                                 <tr>
                                     <td><i class="muted">Stats:</i></td>
                                     <td>
-                                        <div ng-if="metricPeriod === 'hour'">
+                                        <div ng-if="loadParams.metrics[metric] === 'hour'">
                                             Triggered: <b>{{nodeItem.totalCountsHour || 'n/a'}}</b> times<br />
                                             Average: <b>{{nodeItem.meanTimeHour || 'n/a'}}</b> ms
                                         </div>
 
-                                        <div ng-if="metricPeriod === 'day'">
+                                        <div ng-if="loadParams.metrics[metric] === 'day'">
                                             Triggered: <b>{{nodeItem.totalCountsDay || 'n/a'}}</b> times <br />
                                             Average: <b>{{nodeItem.meanTimeDay || 'n/a'}}</b> ms
                                         </div>

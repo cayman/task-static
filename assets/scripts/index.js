@@ -1,13 +1,12 @@
-angular.module('indexApp', ['coreApp',
-    'homeModule', 'queueModule', 'actorModule','taskModule',
-     'processModule','scheduleModule','interruptedModule'])
+angular.module('indexApp', ['coreApp','homeModule', 'queueModule', 'actorModule',
+    'taskModule','processModule','scheduleModule','interruptedModule','metricModule'])
 
     .config(function ($stateProvider, $urlRouterProvider, coreAppProvider) {
         console.log('indexApp.config');
 
         coreAppProvider.setRestUrl('/rest/console/');
-        coreAppProvider.setPageSize([5, 10, 30, 50, 100]);
-        coreAppProvider.setRefreshRates([0, 2, 5, 10, 30, 50]);
+        coreAppProvider.setPageSizes([5, 10, 30, 50, 100, 200]);
+        coreAppProvider.setRefreshRates([0, 2, 5, 10, 30, 50, 100]);
 
         //Dialog configs
         coreAppProvider.setDialogConfirmConfig({
@@ -48,7 +47,7 @@ angular.module('indexApp', ['coreApp',
         //Queues pages configs
         $stateProvider.state('queues', {
             url: '/queues?{filter}&{balancePeriod}&{pageNum:int}&{pageSize:int}&{refreshRate:int}', // root route
-            params: {balancePeriod: 'hour', pageNum: 1, pageSize: 5, refreshRate: 0},
+            params: {balancePeriod: 'hour', pageNum: 1, pageSize: 10, refreshRate: 0},
             views: {
                 'navigation': {
                     templateUrl: '/views/navigation.html'
@@ -66,7 +65,7 @@ angular.module('indexApp', ['coreApp',
         //Actors pages configs
         $stateProvider.state('actors', {
             url: '/actors?{filter}&{pageNum:int}&{pageSize:int}&{refreshRate:int}&{metrics}', // root route
-            params: {pageNum: 1, pageSize: 5, refreshRate: 0},
+            params: {pageNum: 1, pageSize: 10, refreshRate: 0},
             views: {
                 'navigation': {
                     templateUrl: '/views/navigation.html'
@@ -161,7 +160,7 @@ angular.module('indexApp', ['coreApp',
         //Processes pages configs
         $stateProvider.state('processes', {
             url: '/processes?{processId}&{customId}&{status}&{type}&{pageNum:int}&{pageSize:int}&{refreshRate:int}',
-            params: {pageNum: 1, pageSize: 5, refreshRate: 0},
+            params: {pageNum: 1, pageSize: 10, refreshRate: 0},
             views: {
                 'navigation': {
                     templateUrl: '/views/navigation.html'
@@ -255,6 +254,24 @@ angular.module('indexApp', ['coreApp',
                 '': {
                     templateUrl: '/views/schedule/card.html',
                     controller: /*@ngInject*/ 'scheduleCardController'
+                },
+                'footer': {
+                    templateUrl: '/views/footer.html'
+                }
+            }
+        });
+
+        //Metrics
+        $stateProvider.state('metrics', {
+            url: '/metrics?{type}&{scope}&{period}&{metric}&{zeroes}&{smooth}',
+            params: {},
+            views: {
+                'navigation': {
+                    templateUrl: '/views/navigation.html'
+                },
+                '': {
+                    templateUrl: '/views/metric/list.html',
+                    controller: /*@ngInject*/ 'metricListController'
                 },
                 'footer': {
                     templateUrl: '/views/footer.html'

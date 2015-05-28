@@ -3,16 +3,16 @@
     "id": "starter",
     "name": "Process types",
     "label": "Process start task type",
-    "desc": "ActorID of the decider (or the scheduler) task which started the process.",
+    "desc": "Actor id of the decider (or the scheduler) task which started the process.",
     "regroup": "Regroup by process starter type",
     "param" : "starterId",
     "order" : 1
   },
   {
     "id": "actor",
-    "name": "Actor IDs",
-    "label": "Failing actor ID",
-    "desc": "ActorID of the task which cause the process fail.",
+    "name": "Actor ID's",
+    "label": "Failing actor id",
+    "desc": "Actor id of the task which cause the process fail.",
     "regroup": "Regroup by broken actor type",
     "param" : "actorId",
     "order" : 2

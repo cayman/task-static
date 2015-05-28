@@ -11,7 +11,7 @@ angular.module('actorModule', ['coreApp'])
             unblock: {url: restActorUrl + 'unblock/', method: 'POST'},
             block: {url: restActorUrl + 'block/', method: 'POST'},
             //dictionaries
-            dictionaryMetrics: {url: restActorUrl + 'metrics/compare', params: {}, isArray: true}
+            dictionaryMetrics: {url: restActorUrl + 'metrics/compare', params: {}, isArray: true, cache:true}
         });
     })
 

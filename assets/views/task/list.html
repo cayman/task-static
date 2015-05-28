@@ -5,31 +5,34 @@
     <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
-<div class="well">
-    <form class="form-horizontal form-small">
-        <div class="control-group">
-            <label class="control-label" for="processId">ProcessId:</label>
-            <div class="controls">
-                <input id="processId" type="text" ng-model="formParams.processId" ng-disabled="formParams.iterationCount"
-                       class="input-xlarge" on-enter="search()"/>
-            </div>
+<div page-form="Task search form">
+    <div class="control-group">
+        <label class="control-label" for="processId">Process id:</label>
+        <div class="controls">
+            <input id="processId" type="text" ng-model="formParams.processId" ng-disabled="formParams.iterationCount"
+                   class="input-xlarge" on-enter="search()"/>
+            <i icon-info="Filter tasks by *Process id* condition" model="formParams.processId" remove="formParams.processId = null"></i>
+
         </div>
-        <div class="control-group">
-            <label class="control-label" for="taskId">TaskId:</label>
-            <div class="controls">
-                <input id="taskId" type="text" ng-model="formParams.taskId" ng-disabled="formParams.iterationCount"
-                       class="input-xlarge" on-enter="search()"/>
-            </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="taskId">Task id:</label>
+        <div class="controls">
+            <input id="taskId" type="text" ng-model="formParams.taskId" ng-disabled="formParams.iterationCount"
+                   class="input-xlarge" on-enter="search()"/>
+            <i icon-info="Filter tasks by *Task id* condition" model="formParams.taskId" remove="formParams.taskId = null"></i>
         </div>
-        <div class="control-group">
-            <label class="control-label" for="iterationCount">Task attempts:</label>
-            <div class="controls">
-                    <input id="iterationCount" type="number" min="0" ng-model="formParams.iterationCount"
-                           class="input-mini" on-enter="search()"/>
-                    <button class="btn" ng-click="search()">Search</button>
-            </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="iterationCount">Task attempts:</label>
+        <div class="controls">
+            <input id="iterationCount" type="number" min="0" ng-model="formParams.iterationCount"
+                   ng-disabled="formParams.processId || formParams.taskId"
+                   class="input-mini" on-enter="search()"/>
+            <i icon-info="Tasks repeated several times" model="formParams.iterationCount" remove="formParams.iterationCount = 0"></i>
+            <button class="btn" ng-click="search()">Search</button>
         </div>
-    </form>
+    </div>
 </div>
 
 <page-message></page-message>
@@ -42,10 +45,10 @@
         <thead>
             <tr>
                 <th style="width: 50px">№</th>
-                <th>UUID</th>
-                <th>Process UUID</th>
+                <th>Task id</th>
+                <th>Process id</th>
                 <th>Type</th>
-                <th>ActorId</th>
+                <th>Actor id</th>
                 <th>Method</th>
                 <th>Arguments</th>
             </tr>

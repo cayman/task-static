@@ -15,7 +15,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             restUrl = url;
         };
 
-        this.setPageSize = function (size) {
+        this.setPageSizes = function (size) {
             pageSizes = size;
         };
 
@@ -539,6 +539,32 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
         };
     })
 
+    .directive('pageForm', function () {
+        return {
+            restrict: 'A',
+            transclude: true,
+            scope: false,
+            templateUrl: '/views/core/page-form.html',
+            replace: true,
+            controller: function ($scope, $element, $attrs) {
+                $attrs.$observe('pageForm',function(title){
+                    $scope.title = title;
+                });
+                $attrs.$observe('title',function(title){
+                    $scope.title = title;
+                });
+            }
+        };
+    })
+    .directive('iconInfo', function () {
+        return {
+            restrict: 'A',
+            transclude: false,
+            scope: { model: "=model", info: "@iconInfo", remove: "&remove" },
+            templateUrl: '/views/core/icon-info.html',
+            replace: true
+        };
+    })
 
     .directive('pageLoader', function () {
         return {

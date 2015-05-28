@@ -128,7 +128,13 @@ code {
 
 /*Form classes*/
 form {
-    margin: 0 0 0 0;
+
+}
+
+.form-bordered {
+    border: 1px solid lightgrey;
+    padding-top: 10px;
+    margin: 0 0 10px 0;
 }
 
 .form-small .control-label {

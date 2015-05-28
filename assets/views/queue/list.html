@@ -5,18 +5,16 @@
     <!--<h6>{{ loadParams }}</h6>-->
 </div>
 
-<div class="well">
-    <form class="form-horizontal form-small">
-        <div class="control-group">
-            <label class="control-label" for="filter">Filter:</label>
-            <div class="controls">
-                <input id="filter" type="text" ng-model="formParams.filter"
-                       ng-disabled="formParams.periodSize" class="search-query" on-enter="search()"/>
-                <i class="icon-question-sign" popover="Filter queue list by *starts with* condition" popover-trigger="mouseenter"></i>
-                <button class="btn" ng-click="search()">Search</button>
-            </div>
+<div page-form="Task queues search form">
+    <div class="control-group">
+        <label class="control-label" for="filter">Queue name filter:</label>
+        <div class="controls">
+            <input id="filter" type="text" ng-model="formParams.filter"
+                   ng-disabled="formParams.periodSize" class="input-xlarge" on-enter="search()"/>
+            <i icon-info="Filter queue list by *starts with* condition" model="formParams.filter" remove="formParams.filter = null"></i>
+            <button class="btn" ng-click="search()">Search</button>
         </div>
-    </form>
+    </div>
 </div>
 
 <page-message></page-message>
