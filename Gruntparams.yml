@@ -1,4 +1,3 @@
-
 build: ./assets
 hostname: '*'
 port: 9090
