@@ -20,7 +20,7 @@ angular.module('actorModule', ['coreApp'])
 
         function loadModel(params) {
             $log.info('Load model', $scope.loadParams = params);
-            $scope.tempActorsModel = actorRest.query(params,
+            $scope.actorsResource = actorRest.query(params,
                 function success(value) {
                     $scope.actorsModel = coreApp.parseListModel(value); //cause array or object
                     if ($scope.actorsModel) {
@@ -40,7 +40,7 @@ angular.module('actorModule', ['coreApp'])
 
         function loadMetrics(metrics, actors) {
             $log.info('Load metric data');
-            $scope.tempMetricsModel = actorRest.loadMetrics({
+            $scope.metricsResource = actorRest.loadMetrics({
                     metrics: _.reduce(metrics, function (keys, value, key) {
                         return value ? keys.concat(key) : keys;
                     }, []),

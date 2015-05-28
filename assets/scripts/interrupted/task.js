@@ -4,6 +4,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         var restTaskUrl = coreApp.getRestUrl() + 'process/tasks/interrupted/';
 
         return $resource(restTaskUrl + 'task', {}, {
+                getStacktrace: {url: restTaskUrl + 'stacktrace', params: {}},
                 //list
                 query: {url: restTaskUrl + ':query', params: {}, isArray: true},
                 //actions
@@ -26,13 +27,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         function loadModel(params) {
             $log.info('Load model', $scope.loadParams = params);
 
-            //mark selected filter or group
-            params.query = $state.is('interrupted')? 'group':'list';
-            params.dateFrom = getRestDateFormat(params.dateFrom, params.withTime, true);
-            params.dateTo = getRestDateFormat(params.dateTo, params.withTime, true);
-            delete params.withTime;
-
-            $scope.tempInterruptedModel = interruptedRest.query(params,
+            $scope.interruptedResource = interruptedRest.query(params,
                 function success(value) {
                     $scope.interruptedModel = coreApp.parseListModel(value);//cause array or object
                     if($scope.interruptedModel){
@@ -56,7 +51,14 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
             $scope.groups.actor.selected = $stateParams.actorId || $stateParams.group === 'actor';
             $scope.groups.exception.selected = $stateParams.exception || $stateParams.group === 'exception';
 
-            loadModel(angular.copy($scope.formParams));
+            //mark selected filter or group
+            var params = angular.copy($scope.formParams);
+            params.query = $state.is('interrupted')? 'group':'list';
+            params.dateFrom = getRestDateFormat(params.dateFrom, params.withTime, true);
+            params.dateTo = getRestDateFormat(params.dateTo, params.withTime, true);
+            delete params.withTime;
+
+            loadModel(params);
 
             $scope.joinFilterParam = function (params, value) {
                 var param = $scope.groups[$scope.loadParams.group].param;
@@ -84,8 +86,17 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         });
 
         //Actions
-        $scope.showStackTrace = function (message) {
-            coreApp.openStacktraceModal(message, 'StackTrace');
+        $scope.showStackTrace = function (task) {
+            interruptedRest.getStacktrace({taskId:task.taskId,processId:task.processId},
+                function success(value) {
+                    coreApp.openStacktraceModal(value.msg, 'StackTrace');
+                }, function error(reason) {
+                    coreApp.error('Interrupted tasks StackTrace not found',reason);
+                });
+        };
+
+        $scope.showMessage = function (task) {
+            coreApp.openStacktraceModal(task.errorMessage, 'Message');
         };
 
         $scope.restartGroup = function (group) {

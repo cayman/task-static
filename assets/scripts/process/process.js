@@ -41,7 +41,7 @@ angular.module('processModule', ['taskModule', 'coreApp'])
 
         function loadModel(params) {
             $log.info('Load model', $scope.loadParams = params);
-            $scope.tempProcessesModel = getRest(params)(params,
+            $scope.processesResource = getRest(params)(params,
                 function success(value) {
                     $scope.processesModel = coreApp.parseListModel(value);//cause array or object
                     if($scope.processesModel){

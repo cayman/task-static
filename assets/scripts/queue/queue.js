@@ -27,7 +27,7 @@ angular.module('queueModule', ['coreApp'])
 
         function loadModel(params) {
             $log.info('Load model',$scope.loadParams = params);
-            $scope.tempQueuesModel = queueRest.query(params,
+            $scope.queuesResource = queueRest.query(params,
                 function success(value) {
                     $scope.queuesModel = coreApp.parseListModel(value);//cause array or object
                     if($scope.queuesModel){

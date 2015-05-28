@@ -539,6 +539,17 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
         };
     })
 
+
+    .directive('pageLoader', function () {
+        return {
+            restrict: 'A',
+            transclude: false,
+            scope: {},
+            templateUrl: '/views/core/page-loader.html',
+            replace: true
+        };
+    })
+
     .directive('onEnter', function () {
         return {
             restrict: 'A',
@@ -587,10 +598,11 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             }
             return (words[word] = word);
         }
-        return function (word, skip, delimiter) {
-            return words[word] || parseWord(word, skip, delimiter);
+        return function (word, delimiter) {
+            return words[word] || parseWord(word, 25, delimiter);
         };
     })
+
     .filter('prettyStack', function (processRest, coreApp, $log) {
         return function (message) {
             return message.replace(new RegExp('([.,])\\s', 'ig'), '$1' +'<br/>')

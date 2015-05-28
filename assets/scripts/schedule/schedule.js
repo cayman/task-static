@@ -37,7 +37,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
 
         function loadModel(params) {
             $log.info('Load model', $scope.loadParams = params);
-            $scope.tempSchedulesModel = scheduleRest.query(params,
+            $scope.schedulesResource = scheduleRest.query(params,
                 function success(value) {
                     $scope.schedulesModel =  coreApp.parseListModel(value);//cause array or object
                     if($scope.schedulesModel){

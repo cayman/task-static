@@ -62,7 +62,7 @@
 <page-message></page-message>
 
 <div class="well" >
-    <list-reload model="tempInterruptedModel">
+    <list-reload model="interruptedResource">
     </list-reload>
 
     <table class="table table-striped" style="margin-right: 30px;">
@@ -143,4 +143,7 @@
             </tr>
         </tfoot>
     </table>
+
+    <page-loader ng-if="!interruptedModel" model="interruptedResource"></page-loader>
+
 </div>
