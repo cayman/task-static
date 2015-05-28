@@ -64,56 +64,43 @@
     <list-reload model="interruptedResource">
     </list-reload>
 
-    <table class="table table-striped table-condensed table-bordered">
+    <table class="table table-striped table-condensed table-bordered table-items">
         <thead>
             <tr>
-                <th>
-                    <small>Task ID</small>
-                </th>
-                <th>
-                    <small>Starter ActorID</small>
-                </th>
-                <th>
-                    <small>Task ActorID</small>
-                </th>
-                <th style="width:100px">
-                    <small>Fail time</small>
-                </th>
-                <th>
-                    <small>Error</small>
-                </th>
-                <th>
-                    <small>Actions</small>
-                </th>
+                <th>Task ID</th>
+                <th>Starter ActorID</th>
+                <th>Task ActorID</th>
+                <th>Fail time</th>
+                <th>Error</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="task in interruptedModel.items">
                 <td nowrap>
-                    <small>
                         <a class="btn-link" ui-sref="task({processId: task.processId, taskId:task.taskId })">
                             <b>{{ task.taskId }}</b></a>
-                    </small>
                 </td>
                 <td>
-                    <small ng-bind-html="task.starterId | lineWrap"></small>
+                    <span ng-bind-html="task.starterId | lineWrap"></span>
                 </td>
                 <td>
-                    <small ng-bind-html="task.actorId | lineWrap"></small>
+                    <span ng-bind-html="task.actorId | lineWrap"></span>
                 </td>
-                <td>
-                    <small>{{task.time | date:dateTimeFormat }}</small>
+                <td style="min-width:120px">
+                    {{task.time | date:dateTimeFormat }}
                 </td>
-                <td style="max-width: 300px; font-size: 85%">
-                    <span class="muted" ng-bind-html="task.errorClassName | lineWrap"></span><br/>
-                    <span ng-bind-html="task.errorMessage.substring(0,85) | lineWrap:':'"></span>
-                    <a ng-if="task.errorMessage.length>85" ng-click="showMessage(task)">
-                        More...
-                    </a><br/>
+                <td style="max-width: 300px;">
+                    <div class="muted" ng-bind-html="task.errorClassName | lineWrap"></div>
+                    <div ng-if="task.errorMessage">
+                        <span ng-bind-html="task.errorMessage.substring(0,120) | lineWrap:':'"></span>
+                        <a ng-if="task.errorMessage.length>120" ng-click="showMessage(task)">
+                            More...
+                        </a>
+                    </div>
                     <a class="btn-link" ng-click="showStackTrace(task)">
                         <i class="icon-list"></i><b>Stack trace</b>
                     </a>
-
                 </td>
                 <td>
                     <button ng-click="restart(task)" popover="Try to restart the task" popover-trigger="mouseenter"><i class="icon-retweet"></i></button>

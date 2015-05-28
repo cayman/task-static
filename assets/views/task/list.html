@@ -38,7 +38,7 @@
     <list-reload model="tasksResource">
     </list-reload>
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-hover table-bordered table-items">
         <thead>
             <tr>
                 <th style="width: 50px">№</th>
@@ -57,22 +57,21 @@
                     {{ tasksModel.$startIndex + $index }}
                 </td>
                 <td>
-                    <small><a ui-sref="task({taskId: task.taskId, processId:task.processId})" style="cursor: pointer;" >
+                    <a ui-sref="task({taskId: task.taskId, processId:task.processId})" style="cursor: pointer;" >
                             {{task.taskId}}</a>
-                    </small>
                 </td>
                 <td>
-                    <small><a ui-sref="process({processId:task.processId})"  style="cursor: pointer;">
-                            {{task.processId}}</a></small>
+                    <a ui-sref="process({processId:task.processId})"  style="cursor: pointer;">
+                            {{task.processId}}</a>
                 </td>
                 <td>
-                    <small><b>{{task.type}}</b></small>
+                    <b>{{task.type}}</b>
                 </td>
                 <td>
-                    <small ng-bind-html="task.actorId | lineWrap"></small>
+                    <span ng-bind-html="task.actorId | lineWrap"></span>
                 </td>
                 <td>
-                    <small><b>{{task.method}}</b></small>
+                    <b>{{task.method}}</b>
                 </td>
                 <td>
                     <button ng-show="task.args && task.args.length"

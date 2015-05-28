@@ -25,75 +25,55 @@
     <list-reload model="queuesResource">
     </list-reload>
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered table-hover table-items">
         <thead>
             <tr>
-                <th style="width: 25px">
-                    <small>№</small>
+                <th style="width: 25px">№
                 </th>
-                <th>
-                    <small>Name</small>
-                </th>
-                <th>
-                    <small>Activity</small>
-                </th>
-                <th>
-                    <small>Balance</small>
+                <th>Name</th>
+                <th>Activity</th>
+                <th>Balance
                     <select ng-model="formParams.balancePeriod" style="width:90px;" class="btn btn-mini">
                         <option value="hour">Last hour</option>
                         <option value="day">Last day</option>
                     </select>
                     <span class="caret"></span>
                 </th>
-                <th style="width: 50px">
-                    <small>Size
+                <th style="width: 50px">Size
                         <i class="icon-question-sign" popover="Value is measured by metrics handler and could be several seconds delayed from real current size" popover-trigger="mouseenter"></i>
-                    </small>
                 </th>
-                <th>
-                    <small>Actions</small>
-                </th>
+                <th>Actions</th>
             </tr>
         </thead>
-
         <tbody>
             <tr ng-repeat="queue in queuesModel.items">
                 <td>
-                    <small>
-                        {{ queuesModel.$startIndex + $index }}
-                        <i class="icon-flag" ng-show="queue.local" popover="Owned by current node" popover-trigger="mouseenter" ></i>
-                        <i class="icon-globe" ng-hide="queue.local" popover="Owned by remote node" popover-trigger="mouseenter"></i>
-                    </small>
+                    {{ queuesModel.$startIndex + $index }}
+                    <i class="icon-flag" ng-show="queue.local" popover="Owned by current node"
+                       popover-trigger="mouseenter"></i>
+                    <i class="icon-globe" ng-hide="queue.local" popover="Owned by remote node"
+                       popover-trigger="mouseenter"></i>
                 </td>
                 <td>
-                    <small>
-                            <b ng-bind-html=" queue.name | lineWrap"></b>
-                    </small>
+                    <span ng-bind-html=" queue.name | lineWrap"></span>
                 </td>
                 <td nowrap>
                     <div style="width: 100%;" ng-if="queue.lastActivity > 0">
-                        <small>
-                            <i class="icon-question-sign" popover="Last time an actor tried to poll task from the queue" popover-trigger="mouseenter" ></i>
-                            <i class="muted">Last polled: </i>
-                            <b>{{queue.lastActivity | date:dateTimeFormat}}</b>
-                        </small>
+                        <i class="icon-question-sign" popover="Last time an actor tried to poll task from the queue" popover-trigger="mouseenter" ></i>
+                        <i class="muted">Last polled: </i>
+                        {{queue.lastActivity | date:dateTimeFormat}}
                     </div>
                     <div style="width: 100%;" ng-if="queue.lastPolledTaskEnqueueTime > 0">
-                        <small>
-                            <i class="icon-question-sign" popover="Enqueue time for the last successfully polled task for the queue" popover-trigger="mouseenter" ></i>
-                            <i class="muted">Effective time:</i>
-                            <b>{{ queue.lastPolledTaskEnqueueTime | date:dateTimeFormat }}</b>
-                        </small>
+                        <i class="icon-question-sign" popover="Enqueue time for the last successfully polled task for the queue" popover-trigger="mouseenter" ></i>
+                        <i class="muted">Effective time:</i>
+                        {{ queue.lastPolledTaskEnqueueTime | date:dateTimeFormat }}
                     </div>
                 </td>
                 <td>
-                    <small>
-                        In: <b>{{ formParams.balancePeriod === 'day' ? queue.inDay : queue.inHour}}</b>,
-                        out: <b>{{formParams.balancePeriod === 'day' ? queue.outDay: queue.outHour}}</b>
-                    </small>
-
-                    <hr style="margin: 1px 5px 1px 5px;padding:0;"/>
-                    <small class="muted">By <b>{{queue.nodes || 0}}</b> nodes</small>
+                    In: <b>{{ formParams.balancePeriod === 'day' ? queue.inDay : queue.inHour}}</b>,
+                    out: <b>{{formParams.balancePeriod === 'day' ? queue.outDay: queue.outHour}}</b>
+                    <hr/>
+                    By <b>{{queue.nodes || 0}}</b> nodes
                 </td>
                 <td>
                     <b>

@@ -195,10 +195,23 @@ form {
 }
 
 /*Table*/
-table.table th{
+.table-items thead th{
+    font-size: 85%;
+    font-weight: 700;
+}
 
-    font-size: 90%;
-    font-weight: 700 ;
+.table-items tbody td{
+    font-size: 85%;
+    font-weight: 500;
+}
+
+.table-items tbody td td{
+    font-size: 100%;
+}
+
+.table-items tbody td hr{
+    margin: 1px 5px 1px 5px;
+    padding:0;
 }
 
 .checkbox-group-table td {
@@ -209,6 +222,7 @@ table.table th{
     width: 100%;
     margin-bottom: 0px;
     margin-top: 0px;
+    background-color: transparent;
 }
 
 .inner-table th,

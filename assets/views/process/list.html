@@ -46,13 +46,13 @@
     <list-reload model="processesResource">
     </list-reload>
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-hover table-bordered table-items">
         <thead>
             <tr>
                 <th style="width: 40px;">№</th>
                 <th>Process id</th>
                 <th>Start task</th>
-                <th>Custom id</th>
+                <th style="width: 60px;">Custom id</th>
                 <th>Start time</th>
                 <th>End time</th>
                 <th>Actions</th>
@@ -67,32 +67,25 @@
                     <i class="{{ process.state | processState:'icon' }}" popover="{{ process.state | processState:'desc' }}" popover-trigger="mouseenter"></i>
                  </td>
                 <td>
-                    <small>
-                        <a class="btn-link"
-                           ui-sref="process({processId:process.processId})">{{process.processId}}</a>
-                        <div class="muted"><b>{{ process.state | processState:'info' }}</b></div>
-                    </small>
+                    <a class="btn-link"
+                       ui-sref="process({processId:process.processId})">{{process.processId}}</a>
+                    <div class="muted"><b>{{ process.state | processState:'info' }}</b></div>
                 </td>
                 <td>
                     <a ui-sref="task({processId:process.processId,taskId:process.startTaskId})" class="btn-link">
-                        <small>{{process.startTaskId}}</small>
+                        {{process.startTaskId}}
                     </a><br/>
-                    <small class="muted"><b ng-bind-html="process.startTask.actorId | lineWrap"></b> - <b>{{ process.startTask.method }}</b></small>
+                    <span ng-bind-html="process.startTask.actorId | lineWrap"></span>
+                    - <b>{{ process.startTask.method }}</b>
                 </td>
                 <td>
-                    <small><b>{{ process.customId }}</b></small>
+                    {{ process.customId }}
                 </td>
                 <td>
-                    <small ng-if="process.startTime>0">
-                           {{ process.startTime | date:dateFormat }}
-                        <i>{{ process.startTime | date:timeFormat }}</i>
-                    </small>
+                   {{ process.startTime | date:dateTimeFormat }}
                 </td>
                 <td>
-                    <small ng-if="process.endTime>0">
-                           {{ process.endTime | date:dateFormat }}
-                        <i>{{ process.endTime | date:timeFormat }}</i>
-                    </small>
+                   {{ process.endTime | date:dateTimeFormat }}
                 </td>
                 <td>
                     <button ng-click="recovery(process)" class="btn btn-small"

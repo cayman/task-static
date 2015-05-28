@@ -37,17 +37,14 @@
     </list-reload>
 
     <div style="overflow: auto;">
-        <table class="table table-bordered">
+        <table class="table table-striped table-bordered table-items">
             <thead>
                 <tr>
-                    <th style="width:35px;">
-                        <small>№</small>
+                    <th style="width:35px;">№
                     </th>
-                    <th>
-                        <small>Actor ID:</small>
-                    </th>
+                    <th>Actor ID:</th>
                     <th ng-repeat="(metric, metricPeriod) in loadParams.metrics" style="width: 400px;">
-                        <small> {{metric}} </small>
+                       {{metric}}
                         <select style="width:90px;" class="btn btn-mini"
                                 ng-model="loadParams.metrics[metric]" ng-change="changeLoaded()">
                             <option value="hour">Last hour</option>
@@ -56,7 +53,7 @@
                         <span class="caret"></span>
                     </th>
                     <th width="80px;">
-                        <small>Actions:</small>
+                        Actions:
                     </th>
                 </tr>
             </thead>
@@ -64,63 +61,57 @@
             <tbody>
                 <tr ng-repeat="actor in actorsModel.items" ng-class="{error: actor.blocked}">
                     <td>
-                        <small>
-                            {{ actorsModel.$startIndex + $index }}
-                        </small>
+                        {{ actorsModel.$startIndex + $index }}
                         <i class="icon-ban-circle" ng-if="actor.blocked" style="width:25px; height:25px;cursor:help;" popover="Blocked: 'poll' and 'release' requests for this actor are rejected." popover-trigger="mouseenter"></i>
                     </td>
                     <td>
-                        <small><b ng-bind-html="actor.id | lineWrap"></b></small>
+                        <span ng-bind-html="actor.id | lineWrap"></span>
                     </td>
                     <td ng-repeat="(metric, metricPeriod) in loadParams.metrics" >
-                        <span></span>
                         <div ng-repeat="(nodeName, nodeItem) in metricsModel">
-
                             <hr ng-if="!$first" />
-                            <small>
-                                <table class="inner-table">
-                                    <tr>
-                                        <td style="width: 80px;"><i class="muted">Node:</i></td>
-                                        <td>{{nodeName}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="muted">Last activity:</i></td>
-                                        <td> {{nodeItem.lastActivity | date:dateTimeFormat }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="muted">Rate({{ metricPeriod }}):</i></td>
-                                        <td>
-                                            <span ng-if="actor.queueState && metricPeriod === 'hour' &&
-                                                (actor.queueState.totalOutHour>=0 || actor.queueState.totalInHour>=0)">
-                                                <b ng-if="actor.hourRate>0" style="color: red;cursor: help;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.hourRate}}</b>
-                                                <b ng-if="actor.hourRate<=0" style="color: green;cursor: help;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.hourRate}}</b>
-                                                in: <b ng-if="actor.queueState.totalInHour>=0">{{actor.queueState.totalInHour}}</b>, out: <b ng-if="actor.queueState.totalOutHour>=0">{{actor.queueState.totalOutHour}}</b>
-                                            </span>
+                            <table class="inner-table">
+                                <tr>
+                                    <td style="width: 80px;"><i class="muted">Node:</i></td>
+                                    <td>{{nodeName}}</td>
+                                </tr>
+                                <tr ng-show="nodeItem.lastActivity">
+                                    <td><i class="muted">Last activity:</i></td>
+                                    <td> {{nodeItem.lastActivity | date:dateTimeFormat }}</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="muted">Rate({{ metricPeriod }}):</i></td>
+                                    <td>
+                                        <span ng-if="actor.queueState && metricPeriod === 'hour' &&
+                                            (actor.queueState.totalOutHour>=0 || actor.queueState.totalInHour>=0)">
+                                            <b ng-if="actor.hourRate>0" style="color: red;cursor: help;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.hourRate}}</b>
+                                            <b ng-if="actor.hourRate<=0" style="color: green;cursor: help;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.hourRate}}</b>
+                                            in: <b ng-if="actor.queueState.totalInHour>=0">{{actor.queueState.totalInHour}}</b>, out: <b ng-if="actor.queueState.totalOutHour>=0">{{actor.queueState.totalOutHour}}</b>
+                                        </span>
 
-                                            <span ng-if="actor.queueState && metricPeriod === 'day' &&
-                                                (actor.queueState.totalOutDay>=0 || actor.queueState.totalInDay>=0)">
-                                                <b ng-if="actor.dayRate>0" style="color: red;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.dayRate}}</b>
-                                                <b ng-if="actor.dayRate<=0" style="color: green;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.dayRate}}</b>
-                                                in: <b ng-if="actor.queueState.totalInDay>=0">{{actor.queueState.totalInDay}}</b>, out: <b ng-if="actor.queueState.totalOutDay>=0">{{actor.queueState.totalOutDay}}</b>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="muted">Stats:</i></td>
-                                        <td>
-                                            <div ng-if="metricPeriod === 'hour'">
-                                                Triggered: <b>{{nodeItem.totalCountsHour || 'n/a'}}</b> times<br />
-                                                Average: <b>{{nodeItem.meanTimeHour || 'n/a'}}</b> ms
-                                            </div>
+                                        <span ng-if="actor.queueState && metricPeriod === 'day' &&
+                                            (actor.queueState.totalOutDay>=0 || actor.queueState.totalInDay>=0)">
+                                            <b ng-if="actor.dayRate>0" style="color: red;" popover="Possible performance problems: mean outcome < mean income" popover-trigger="mouseenter">&#x25B2;{{actor.dayRate}}</b>
+                                            <b ng-if="actor.dayRate<=0" style="color: green;" popover="Actor is OK" popover-trigger="mouseenter">&#x25BC;{{actor.dayRate}}</b>
+                                            in: <b ng-if="actor.queueState.totalInDay>=0">{{actor.queueState.totalInDay}}</b>, out: <b ng-if="actor.queueState.totalOutDay>=0">{{actor.queueState.totalOutDay}}</b>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="muted">Stats:</i></td>
+                                    <td>
+                                        <div ng-if="metricPeriod === 'hour'">
+                                            Triggered: <b>{{nodeItem.totalCountsHour || 'n/a'}}</b> times<br />
+                                            Average: <b>{{nodeItem.meanTimeHour || 'n/a'}}</b> ms
+                                        </div>
 
-                                            <div ng-if="metricPeriod === 'day'">
-                                                Triggered: <b>{{nodeItem.totalCountsDay || 'n/a'}}</b> times <br />
-                                                Average: <b>{{nodeItem.meanTimeDay || 'n/a'}}</b> ms
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </small>
+                                        <div ng-if="metricPeriod === 'day'">
+                                            Triggered: <b>{{nodeItem.totalCountsDay || 'n/a'}}</b> times <br />
+                                            Average: <b>{{nodeItem.meanTimeDay || 'n/a'}}</b> ms
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </td>
                     <td>
