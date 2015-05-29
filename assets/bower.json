@@ -4,7 +4,6 @@
   "main": "index.js",
   "dependencies": {
     "html5shiv": "~3.7.0",
-    "jquery": "~1.9.0",
     "jquery-flot": "~0.8.0",
     "underscore": "latest",
     "moment": "latest",

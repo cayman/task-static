@@ -26,11 +26,11 @@ angular.module('actorModule', ['coreApp'])
                     if ($scope.actorsModel) {
                         $log.info('Successfully updated actors data');
                         params.metrics = coreApp.clearObject(params.metrics);
-                        if (_.size(params.metrics) > 0) {
+                        if (coreApp.clearObjectSize(params.metrics) > 0) {
                             loadMetrics(params.metrics, $scope.actorsModel.items);
                         }
                     } else {
-                        coreApp.info('Actors not found', reason);
+                        coreApp.info('Actors not found', value);
                     }
                     coreApp.refreshRate(params, loadModel);
                 }, function error(reason) {

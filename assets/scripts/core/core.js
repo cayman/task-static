@@ -106,6 +106,11 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                         return object;
                     }, {});
                 },
+                clearObjectSize: function(list){
+                    return  _.reduce(list, function(size, value, property ){
+                        return value ? size+1 : size;
+                    }, 0);
+                },
 
                 parseListModel : function(value){
                     if(angular.isArray(value) && value.length > 0){

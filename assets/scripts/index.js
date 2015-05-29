@@ -263,8 +263,13 @@ angular.module('indexApp', ['coreApp','homeModule', 'queueModule', 'actorModule'
 
         //Metrics
         $stateProvider.state('metrics', {
-            url: '/metrics?{type}&{scope}&{period}&{metric}&{zeroes}&{smooth}',
-            params: {},
+            url: '/metrics?{metric}&{scope}&{type}&{period}&{zeroes:bool}&{smooth:int}&{refreshRate:int}&{dataset}',
+            params: { refreshRate: 0 },
+            resolve: {
+                smoothRates: function () {
+                    return [0, 3, 7, 20, 30];
+                }
+            },
             views: {
                 'navigation': {
                     templateUrl: '/views/navigation.html'
