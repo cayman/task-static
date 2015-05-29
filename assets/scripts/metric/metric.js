@@ -37,19 +37,13 @@ angular.module('metricModule', ['coreApp'])
         }
 
         //Initialization:
-        $scope.plotProps = {
-            updatePeriod: 0,
-            options: {
-                zoom: {interactive: false},
-                pan: {interactive: false}
-//                xaxis: {ticks: 10},
-//                yaxis: {ticks: 10}
-            }
-        };
         $scope.smoothRates = smoothRates;
+
         $scope.formParams = coreApp.copyStateParams();
+        $scope.$stateParams = coreApp.getStateParams();
         $scope.formParams.dataset = $scope.formParams.dataset ?
             coreApp.clearObject(JSON.parse($scope.formParams.dataset)) : {};
+
 
         $scope.isValidForm = function() {
             return $scope.formParams.type && $scope.formParams.scope &&
@@ -62,12 +56,7 @@ angular.module('metricModule', ['coreApp'])
             function success(value) {
                 $log.log('Loaded metric options dictionary', value);
                 if($scope.options.metrics.length){
-                    $scope.$showDatasets = !!_.find($scope.formParams.dataset,function(value,key){
-                        return key !== $scope.formParams.metric;
-                    });
-                    $log.debug('$scope.$showDatasets',$scope.$showDatasets);
                     if($scope.isValidForm()){
-
                         loadModel(angular.copy($scope.formParams));
                     }
                 }else{
@@ -84,9 +73,8 @@ angular.module('metricModule', ['coreApp'])
             $scope.formParams.scope = undefined;
             $scope.formParams.type = undefined;
             $scope.formParams.period = undefined;
-            $scope.$showDatasets = false;
+            $scope.formParams.showDataset = undefined;
         };
-
 
         //Update command:
         $scope.search = function () {
@@ -103,17 +91,46 @@ angular.module('metricModule', ['coreApp'])
 
     })
 
-    .directive('metricsPlot', ['metricsFormatters', function (metricsFormatters) {
+    .directive('metricsPlot', function ( $log, metricsFormatters) {
+        function getOptions(params, xFormatter, yFormatter){
+            var xFormatterFunc = xFormatter ? metricsFormatters[xFormatter] : undefined;
+            var yFormatterFunc = yFormatter ? metricsFormatters[yFormatter] : undefined;
+            return {
+                zoom: {interactive: (params && params.zoom) || false},
+                pan: {interactive: (params && params.pan) || false},
+                xaxis: xFormatterFunc ? { tickFormatter: xFormatterFunc } : undefined,
+                yaxis: yFormatterFunc ? { tickFormatter: yFormatterFunc } : undefined,
+                legend: {show: true},
+                grid: {
+                    hoverable: true
+//                        clickable: true
+                },
+                series: {
+                    lines: {show: true},
+                    points: {show: true}
+                }
+            };
+        }
+        var style = {
+            position: "absolute",
+            display: "none",
+            border: "1px solid #fdd",
+            padding: "2px",
+            backgroundColor: "#FFA801",
+            opacity: 0.80,
+            fontSize: "12px"
+        };
+
         return {
             restrict: 'CA',//Class, Attribute
             terminal: true,
-            scope: {//'=' enables ability to $watch
-                datasets: "=",
+            scope: {
+                model: "=metricsPlot",
                 width: "@",
                 height: "@",
-                addOptions: "="
+                params: "="
             },
-            controller: ['$scope', '$element', '$attrs', '$transclude', '$window', '$log', function ($scope, $element, $attrs, $transclude, $window, $log) {
+            controller: function ($scope, $element, $attrs) {
 
                 var jPlot = $($element);
 
@@ -121,46 +138,23 @@ angular.module('metricModule', ['coreApp'])
                 if($scope.width) { jPlot.css("width", $scope.width); }
                 if($scope.height) { jPlot.css("height", $scope.height); }
 
-                $("<div id='metrics-tooltip'></div>").css({
-                    position: "absolute",
-                    display: "none",
-                    border: "1px solid #fdd",
-                    padding: "2px",
-                    backgroundColor: "#FFA801",
-                    opacity: 0.80,
-                    fontSize: "12px"
-                }).appendTo("body");
+                $("<div id='metrics-tooltip'></div>").css(style).appendTo("body");
 
-                var defaultOptions = {
-                    legend: {show: true},
-                    grid: {
-                        hoverable: true
-//                        clickable: true
-                    },
-                    series: {
-                        lines: {show: true},
-                        points: {show: true}
-                    }
-                };
-
-                var plotElem = $.plot(jPlot, [], defaultOptions);
+                var plotElem = $.plot(jPlot, [], getOptions());
 
                 jPlot.bind("plothover", function (event, pos, item) {
 
-                    if ($scope.datasets.length>0) {
-                        var posX = metricsFormatters.getFormattedValue($scope.datasets[0].xFormatter, pos.x, false);
-                        var posY = metricsFormatters.getFormattedValue($scope.datasets[0].yFormatter, pos.y, false);
-                        if (angular.isNumber(posX)) {
-                            posX = posX.toFixed(2);
-                        }
-                        if (angular.isNumber(posY)) {
-                            posY = posY.toFixed(2);
-                        }
-                        $("#metrics-hoverdata .current").text("(" + posX + ", " + posY + ")");
+                    if ($scope.model.length>0) {
+                        var posX = metricsFormatters.getFormattedValue($scope.model[0].xFormatter, pos.x, false);
+                        var posY = metricsFormatters.getFormattedValue($scope.model[0].yFormatter, pos.y, false);
 
+                        $("#metrics-hoverdata .current").text("(" +
+                                posX + ", " + posY + ")");
+
+                        //$log.info('$scope.mousePosition',$scope.mousePosition);
                         if (item) {
-                            var xVal = metricsFormatters.getFormattedValue($scope.datasets[0].xFormatter, item.datapoint[0], false);
-                            var yVal = metricsFormatters.getFormattedValue($scope.datasets[0].yFormatter, item.datapoint[1], false);
+                            var xVal = metricsFormatters.getFormattedValue($scope.model[0].xFormatter, item.datapoint[0], false);
+                            var yVal = metricsFormatters.getFormattedValue($scope.model[0].yFormatter, item.datapoint[1], false);
                             $("#metrics-tooltip").html("[" + xVal + ", " + yVal + "]")
                                 .css({top: item.pageY+5, left: item.pageX+5})
                                 .fadeIn(200);
@@ -171,48 +165,36 @@ angular.module('metricModule', ['coreApp'])
 
                 });
 
-                var updatePlotData = function(newData) {
-                    $log.info("Update plot data. New datasets count: " + newData.length);
-
-                    if (!!newData && newData.length>0) {
-                        var newOptions = $.extend({}, defaultOptions);
-
-                        if (!!newData[0].yFormatter && !!metricsFormatters[newData[0].yFormatter]) {
-                            newOptions = $.extend(newOptions, {
-                                yaxis: {
-                                    tickFormatter: metricsFormatters[newData[0].yFormatter]
-                                }
-                            });
-                        }
-
-                        if (!!newData[0].xFormatter && !!metricsFormatters[newData[0].xFormatter]) {
-                            newOptions = $.extend(newOptions, {
-                                xaxis: {
-                                    tickFormatter: metricsFormatters[newData[0].xFormatter]
-                                }
-                            });
-                        }
-                        newOptions = $.extend(newOptions, $scope.addOptions);
-
-                        plotElem = $.plot(jPlot, newData, newOptions);
-                    } else {
-                        plotElem = $.plot(jPlot, [], defaultOptions);
+                var updatePlotData = function(model, params) {
+                    if(model && model.length>0){
+                        var options = getOptions(params, model[0].xFormatter, model[0].yFormatter);
+                        //$log.info("Plot options:",options);
+                        plotElem = $.plot(jPlot, model, options );
+                    }else{
+                        $log.info('Clear datasets');
+                        plotElem = $.plot(jPlot, [], getOptions());
                     }
                 };
 
-                $scope.$watch('datasets', function (newVal, oldVal) {
+                $scope.$watch('model', function (newData) {
+                   // $log.info('$watch(model)',newData);
+                    if(newData.$resolved) {
+                        $log.info("Updated plot datasets:");
+                        updatePlotData(newData,$scope.params);
+                    }
+                },false);
 
-                    updatePlotData(newVal);
-                });
-
-                $scope.$watch('addOptions', function (newVal, oldVal) {
-                    updatePlotData(plotElem.getData());
+                $scope.$watch('params', function (newParams, oldParams) {
+                    if(newParams!==oldParams) {
+                        $log.info("Updated plot params:", newParams);
+                        updatePlotData($scope.model,newParams);
+                   }
                 }, true);
 
-            }],
+            },
             replace: true
         };
-    }])
+    })
 
     .factory("metricsFormatters", function ( $log) {
         var resultService = {

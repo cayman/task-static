@@ -299,7 +299,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                 item.$num = parent ? (parent.$num + '.' + (++subNum)) : ('' + (++subNum));
                 item.$level = parent ? (parent.$level + 1 ) : 0;
                 item.$parentKey = parent ? parent.$key : null;
-                item.$expanded = !parent && (subNum === 1 || item.$children === 0);
+                item.$expanded = !parent && (subNum < 3 || item.$children === 0);
 
                 item.$parent = function getParent(){
                     return this.$parentKey !== null ? list[this.$parentKey] : null;
@@ -532,7 +532,8 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                     } else if (isObject && message.reason.status) {
                         $scope.messageEvent.message = 'Status ' + message.reason.status +
                             ' : ' + message.reason.statusText;
-                        $scope.messageEvent.detail = message.reason.data;
+                        $scope.messageEvent.detail = message.reason.data && message.reason.data.length>0 ?
+                            message.reason.data : null;
                         $scope.messageEvent.detailObject = message.reason.config;
 
                     } else {

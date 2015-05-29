@@ -46,7 +46,7 @@
                     <th ng-show="resourceParams.metrics[metric]" ng-repeat="metric in metrics" style="min-width:190px;">
                        {{metric}}
                         <select style="width:90px;" class="btn btn-mini"
-                                ng-model="resourceParams.metrics[metric]" ng-change="changeLoaded()">
+                                ng-model="resourceParams.metrics[metric]" ng-change="changeStateParams()">
                             <option value="hour">Last hour</option>
                             <option value="day">Last day</option>
                         </select>

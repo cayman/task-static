@@ -263,7 +263,8 @@ angular.module('indexApp', ['coreApp','homeModule', 'queueModule', 'actorModule'
 
         //Metrics
         $stateProvider.state('metrics', {
-            url: '/metrics?{metric}&{scope}&{type}&{period}&{zeroes:bool}&{smooth:int}&{refreshRate:int}&{dataset}',
+            url: '/metrics?{metric}&{scope}&{type}&{period}&{zeroes:bool}&{smooth:int}&' +
+            '{refreshRate:int}&{dataset}&{showDataset:bool}&{zoom:bool}&{pan:bool}&{xaxis:num}&{yaxis:num}',
             params: { refreshRate: 0 },
             resolve: {
                 smoothRates: function () {

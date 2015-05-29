@@ -1,7 +1,8 @@
 <div page-header="Metrics" ng-dblclick="$debug = !$debug">
     <div ng-if="$debug">
         <h6>{{ formParams | json}}</h6>
-        <h6>{{ resourceParams | json}}</h6>
+        <h6>{{ $stateParams | json}}</h6>
+        <h6>{{ plotOptions | json}}</h6>
     </div>
 </div>
 
@@ -86,8 +87,9 @@
         <td>
             <div class="control-group">
                 <label class="inline-label" for="dataSets">
-                    <input id="dataSets" type="checkbox" ng-model="$showDatasets"
-                           ng-disabled="!options.dataSets[formParams.metric]"/>
+                    <input id="dataSets" type="checkbox" ng-model="formParams.showDataset"
+                           ng-disabled="!options.dataSets[formParams.metric]"
+                           ng-changed="formParams.dataset = {}"/>
                     Show all datasets:
                     <i icon-info="Select datasets to show on the diagram"></i>
                 </label>
@@ -96,7 +98,7 @@
                 <!--<div ng-hide = "options.dataSets[formParams.metric].length"-->
                      <!--class="alert alert-warning">No selected datasets to show</div>-->
                 <ul style="max-height: 180px; overflow: auto; padding: 0 0 0 0">
-                    <li ng-repeat="dataSet in options.dataSets[formParams.metric] | filter:{general:!$showDatasets}">
+                    <li ng-repeat="dataSet in options.dataSets[formParams.metric] | filter:{general:!formParams.showDataset}">
                         <label class="checkbox">
                             <input type="checkbox" ng-model="formParams.dataset[dataSet.value]"/>
                             <small>
@@ -120,42 +122,34 @@
     <list-reload model="metricsResource">
     </list-reload>
 
-    <table class="table table-bordered table-items " ng-if="metricsModel">
-        <tbody>
+    <table class="table table-condensed table-items " ng-if="metricsModel">
+        <tbody ng-init="position = {}">
             <tr>
                 <td style="min-width: 35px; vertical-align: middle; ">
                     <span class="axis-label">{{ metricsModel[0].yLabel }}</span>
                 </td>
                 <td style="min-width: 900px;">
-                    <div metrics-plot style="width:900px;height:480px;"
-                         datasets="metricsModel" add-options="plotProps.options" />
+                    <div ng-show="metricsModel" style="width:900px;height:480px;"
+                         metrics-plot="metricsModel" params="$stateParams"/>
                 </td>
                 <td style="vertical-align: top; text-align: left; min-width: 160px;">
                     <label class="checkbox small">
-                        <input type="checkbox" ng-model="plotProps.options.zoom.interactive" />Zoom on scroll <i class="icon-question-sign" style="cursor: help;" popover-placement="bottom" popover="Enable to zoom in/out on mouse scroll over plot pane" popover-trigger="mouseenter"></i>
+                        <input type="checkbox" ng-model="$stateParams.zoom"/>
+                        Zoom on scroll <i class="icon-question-sign" style="cursor: help;" popover-placement="bottom" popover="Enable to zoom in/out on mouse scroll over plot pane" popover-trigger="mouseenter"></i>
                     </label>
                     <label class="checkbox small">
-                        <input type="checkbox" ng-model="plotProps.options.pan.interactive" />Mouse draggable <i class="icon-question-sign" style="cursor: help;" popover-placement="bottom" popover="Enable to drag plot over pane with mouse" popover-trigger="mouseenter"></i>
+                        <input type="checkbox" ng-model="$stateParams.pan" />
+                        Mouse draggable <i class="icon-question-sign" style="cursor: help;" popover-placement="bottom" popover="Enable to drag plot over pane with mouse" popover-trigger="mouseenter"></i>
                     </label>
                     <hr />
 
-                    <!--<small>X ticks: </small><input type="text" class="input-mini" ng-model="plotProps.options.xaxis.ticks"/>-->
-                    <!--<small>Y ticks: </small><input type="text" class="input-mini" ng-model="plotProps.options.yaxis.ticks" />-->
+                    <!--<small>X ticks: </small><input type="text" class="input-mini" ng-model="$stateParams.xaxis"/>-->
+                    <!--<small>Y ticks: </small><input type="text" class="input-mini" ng-model="$stateParams.yaxis" />-->
                     <b style="font-size: 12px;">Mouse position:</b>
                     <div class="well" id="metrics-hoverdata">
                         <div class="current" style="font-size: 12px;"></div>
                     </div>
-                    <button class="btn" ng-click="clear()"><i class="icon-remove"></i>Clear data</button>
-
-                    <hr />
-
-                    <div>
-                        <label class="checkbox small"><small>
-                            <b>Refresh automatically</b></small>
-                            <input type="checkbox" ng-model="plotProps.updatePeriod" ng-true-value="1" ng-false-value="0"/>
-                            <i class="icon-question-sign" style="cursor: help;" popover="Enable to refresh plot data every second" popover-trigger="mouseenter"></i>
-                        </label>
-                    </div>
+                    <!--<button class="btn" ng-click="clear()"><i class="icon-remove"></i>Clear data</button>-->
                 </td>
             </tr>
             <tr>

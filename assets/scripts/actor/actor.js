@@ -69,7 +69,7 @@ angular.module('actorModule', ['coreApp'])
             });
 
 
-        $scope.changeLoaded = function () {
+        $scope.changeStateParams = function () {
             var params = coreApp.getStateParams();
             params.metrics = JSON.stringify($scope.resourceParams.metrics);
             $log.debug('change $stateParams', params);
