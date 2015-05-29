@@ -1,8 +1,10 @@
-<div page-header>
-    <h4 ng-hide="loadParams.iterationCount">List of tasks</h4>
-    <h4 ng-show="loadParams.iterationCount">Tasks repeated {{ loadParams.iterationCount }} and more times</h4>
-    <!--<h6>{{ formParams }}</h6>-->
-    <!--<h6>{{ loadParams }}</h6>-->
+<div page-header ng-dblclick="$debug = !$debug">
+    <h4 ng-hide="resourceParams.iterationCount">List of tasks</h4>
+    <h4 ng-show="resourceParams.iterationCount">Tasks repeated {{ resourceParams.iterationCount }} and more times</h4>
+    <div ng-if="$debug">
+        <h6>{{ formParams }}</h6>
+        <h6>{{ resourceParams }}</h6>
+    </div>
 </div>
 
 <div page-form="Task search form">

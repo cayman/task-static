@@ -17,8 +17,12 @@ angular.module('metricModule', ['coreApp'])
 
 
         function loadModel(params) {
-            $log.info('Load model', $scope.loadParams = params);
-            $scope.metricsResource =  metricRest.query(params,
+            $log.info('Load model', $scope.resourceParams = params);
+            $scope.metricsResource =  metricRest.query(function(restParams){
+                    $log.info('metricsResource ',restParams);
+                    restParams.dataset = coreApp.getKeys(restParams.dataset).join(',');
+                    return restParams;
+                }(angular.copy(params)),
                 function success(value) {
                     $scope.metricsModel = value; //cause array or object
                     if ($scope.metricsModel) {
@@ -51,7 +55,7 @@ angular.module('metricModule', ['coreApp'])
             return $scope.formParams.type && $scope.formParams.scope &&
                 $scope.formParams.period && $scope.formParams.metric &&
                 angular.isObject($scope.formParams.dataset) &&
-                coreApp.clearObjectSize($scope.formParams.dataset)>0;
+                _.size(coreApp.clearObject($scope.formParams.dataset))>0;
         };
 
         $scope.options = metricRest.dictionaryOptions({},
@@ -63,11 +67,8 @@ angular.module('metricModule', ['coreApp'])
                     });
                     $log.debug('$scope.$showDatasets',$scope.$showDatasets);
                     if($scope.isValidForm()){
-                        var params = angular.copy($scope.formParams);
-                        params.dataset = _.reduce(params.dataset, function (keys, value, key) {
-                            return value ? keys .concat(key) : keys;
-                        }, []).join(',');
-                        loadModel(params);
+
+                        loadModel(angular.copy($scope.formParams));
                     }
                 }else{
                     coreApp.error('No available metrics to show', $scope.options);
@@ -213,63 +214,18 @@ angular.module('metricModule', ['coreApp'])
         };
     }])
 
-    .factory("metricsDateTime", function () {
-        var resultService = {
-            withLeadingZero: function(number) {
-                if (number<10) {
-                    return "0"+number;
-                } else {
-                    return number;
-                }
-            },
-            getShortDate: function(date) {
-                if (date) {
-                    return this.withLeadingZero(date.getDate()) + "/" + this.withLeadingZero(date.getMonth()+1);
-                } else {
-                    return "";
-                }
-            },
-            getTimeStr: function(time) {
-                if (time) {
-                    return this.withLeadingZero(time.getHours()) + ":" + this.withLeadingZero(time.getMinutes());
-                } else {
-                    return "";
-                }
-            }
-        };
-
-        return resultService;
-    })
-    .factory("metricsFormatters", function (metricsDateTime, $log) {
+    .factory("metricsFormatters", function ( $log) {
         var resultService = {
             time: function (val, axis) {
-                var date = new Date(val);
-                return metricsDateTime.getShortDate(date) + " " + metricsDateTime.getTimeStr(date);
+                return moment(new Date(val)).format('DD/MM HH:mm');
             },
             memory: function (bytes, axis) {
-                var kilobyte = 1024;
-                var megabyte = kilobyte * 1024;
-                var gigabyte = megabyte * 1024;
-                var terabyte = gigabyte * 1024;
-
-                if ((bytes >= 0) && (bytes < kilobyte)) {
-                    return bytes + ' B';
-
-                } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
-                    return (bytes / kilobyte).toFixed(2) + ' KB';
-
-                } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
-                    return (bytes / megabyte).toFixed(2) + ' MB';
-
-                } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
-                    return (bytes / gigabyte).toFixed(2) + ' GB';
-
-                } else if (bytes >= terabyte) {
-                    return (bytes / terabyte).toFixed(2) + ' TB';
-
-                } else {
-                    return bytes + ' B';
+                if (!bytes || isNaN(parseFloat(bytes)) || !isFinite(bytes)) {
+                    return '-';
                 }
+                var units = [' B', ' KB', ' MB', ' GB', ' TB', ' PB'],
+                    number = Math.floor(Math.log(bytes) / Math.log(1024));
+                return (bytes / Math.pow(1024, Math.floor(number))).toFixed(1) + ' ' + units[number];
             },
             getFormattedValue: function(formatterName, value, axis) {
                 var result = value;

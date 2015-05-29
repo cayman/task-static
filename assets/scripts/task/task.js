@@ -90,7 +90,7 @@ angular.module('taskModule', ['coreApp'])
         }
 
         function loadModel(params) {
-            $log.info('Load model', $scope.loadParams = params);
+            $log.info('Load model', $scope.resourceParams = params);
             $scope.tasksResource = getRest(params)(params,
                 function success(value) {
                     $scope.tasksModel =  coreApp.parseListModel(value); //cause array or object

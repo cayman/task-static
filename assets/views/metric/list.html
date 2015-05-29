@@ -1,28 +1,36 @@
-<div page-header="Metrics">
-    <!--<h6>{{ formParams | json}}</h6>-->
-    <!--<h6>{{ options.metrics | json}}</h6>-->
-    <!--<h6>{{ metricsResource | json}}</h6>-->
+<div page-header="Metrics" ng-dblclick="$debug = !$debug">
+    <div ng-if="$debug">
+        <h6>{{ formParams | json}}</h6>
+        <h6>{{ resourceParams | json}}</h6>
+    </div>
 </div>
 
 <div page-form="Metrics options">
-    <div class="control-group">
-        <label class="control-label" for="metric">Metric:</label>
-        <div class="controls">
-            <select id="metric" class="input-large"
-                    ng-model="formParams.metric"
-                    ng-options="metric.value as metric.value for metric in options.metrics"
-                    ng-change="clearForm()">
-            </select>
-            {{ formParams.metric }}
-            <i icon-info="Specify metrics checkpoint to show. Enable checkbox to enable additional data sets (ex., actor specific) to list."></i>
-            <span style="padding-left: 20px">
-                {{ (options.metrics | filter:formParams.metric)[0] ?
-                   (options.metrics | filter:formParams.metric)[0].name : 'Select a metric' }}
-            </span>
-        </div>
-    </div>
-    <table class="table table-condensed" cellspacing="0" cellpadding="0" width="100%">
-        <tr><td style="width:40%; vertical-align: top">
+    <table ng-if="options.metrics" class="table table-condensed" style="max-width: 100%">
+        <tr>
+            <td style="width:35%; border: none;">
+                <div class="control-group">
+                    <label class="control-label" for="metric">Metric:</label>
+                    <div class="controls">
+                        <select id="metric" class="input-medium"
+                                ng-model="formParams.metric"
+                                ng-options="metric.value as metric.value for metric in options.metrics"
+                                ng-change="clearForm()">
+                        </select>
+                        <i icon-info="Specify metrics checkpoint to show. Enable checkbox to enable additional data sets (ex., actor specific) to list."></i>
+                    </div>
+                </div>
+            </td>
+            <td style="border: none;">
+                <div class="control-group">
+                    <label class="inline-label alert alert-info" for="metric">
+                        {{ (options.metrics | filter:formParams.metric)[0] ?
+                        (options.metrics | filter:formParams.metric)[0].name : 'Select a metric' }}
+                    </label>
+                </div>
+            </td>
+        </tr>
+        <tr><td>
             <div class="control-group">
                 <label class="control-label" for="scope">Scope:</label>
                 <div class="controls">
@@ -63,37 +71,37 @@
             <div class="control-group">
                 <label class="control-label" for="smooth">Sibling average filter:</label>
                 <div class="controls">
-                    <select class="input-mini" ng-model="formParams.smooth"
+                    <select id="smooth" class="input-mini" ng-model="formParams.smooth"
                             ng-options = "smooth for smooth in smoothRates" ></select>
                     <i icon-info="Enable filter to perform data averaging. Every dot value would be replaced with averaged value by N siblings."></i>
                 </div>
             </div>
-            <div id="smooth" class="control-group">
+            <div class="control-group">
                 <div class="controls">
                     <button class="btn" ng-click="search()" ng-disabled="!isValidForm()">
                         <i class="icon-refresh"></i>Refresh</button>
                 </div>
             </div>
         </td>
-        <td style="width:60%;">
+        <td>
             <div class="control-group">
                 <label class="inline-label" for="dataSets">
                     <input id="dataSets" type="checkbox" ng-model="$showDatasets"
                            ng-disabled="!options.dataSets[formParams.metric]"/>
-                    <i icon-info="Select datasets to show on the diagram"></i>
                     Show all datasets:
+                    <i icon-info="Select datasets to show on the diagram"></i>
                 </label>
             </div>
             <div class="control-group">
-                <div ng-hide = "options.dataSets[formParams.metric].length"
-                     class="alert alert-warning">No selected datasets to show</div>
-                <ul style="max-height: 200px; overflow: auto">
+                <!--<div ng-hide = "options.dataSets[formParams.metric].length"-->
+                     <!--class="alert alert-warning">No selected datasets to show</div>-->
+                <ul style="max-height: 180px; overflow: auto; padding: 0 0 0 0">
                     <li ng-repeat="dataSet in options.dataSets[formParams.metric] | filter:{general:!$showDatasets}">
                         <label class="checkbox">
                             <input type="checkbox" ng-model="formParams.dataset[dataSet.value]"/>
                             <small>
                                 {{ dataSet.value }}
-                                <i ng-if="dataSet.general"> - {{dataSet.name}}</i>
+                                <i ng-if="dataSet.general"> - <b>{{dataSet.name}}</b></i>
                             </small>
                         </label>
                     </li>
@@ -112,18 +120,17 @@
     <list-reload model="metricsResource">
     </list-reload>
 
-    <table class="table table-striped table-items" ng-if="metricsModel">
+    <table class="table table-bordered table-items " ng-if="metricsModel">
         <tbody>
             <tr>
-                <td style="width: 40px;">
-                    <span class="axis-label">{{ metricsModel[0].xLabel }}</span>
+                <td style="min-width: 35px; vertical-align: middle; ">
+                    <span class="axis-label">{{ metricsModel[0].yLabel }}</span>
                 </td>
-                <td style="width: 920px;">
+                <td style="min-width: 900px;">
                     <div metrics-plot style="width:900px;height:480px;"
                          datasets="metricsModel" add-options="plotProps.options" />
                 </td>
-                <td style="vertical-align: top; text-align: left;">
-
+                <td style="vertical-align: top; text-align: left; min-width: 160px;">
                     <label class="checkbox small">
                         <input type="checkbox" ng-model="plotProps.options.zoom.interactive" />Zoom on scroll <i class="icon-question-sign" style="cursor: help;" popover-placement="bottom" popover="Enable to zoom in/out on mouse scroll over plot pane" popover-trigger="mouseenter"></i>
                     </label>
@@ -154,7 +161,7 @@
             <tr>
                 <td></td>
                 <td style="height: 30px;text-align: center;">
-                    <span class="axis-label">{{ metricsModel[0].yLabel }}</span>
+                    <span class="axis-label">{{ metricsModel[0].xLabel }}</span>
                 </td>
                 <td></td>
             </tr>

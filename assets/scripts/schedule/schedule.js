@@ -36,7 +36,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
         $log.info('scheduleListController');
 
         function loadModel(params) {
-            $log.info('Load model', $scope.loadParams = params);
+            $log.info('Load model', $scope.resourceParams = params);
             $scope.schedulesResource = scheduleRest.query(params,
                 function success(value) {
                     $scope.schedulesModel =  coreApp.parseListModel(value);//cause array or object
@@ -84,7 +84,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
             scheduleRest.activate({id: schedule.job.id},
                 function success(value) {
                     $log.log('scheduleListController: schedule activated', value);
-                    loadModel($scope.loadParams);
+                    loadModel($scope.resourceParams);
                 }, function error(reason) {
                     coreApp.error('Schedule activate failed',reason);
                 });
@@ -94,7 +94,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
             scheduleRest.deactivate({id: schedule.job.id},
                 function success(value) {
                     $log.log('scheduleListController: schedule deactivated', value);
-                    loadModel($scope.loadParams);
+                    loadModel($scope.resourceParams);
                 }, function error(reason) {
                     coreApp.error('Schedule deactivate failed',reason);
                 });
@@ -106,7 +106,7 @@ angular.module('scheduleModule', ['taskModule', 'coreApp'])
                     scheduleRest.delete({id: schedule.job.id},
                         function success(value) {
                             $log.log('scheduleListController: schedule removed', value);
-                            loadModel($scope.loadParams);
+                            loadModel($scope.resourceParams);
                         }, function error(reason) {
                             coreApp.error('Schedule removal failed',reason);
                         });

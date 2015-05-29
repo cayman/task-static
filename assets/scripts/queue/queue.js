@@ -26,15 +26,14 @@ angular.module('queueModule', ['coreApp'])
         //}
 
         function loadModel(params) {
-            $log.info('Load model',$scope.loadParams = params);
+            $log.info('Load model',$scope.resourceParams = params);
             $scope.queuesResource = queueRest.query(params,
                 function success(value) {
                     $scope.queuesModel = coreApp.parseListModel(value);//cause array or object
                     if($scope.queuesModel){
                         $log.info('Successfully updated queues page');
-                        $scope.queuesModel.$totalTasks = _.reduce($scope.queuesModel.items, function(sum, item) {
-                            return sum + item.count;
-                        }, 0);
+                        $scope.queuesModel.$totalTasks = _.reduce($scope.queuesModel.items,
+                            function(sum, item) { return sum + item.count; }, 0);
                     }else{
                         coreApp.info('Processes not found',value);
                     }
@@ -46,6 +45,8 @@ angular.module('queueModule', ['coreApp'])
 
         //Initialization:
         $scope.formParams = coreApp.copyStateParams();
+        $scope.$stateParams = coreApp.getStateParams();
+
         loadModel(angular.copy($scope.formParams));
 
         //Submit form command:
@@ -84,7 +85,7 @@ angular.module('queueModule', ['coreApp'])
                 function confirmed() {
                     queueRest.clear(queue.name,function(value){
                         $log.log('Queue cleared', value);
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function(reason){
                         coreApp.error('Queue draining failed',reason);
                     });
@@ -97,7 +98,7 @@ angular.module('queueModule', ['coreApp'])
                 function confirmed() {
                     queueRest.remove(queue.name,function(value){
                         $log.log('Queue removed', value);
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function(reason){
                         coreApp.error('Queue removal failed',reason);
                     });

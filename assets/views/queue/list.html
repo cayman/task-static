@@ -1,8 +1,10 @@
-<div page-header>
-    <h4 ng-hide="loadParams.periodSize">Task queues</h4>
-    <h4 ng-show="loadParams.periodSize">Hovering queues list</h4>
-    <!--<h6>{{ formParams }}</h6>-->
-    <!--<h6>{{ loadParams }}</h6>-->
+<div page-header ng-dblclick="$debug = !$debug">
+    <h4 ng-hide="resourceParams.periodSize">Task queues</h4>
+    <h4 ng-show="resourceParams.periodSize">Hovering queues list</h4>
+    <div ng-if="$debug">
+        <h6>{{ formParams }}</h6>
+        <h6>{{ $stateParams }}</h6>
+    </div>
 </div>
 
 <div page-form="Task queues search form">
@@ -31,7 +33,7 @@
                 <th>Name</th>
                 <th>Activity</th>
                 <th>Balance
-                    <select ng-model="formParams.balancePeriod" style="width:90px;" class="btn btn-mini">
+                    <select ng-model="$stateParams.balancePeriod" style="width:90px;" class="btn btn-mini">
                         <option value="hour">Last hour</option>
                         <option value="day">Last day</option>
                     </select>
@@ -68,8 +70,8 @@
                     </div>
                 </td>
                 <td>
-                    In: <b>{{ formParams.balancePeriod === 'day' ? queue.inDay : queue.inHour}}</b>,
-                    out: <b>{{formParams.balancePeriod === 'day' ? queue.outDay: queue.outHour}}</b>
+                    In: <b>{{ $stateParams.balancePeriod === 'day' ? queue.inDay : queue.inHour}}</b>,
+                    out: <b>{{$stateParams.balancePeriod === 'day' ? queue.outDay: queue.outHour}}</b>
                     <hr/>
                     By <b>{{queue.nodes || 0}}</b> nodes
                 </td>

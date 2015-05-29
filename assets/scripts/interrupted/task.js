@@ -25,7 +25,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
         }
 
         function loadModel(params) {
-            $log.info('Load model', $scope.loadParams = params);
+            $log.info('Load model', $scope.resourceParams = params);
 
             $scope.interruptedResource = interruptedRest.query(params,
                 function success(value) {
@@ -61,7 +61,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
             loadModel(params);
 
             $scope.joinFilterParam = function (params, value) {
-                var param = $scope.groups[$scope.loadParams.group].param;
+                var param = $scope.groups[$scope.resourceParams.group].param;
                 params[param] = value;
                 return params;
             };
@@ -111,7 +111,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
                         })
                     }, function success() {
                         $log.log('Tasks of group ' + group.name + ' have been restarted');
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function error(reason) {
                         coreApp.error('Error task group '+group.name +' restarting', reason);
                     });
@@ -128,7 +128,7 @@ angular.module('interruptedModule', ['taskModule', 'coreApp'])
                         }]
                     }, function success() {
                         $log.log('Task [' + task.taskId + '] have been restarted');
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function error(reason) {
                         coreApp.error('Error task [' + task.taskId + '] restarting', reason);
                     });

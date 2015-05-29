@@ -98,6 +98,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                         return object;
                     }, {});
                 },
+
                 clearObject: function(list){
                     return  _.reduce(list, function(object, value, property ){
                         if(value) {
@@ -106,10 +107,11 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                         return object;
                     }, {});
                 },
-                clearObjectSize: function(list){
-                    return  _.reduce(list, function(size, value, property ){
-                        return value ? size+1 : size;
-                    }, 0);
+
+                getKeys: function(list){
+                    return _.reduce(list, function (keys, value, key) {
+                        return value ? keys .concat(key) : keys;
+                    }, []);
                 },
 
                 parseListModel : function(value){
@@ -140,9 +142,6 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
                             }
                         }, params.refreshRate * 1000);
                     }
-                },
-                getDateString: function (date){
-                    return $filter('date')(date || new Date(), 'yyyy-MM-dd');
                 },
 
                 openModal: function (dialogConfig, params) {
@@ -374,7 +373,8 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             templateUrl: '/views/core/input-date.html',
             replace: false,
             link: function (scope, element, attrs) {
-                scope.dateModel = scope.dateModel || coreApp.getDateString();
+
+                scope.dateModel = scope.dateModel || new Date();//moment().format('YYYY-MM-DD');
                 scope.isOpen = false;
                 scope.open = function () {
                     $timeout(function () {
@@ -398,7 +398,7 @@ angular.module('coreApp', ['ngResource', 'ngSanitize', 'ui.router',
             templateUrl: '/views/core/input-time.html',
             replace: false,
             link: function (scope, element, attrs) {
-                scope.timeModel = scope.timeModel || coreApp.getDateString();
+                scope.timeModel = scope.timeModel || new Date(); //.format('YYYY-MM-DD ');
 
                 scope.hstep = 1;
                 scope.mstep = 5;

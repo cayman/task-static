@@ -40,7 +40,7 @@ angular.module('processModule', ['taskModule', 'coreApp'])
         }
 
         function loadModel(params) {
-            $log.info('Load model', $scope.loadParams = params);
+            $log.info('Load model', $scope.resourceParams = params);
             $scope.processesResource = getRest(params)(params,
                 function success(value) {
                     $scope.processesModel = coreApp.parseListModel(value);//cause array or object
@@ -78,7 +78,7 @@ angular.module('processModule', ['taskModule', 'coreApp'])
                     processRest.recovery(process.processId, function success (value) {
                         $log.log('Process recovered', value);
                         process.$recoverySubmited = true;
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function error(reason) {
                         coreApp.error('Processes recovery error',reason);
                     });
@@ -90,7 +90,7 @@ angular.module('processModule', ['taskModule', 'coreApp'])
                 function confirmed() {
                     processRest.abort(process.processId, function success(value) {
                         $log.log('Process abort success', value);
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function error(reason) {
                         coreApp.error('Process abort error',reason);
                     });

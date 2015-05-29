@@ -19,14 +19,14 @@ angular.module('actorModule', ['coreApp'])
         $log.info('actorListController');
 
         function loadModel(params) {
-            $log.info('Load model', $scope.loadParams = params);
+            $log.info('Load model', $scope.resourceParams = params);
             $scope.actorsResource = actorRest.query(params,
                 function success(value) {
                     $scope.actorsModel = coreApp.parseListModel(value); //cause array or object
                     if ($scope.actorsModel) {
                         $log.info('Successfully updated actors data');
                         params.metrics = coreApp.clearObject(params.metrics);
-                        if (coreApp.clearObjectSize(params.metrics) > 0) {
+                        if (_.size(params.metrics) > 0) {
                             loadMetrics(params.metrics, $scope.actorsModel.items);
                         }
                     } else {
@@ -41,9 +41,7 @@ angular.module('actorModule', ['coreApp'])
         function loadMetrics(metrics, actors) {
             $log.info('Load metric data');
             $scope.metricsResource = actorRest.loadMetrics({
-                    metrics: _.reduce(metrics, function (keys, value, key) {
-                        return value ? keys.concat(key) : keys;
-                    }, []),
+                    metrics: coreApp.getKeys(metrics),
                     actorIds: _.map(actors, function (item) {
                         return item.id;
                     })
@@ -73,7 +71,7 @@ angular.module('actorModule', ['coreApp'])
 
         $scope.changeLoaded = function () {
             var params = coreApp.getStateParams();
-            params.metrics = JSON.stringify($scope.loadParams.metrics);
+            params.metrics = JSON.stringify($scope.resourceParams.metrics);
             $log.debug('change $stateParams', params);
         };
 
@@ -95,7 +93,7 @@ angular.module('actorModule', ['coreApp'])
                 function confirmed() {
                     actorRest.unblock(actor.id, function success() {
                         $log.log('Actor [' + actor.id + '] have been set to unblocked');
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function error(reason) {
                         coreApp.error('Error setting unblocked for actor [' + actor.id + ']', reason);
                     });
@@ -107,7 +105,7 @@ angular.module('actorModule', ['coreApp'])
                 function confirmed() {
                     actorRest.block(actor.id, function success() {
                         $log.log('Actor [' + actor.id + '] have been set to blocked');
-                        loadModel($scope.loadParams);
+                        loadModel($scope.resourceParams);
                     }, function error(reason) {
                         coreApp.error('Error setting blocked for actor [' + actor.id + ']', reason);
                     });

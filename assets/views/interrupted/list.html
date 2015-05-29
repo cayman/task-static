@@ -1,6 +1,8 @@
-<div page-header="Interrupted tasks">
-    <!--<h6>{{ formParams }}</h6>-->
-    <!--<h6>{{ loadParams }}</h6>-->
+<div page-header="Interrupted tasks" ng-dblclick="$debug = !$debug">
+    <div ng-if="$debug">
+        <h6>{{ formParams }}</h6>
+        <h6>{{ resourceParams }}</h6>
+    </div>
 </div>
 
 <div page-form="Interrupted tasks search form">

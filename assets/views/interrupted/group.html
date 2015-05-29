@@ -1,7 +1,9 @@
-<div page-header="Interrupted tasksgroups">
-    <!--<h6>{{ formParams }}</h6>-->
-    <!--<h6>{{ loadParams }}</h6>-->
-    <!--<h6>{{ groups }}</h6>-->
+<div page-header="Interrupted tasksgroups" ng-dblclick="$debug = !$debug">
+    <div ng-if="$debug">
+        <h6>{{ formParams }}</h6>
+        <h6>{{ resourceParams }}</h6>
+        <h6>{{ groups }}</h6>
+    </div>
 </div>
 
 <div page-form="Interrupted task groups search form">
@@ -70,7 +72,7 @@
                 №
             </td>
             <td>
-                {{ groups[loadParams.group].label }}
+                {{ groups[resourceParams.group].label }}
             </td>
             <td ng-hide="groups.starter.selected"  style="width: 200px;">
                 {{ groups.starter.name }}:
