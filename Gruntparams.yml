@@ -1,6 +1,7 @@
 build: ./assets
 hostname: '*'
 port: 9090
+page: /app.html
 proxies:
 # test rest server awp.egron.net (login/password = guest/querty)
     - context: /rest

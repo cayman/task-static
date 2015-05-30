@@ -29,7 +29,7 @@ module.exports = function (grunt) {
                     port: '<%= params.port %>',
                     hostname: '<%= params.hostname %>',
                     base: '<%= params.build %>/',
-                    open: 'http://localhost:<%= params.port %>',
+                    open: 'http://localhost:<%= params.port %><%= params.page %>',
                     livereload: true,
                     middleware: function (connect, options) {
                         return [
